@@ -1,3 +1,12 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+  "builds": [
+    {
+      "src": "vite.config.ts",
+      "use": "@Vercel Beta/node"
+    }
+  ],
+  "routes": [
+    { "src": "/api/.*", "dest": "/api/index.ts" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
 }
