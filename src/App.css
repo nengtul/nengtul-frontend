@@ -87,8 +87,11 @@ video {
   font-size: 6.25%;
   font-family: "Nanum Gothic", sans-serif;
   vertical-align: baseline;
+  color: #333;
+  text-decoration: none;
+  box-sizing: border-box;
 }
-/* HTML5 display-role reset for older browsers */
+
 article,
 aside,
 details,
@@ -125,6 +128,6 @@ table {
   border-spacing: 0;
 }
 
-.ppp {
-  font-size: 30rem;
+#root {
+  background-color: #d9ffe6;
 }
