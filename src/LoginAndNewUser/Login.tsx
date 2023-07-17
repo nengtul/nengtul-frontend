@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import KakaoIcon from '../assets/KakaoIcon.svg'
-import EggIcon from '../assets/EggIcon.tsx'
+// import EggIcon from '../assets/EggIcon.tsx' 
+import EggIcon from '../assets/EggIcon_png.png' 
 
 import HomePart from './HomePart.tsx'
 import {Link} from 'react-router-dom'
@@ -11,8 +12,8 @@ function Login() {
             <Egg>
                 <EggImg>
 
-               
-                    <EggIcon/>
+                <img src={EggIcon} alt="KakaoIcon" />
+                    {/* <EggIcon/> */}
                 </EggImg>
             </Egg>
 
