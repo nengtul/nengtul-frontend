@@ -1,3 +1,4 @@
+
 import styled from "styled-components"
 import KakaoIcon from '../assets/icon/kakaotalk.svg'
 import GoogleIcon from '../assets/icon/google.svg'
@@ -48,8 +49,23 @@ function Login() {
         </Wrapper>
         </MobileWrap>
     )
+
 }
 
+const Wrapper = styled.div`
+  width: 390px;
+  height: 844px;
+  background-color: #38db83;
+  margin: 0 auto;
+`;
+
+const Egg = styled.div`
+  width: 150px;
+  margin: 0 auto;
+`;
+const EggImg = styled.div`
+  padding-top: 77px;
+`;
 
 
 const Wrapper= styled.div`
@@ -80,18 +96,19 @@ const SquareInput=styled.div`
     margin: 0 auto;
     margin-bottom:3%;
 `
+
 const IdInputWrapper = styled.div`
     position: relative;
     width: 100%;
     height: 100%;
 
   input {
-    padding-left:5%;
-    padding-right:5%;
+    padding-left: 5%;
+    padding-right: 5%;
     width: 90%;
     height: 95%;
-    font-size:16rem;
-    background-color: #38DB83;
+    font-size: 16rem;
+    background-color: #38db83;
     // background-color: red;
     outline: none;
     border: none;
@@ -104,27 +121,30 @@ const IdInputWrapper = styled.div`
 `;
 
 const PasswordInputWrapper = styled.div`
-    position: relative;
-    width: 100%;
-    height: 100%;
+  position: relative;
+  width: 100%;
+  height: 100%;
 
-    input {
-    padding-left:5%;
-    padding-right:5%;
+  input {
+    padding-left: 5%;
+    padding-right: 5%;
     width: 90%;
     height: 95%;
+
     font-size:16rem;
     background-color: #38DB83;
+
 
     outline: none;
     border: none;
     color: white;
-    }
+  }
 
-    input::placeholder {
+  input::placeholder {
     color: white;
-    }
+  }
 `;
+
 
 const SquareButton=styled.button`
 
@@ -180,3 +200,5 @@ const SNSButton=styled.button`
 `
 export default Login
 
+
+export default Login;
