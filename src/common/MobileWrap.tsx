@@ -3,7 +3,8 @@ import styled from "styled-components";
 const MobileWrap = styled.div`
   width: 390px;
   margin: 0 auto;
-  min-height: 100vh;
+  max-height: 844px;
+  height: 844px;
   border-radius: 20px;
   position: relative;
   background-color: #fff;

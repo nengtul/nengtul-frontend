@@ -1,19 +1,22 @@
 import styled from "styled-components"
-import KakaoIcon from '../assets/KakaoIcon.svg'
+import KakaoIcon from '../assets/icon/kakaotalk.svg'
+import GoogleIcon from '../assets/icon/google.svg'
+import NaverIcon from '../assets/icon/naver.svg'
 // import EggIcon from '../assets/EggIcon.tsx' 
-import EggIcon from '../assets/EggIcon_png.png' 
+import EggIcon from '../assets/icon/EggIcon_png.png' 
 
 import HomePart from './HomePart.tsx'
+import MobileWrap from '../common/MobileWrap.tsx'
 import {Link} from 'react-router-dom'
 function Login() {
     return( 
-        <Wrapper>
+        <MobileWrap>
+         <Wrapper>
             <HomePart/>
             <Egg>
                 <EggImg>
 
-                <img src={EggIcon} alt="KakaoIcon" />
-                    {/* <EggIcon/> */}
+                    <img src={EggIcon} alt="EggIcon" />
                 </EggImg>
             </Egg>
 
@@ -32,29 +35,30 @@ function Login() {
                 </SquareInput>
                 
                 <Button><SquareButton id='login'>로그인</SquareButton></Button>
-                <Button><SquareButton id='kakaoLogin'>
-                    <KakaoPart>
-                        <img src={KakaoIcon} alt="KakaoIcon" />
-                    </KakaoPart>
-                            카카오 로그인 
-                </SquareButton></Button>
-
-
                 <Link to='/newUser'>
                     <Button><SquareButton id='newUser'>회원가입</SquareButton></Button>
                 </Link>
+
+                <SNSButtonArea>
+                    <SNSButton id='kakao'><img src={KakaoIcon} alt="EggIcon" /></SNSButton>
+                    <SNSButton id='Google'><img src={GoogleIcon} alt="EggIcon" /></SNSButton>
+                    <SNSButton id='Naver'><img src={NaverIcon} alt="EggIcon" /></SNSButton>
+                </SNSButtonArea>
             </InputAndButton>
         </Wrapper>
+        </MobileWrap>
     )
 }
 
 
 
 const Wrapper= styled.div`
-    width:390px;
-    height:844px;
+    // width:390px;
+    // height:844px;
+    min-height:844px;
+    // height:100%;
     background-color:#38DB83;
-    margin: 0 auto;
+    
     `
 
 const Egg=styled.div`
@@ -68,16 +72,18 @@ const EggImg=styled.div`
 
 const SquareInput=styled.div`
     width: 90%;
-    height: 6%;
+    // height: 6%;
+    height: 54rem;
     background-color:#38DB83;
     border: 2rem solid white;
+    border-radius:4rem;
     margin: 0 auto;
     margin-bottom:3%;
 `
 const IdInputWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
+    position: relative;
+    width: 100%;
+    height: 100%;
 
   input {
     padding-left:5%;
@@ -109,7 +115,7 @@ const PasswordInputWrapper = styled.div`
     height: 95%;
     font-size:16rem;
     background-color: #38DB83;
-    // background-color: red;
+
     outline: none;
     border: none;
     color: white;
@@ -123,18 +129,21 @@ const PasswordInputWrapper = styled.div`
 const SquareButton=styled.button`
 
     width: 100%;
-    height: 100%;
+    // height: 100%;
+    height: 51rem;
     background-color:white;
     border: 2rem solid white;
-    margin-bottom:14rem;
+    border-radius:4rem;
+    
     font-size: 20rem;
     font-weight:700;
     color:#38DB83;
     text-align:center;
     cursor:pointer;
     &:first-of-type {
-        margin-top: 6rem;
+        margin-top: 16rem;
       }
+ 
     
     
 `
@@ -142,8 +151,8 @@ const Button=styled.div`
     width:90%;
     height: 6%;
     margin: 0 auto;
-    margin-bottom:14rem;
     position:relative;
+    
     
 `
 const InputAndButton=styled.div`
@@ -151,13 +160,23 @@ const InputAndButton=styled.div`
     height:inherit;
     margin-top:30rem;
 `
-
-const KakaoPart=styled.p`
-      position:absolute;
-      top:30%;
-      left:3%;
-      
+const SNSButtonArea=styled.div`
+    display:flex;
+    justify-content:center;
+    margin-top:20rem;
+    `
+const SNSButton=styled.button`
+    width:62rem;
+    height:62rem;
+    border-radius:100%;
+    border:none;
+    cursor:pointer;
+    background-color:#fff;
+    &:not(:last-child){
+        margin-right:17rem;
+    }
+    
+    
 `
-
 export default Login
 
