@@ -1,6 +1,6 @@
 import Header from "../common/Header";
 import MobileWrap from "../common/MobileWrap";
-import EggIcon from "../assets/EggIcon_png.png";
+import EggIcon from "../assets/icon/EggIcon_png.png";
 import styled from "styled-components";
 import theme from "../common/theme";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
