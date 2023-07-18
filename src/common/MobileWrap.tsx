@@ -8,8 +8,19 @@ const MobileWrap = styled.div`
   border-radius: 20px;
   position: relative;
   background-color: #fff;
-  overflow: auto;
-  padding-top: 44px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #b5b5b5;
+    border-radius: 10px;
+    width: 2px;
+  }
 `;
 
 export default MobileWrap;

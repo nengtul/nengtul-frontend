@@ -4,6 +4,7 @@ import Search from "../assets/icon/search.svg";
 import HeaderTabMenu from "./HeaderTabMenu";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const StyledHeader = styled.header`
   padding: 5px 10px;
@@ -15,10 +16,10 @@ const StyledHeader = styled.header`
   border-bottom: 1px solid #dfdfdf;
   position: fixed;
   left: auto;
-  top: 0;
+  top: auto;
   width: 390px;
   z-index: 999999;
-
+  border-radius: 20px 20px 0px 0px;
   img {
     cursor: pointer;
   }
@@ -74,7 +75,9 @@ export default function Header() {
           />
         </div>
         <RightMenu>
-          <img src={Search} alt="search-button" />
+          <Link to={"/search"}>
+            <img src={Search} alt="search-button" />
+          </Link>
           <HamburgerIcon onClick={toggleTabMenu}>
             <span></span>
             <span></span>
