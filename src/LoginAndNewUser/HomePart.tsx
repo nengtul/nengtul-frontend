@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import HomeIcon from '../assets/HomeIcon.svg'
+import HomeIcon from '../assets/icon/HomeIcon.svg'
 function HomePart(){
     return(
         <Home>
