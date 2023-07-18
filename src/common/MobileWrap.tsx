@@ -7,7 +7,8 @@ const MobileWrap = styled.div`
   border-radius: 20px;
   position: relative;
   background-color: #fff;
-  overflow-x: hidden;
+  overflow: auto;
+  padding-top: 44px;
 `;
 
 export default MobileWrap;

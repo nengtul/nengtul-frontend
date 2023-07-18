@@ -1,15 +1,27 @@
 import styled from "styled-components";
 import HomeButton from "../assets/icon/home.svg";
 import Search from "../assets/icon/search.svg";
-import Menu from "../assets/icon/hamburger.svg";
+import HeaderTabMenu from "./HeaderTabMenu";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const StyledHeader = styled.header`
-  padding: 3px 10px;
+  padding: 5px 10px;
+  padding-right: 2px;
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #dfdfdf;
+  position: fixed;
+  left: auto;
+  top: 0;
+  width: 390px;
+  z-index: 999999;
+
+  img {
+    cursor: pointer;
+  }
 `;
 
 const RightMenu = styled.div`
@@ -17,17 +29,59 @@ const RightMenu = styled.div`
   align-items: center;
 `;
 
+const HamburgerIcon = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 30px;
+  cursor: pointer;
+
+  span {
+    width: 5px;
+    height: 5px;
+    background-color: #000;
+    margin-bottom: 6px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
+
 export default function Header() {
+  const [showTabMenu, setShowTabMenu] = useState(false);
+
+  const toggleTabMenu = () => {
+    setShowTabMenu(!showTabMenu);
+  };
+
+  const navigate = useNavigate();
+
   return (
     <>
       <StyledHeader>
         <div>
-          <img src={HomeButton} alt="home-button" />
+          <img
+            src={HomeButton}
+            alt="home-button"
+            onClick={() => {
+              navigate("/");
+            }}
+          />
         </div>
         <RightMenu>
           <img src={Search} alt="search-button" />
-          <img src={Menu} alt="menu-button" />
+          <HamburgerIcon onClick={toggleTabMenu}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </HamburgerIcon>
         </RightMenu>
+        {showTabMenu && <HeaderTabMenu />}
       </StyledHeader>
     </>
   );
