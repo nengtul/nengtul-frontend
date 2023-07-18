@@ -130,6 +130,13 @@ table {
 
 #root {
   background-color: #d9ffe6;
-
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+button {
+  border: none;
+}

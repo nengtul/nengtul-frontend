@@ -10,12 +10,14 @@ export default function MainPage() {
   return (
     <MobileWrap>
       <Header />
-      <MainBanner />
-      <RecipeSlide />
-      <Shadow />
-      <ServiceSection />
-      <Shadow />
-      <MyRecipe />
+      <div className="MainWrap" style={{ paddingTop: "40px" }}>
+        <MainBanner />
+        <RecipeSlide />
+        <Shadow />
+        <ServiceSection />
+        <Shadow />
+        <MyRecipe />
+      </div>
     </MobileWrap>
   );
 }
