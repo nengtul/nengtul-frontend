@@ -1,12 +1,13 @@
 import styled from "styled-components"
-import EggIcon from '../assets/EggIcon.tsx'
+import EggIcon from '../assets/icon/EggIcon_png.png'
 import HomePart from './HomePart'
-
+import MobileWrap from '../common/MobileWrap'
 function NewUser (){
 
     
 
     return (
+        <MobileWrap>
         <Wrapper>
             <HomePart/>
             <EggPart/>
@@ -45,6 +46,7 @@ function NewUser (){
             </Button>
 
         </Wrapper>
+        </MobileWrap>
     )
 }
 
@@ -53,14 +55,13 @@ function EggPart(){
     return (
         <Egg>
             <EggImg>
-                <EggIcon/>
+                <img src={EggIcon} alt="EggIcon" />
             </EggImg>
         </Egg>
     )
 }
 const Wrapper= styled.div`
-    width:390px;
-    height:844px;
+    height:100%;
     background-color:#38DB83;
     margin: 0 auto;
     `
@@ -96,6 +97,7 @@ const InputWrapper=styled.div`
     width: 99%;
     height: 45rem;
     border: 2rem solid white;
+    border-radius:4rem;
     input {
         padding-left:5%;
         padding-right:5%;
@@ -120,6 +122,7 @@ const SquareButton=styled.button`
     height: 100%;
     background-color:white;
     border: 2rem solid white;
+    border-radius:4rem;
     margin-bottom:14rem;
     font-size: 20rem;
     font-weight:700;
