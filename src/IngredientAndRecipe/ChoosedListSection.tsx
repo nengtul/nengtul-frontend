@@ -28,6 +28,7 @@ const GreenArea=styled.div`
     background-color:#38DB83;
     width:100%;
     height:auto;    
+    margin-top:41px;
 `
 const MainArea=styled.div`
     padding:20rem 0 16rem 0;
