@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
+import { Link } from "react-router-dom";
 
 export default function IngredientSearch() {
   const [searchData, setSearchData] = useState<string[]>([]);
@@ -62,7 +63,7 @@ export default function IngredientSearch() {
                 ))}
               </ul>
             </SearchList>
-            <SearchButton type="button">레시피 조회</SearchButton>
+            <SearchButton to={"/ingredientRecipe"}>레시피 조회</SearchButton>
           </SearchWrap>
         </div>
       </MobileWrap>
@@ -140,7 +141,7 @@ const SearchList = styled.div`
   }
 `;
 
-const SearchButton = styled.button`
+const SearchButton = styled(Link)`
   width: 90%;
   background-color: ${theme.colors.main};
   font-size: 20rem;
@@ -150,4 +151,5 @@ const SearchButton = styled.button`
   margin-top: 40px;
   border-radius: 5px;
   cursor: pointer;
+  text-align: center;
 `;

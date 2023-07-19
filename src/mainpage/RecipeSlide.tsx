@@ -17,7 +17,7 @@ const SliderP = styled.p`
   padding: 4px 8px;
 `;
 
-const MoreButton = styled.button`
+const MoreButton = styled(Link)`
   width: 190px;
   height: 50px;
   display: flex;
@@ -69,7 +69,7 @@ export default function RecipeSlide() {
             </Link>
           </div>
         </Slider>
-        <MoreButton>더보기</MoreButton>
+        <MoreButton to={"/recipelist"}>더보기</MoreButton>
       </MainSlider>
     </MainPageSection>
   );

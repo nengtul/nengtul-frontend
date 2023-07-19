@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const StyledHeader = styled.header`
-  padding: 5px 10px;
+  padding: 12px 10px;
   padding-right: 2px;
   background: #fff;
   display: flex;
