@@ -1,5 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap");
 
+* {
+  box-sizing: border-box;
+}
 html,
 body,
 div,
@@ -129,7 +132,6 @@ table {
 }
 
 #root {
-  background-color: #d9ffe6;
   width: 100%;
   height: 100vh;
   display: flex;

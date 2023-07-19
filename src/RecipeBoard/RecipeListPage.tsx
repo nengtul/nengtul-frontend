@@ -8,6 +8,7 @@ import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import RecipeListCard from "./RecipeListCard";
 import axios from "axios";
 import { useInView } from "react-intersection-observer";
+import RecipeWriteBtn from "./RecipeWriteBtn";
 
 export interface Post {
   id: number;
@@ -136,6 +137,8 @@ export default function RecipeListPage() {
           <div ref={ref} />
         </CardWrap>
       </ListWrap>
+
+      <RecipeWriteBtn />
     </MobileWrap>
   );
 }
@@ -146,7 +149,7 @@ const ListWrap = styled.div`
   padding-top: 70px;
 `;
 
-const CategoryBtn = styled.div`
+export const CategoryBtn = styled.div`
   position: relative;
   font-size: 14rem;
   width: 110px;
@@ -155,7 +158,7 @@ const CategoryBtn = styled.div`
   display: inline-block;
   box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.31);
   border-radius: 9px;
-
+  z-index: 9999;
   &:nth-of-type(2) {
     margin-left: 4px;
   }

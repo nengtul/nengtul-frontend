@@ -6,6 +6,7 @@ import NewUser from "./LoginAndNewUser/NewUser";
 import IngredientSearch from "./IngredientAndRecipe/IngredientSearch";
 import IngreAfterRecipePage from "./IngredientAndRecipe/IngreAfterRecipePage";
 import RecipeListPage from "./RecipeBoard/RecipeListPage";
+import RecipeWritePage from "./RecipeBoard/RecipeWritePage";
 
 import ChattingList from "./Chatting/ChattingList";
 import Chat from "./Chatting/Chat";
@@ -21,6 +22,7 @@ function App() {
           <Route path="/search" element={<IngredientSearch />} />
           <Route path="/ingredientRecipe" element={<IngreAfterRecipePage />} />
           <Route path="/recipeList" element={<RecipeListPage />} />
+          <Route path="/recipeWrite" element={<RecipeWritePage />} />
           <Route path="/chattingList" element={<ChattingList />} />
           <Route path="/chat" element={<Chat />} />
         </Routes>
