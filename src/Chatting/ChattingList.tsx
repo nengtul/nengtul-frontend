@@ -4,7 +4,7 @@ import MobileWrap from "../common/MobileWrap";
 import Header from "../common/Header";
 function ChattingList() {
 
-    const chattings=Array.from({ length: 8 }, (_, index) => (
+    const chattings=Array.from({ length: 8 }, () => (
                     <Chat>
                         <UserPic></UserPic>
                         <UserText>
