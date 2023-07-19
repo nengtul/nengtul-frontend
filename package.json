@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "json-server --watch db.json --port 5000"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
@@ -17,6 +18,8 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/react-slick": "^0.23.10",
+    "axios": "^1.4.0",
+    "json-server": "^0.17.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intersection-observer": "^9.5.2",
@@ -27,6 +30,7 @@
     "v6": "^0.0.0"
   },
   "devDependencies": {
+    "@types/node": "^20.4.2",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.7",
     "@types/styled-components": "^5.1.26",

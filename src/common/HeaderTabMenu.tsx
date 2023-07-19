@@ -11,7 +11,7 @@ import HeaderLatest from "./HeaderLatest";
 const HeaderTabWrap = styled.div`
   width: 100%;
   position: absolute;
-  top: 44px;
+  top: 58px;
   left: 0;
   height: calc(100vh - 44px);
   max-height: 100vh;
