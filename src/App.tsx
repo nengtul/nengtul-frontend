@@ -7,6 +7,9 @@ import NewUser from "./LoginAndNewUser/NewUser";
 import IngredientSearch from "./IngredientAndRecipe/IngredientSearch";
 import IngreAfterRecipePage from "./IngredientAndRecipe/IngreAfterRecipePage";
 
+import ChattingList from "./Chatting/ChattingList";
+import Chat from "./Chatting/Chat";
+
 function App() {
   return (
     <>
@@ -17,6 +20,8 @@ function App() {
           <Route path="/newUser" element={<NewUser />} />
           <Route path="/search" element={<IngredientSearch />} />
           <Route path='/ingredientRecipe' element={<IngreAfterRecipePage/>}/>
+          <Route path='/chattingList' element={<ChattingList/>}/>
+          <Route path='/chat' element={<Chat/>}/>
 
         </Routes>
       </BrowserRouter>
