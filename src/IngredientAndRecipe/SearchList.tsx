@@ -5,12 +5,14 @@ import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 
 interface SearchListProps {
   searchData: string[];
-  removeItem: (index: number) => void;
+  removeItem?: (index: number) => void;
 }
 
 export default function SearchList({
   searchData,
-  removeItem,
+  removeItem = () => {
+    return;
+  },
 }: SearchListProps) {
   return (
     <SearchListWrap>
