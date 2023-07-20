@@ -2,25 +2,110 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft,faCamera,faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import MobileWrap from "../common/MobileWrap";
+import {useRef,useEffect,useState,ChangeEvent} from 'react';
 
 function Chat() {
- return(
-    <MobileWrap>
-        <ChatHeader/>
-        <Info/>
-        <SendChat/>
-    </MobileWrap>
- )
+    const [chatMessages, setChatMessages] = useState<string[]>([]);
+
+    const handleChatInfoChange = (newInfo:string) => {
+        setChatMessages(prevMessages => [...prevMessages, newInfo]);
+    };
+
+    return(
+        // <MobileWrap style={{display:"flex",flexDirection:"column",height:"844px"}}>
+        <MobileWrap >
+
+                <ChatHeader/>
+                <Info/> 
+                <Chatting chatMessages={chatMessages} />
+
+                <SendChat updateChatInfo={handleChatInfoChange}/>
+
+
+            
+        </MobileWrap>
+    )
 }
 
 
-function SendChat(){
+function Chatting({chatMessages}: { chatMessages: string[]}){
+
+    return (
+        <ChattingArea>
+        {chatMessages.map((message, index) => (
+            <div key={index}>
+                <Message>
+                    {message}
+                </Message>
+                <br/>
+            </div>
+        ))}
+        </ChattingArea>
+    )
+}
+
+const Message =styled.div`
+    font-size: 14rem;
+    display:inline-block;
+    // width:auto;
+    max-width: 200rem;
+    height:auto;
+    background-color: #38DB83;
+    padding: 10rem;
+    border-radius:15rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+
+    margin: 10rem 10rem 0 180rem;
+    line-height:1.3;
+    float:right;
+  
+`
+const ChattingArea =styled.div`
+    width:100%;
+    // background-color:pink;
+    margin-top:141rem;  
+    height: 625rem;
+    overflow: auto;
+`
+//------------------
+interface SendChatProps {
+    updateChatInfo: (newInfo: string) => void; 
+  }
+function SendChat({ updateChatInfo }:SendChatProps){
+
+    const sendChatAreaRef = useRef<HTMLDivElement>(null);
+    const inputTextRef = useRef<HTMLTextAreaElement>(null);
+
+    const [inputValue, setInputValue] = useState('');
+    const updateHeight=()=>{
+        if (sendChatAreaRef.current && inputTextRef.current) {
+            inputTextRef.current.style.height = '20rem';
+            inputTextRef.current.style.height = inputTextRef.current.scrollHeight.toString() + 'px';
+          }
+        }
+    useEffect(()=>{
+        updateHeight();
+    },[])
+
+
+    const handleChange = (event :ChangeEvent<HTMLTextAreaElement>) => {
+        updateHeight();
+        setInputValue(event.target.value);
+    };
+
+    const handleSubmit = () => {
+        if (inputValue.trim() !== '') {
+          updateChatInfo(inputValue);
+          setInputValue('');
+        }
+      };
+    
     return(
-        
-        <SendChatArea>
-            <FontAwesomeIcon icon={faCamera} style={{color: "#000000",width:"40rem",height:"30rem",padding:"0 10rem 0 10rem"}} />
-            <InputText></InputText>
-            <SendButton><FontAwesomeIcon icon={faArrowUp} style={{color: "#fff",width:"40rem",height:"30rem",padding:"3rem"}} /></SendButton>
+        <SendChatArea >
+            <FontAwesomeIcon icon={faCamera} style={{color: "#000000",height:"30rem",padding:"0 11rem 0 17rem",cursor:"pointer"}} />
+            <InputText  ref={inputTextRef} value={inputValue} onChange={handleChange} ></InputText>
+            <SendButton type="submit"  onClick={handleSubmit} ><FontAwesomeIcon icon={faArrowUp} style={{color: "#fff",height:"30rem",padding:"2rem"}} /></SendButton>
         </SendChatArea>
         
     )
@@ -28,34 +113,37 @@ function SendChat(){
 
 const SendChatArea=styled.div`
     width:inherit;
-    height:65rem;
-    background-color:pink;
+    min-height:65rem;
     position:absolute;
     bottom:0;
     display:flex;
     align-items:center;
-
-    
+    padding-top:10rem;
+    padding-bottom:10rem;
+    border-top:1px solid #dddddd;
 `
 
 const InputText=styled.textarea`
-    width:65%;
-    max-height:40%;
+    width:70%;
+    max-height: 250rem;
     background-color:#dddddd;
-    resize: none; /* 사용자가 크기를 조정하지 못하도록 함 */
+    resize: none;
     word-wrap: break-word;
     white-space: pre-wrap;
     padding:5px;
     font-size:20rem;
-    
+    rows: 1;
+    border:none;
+    border-radius:7rem;
+    outline: none;
 `
 const SendButton = styled.button`
-width:37rem;
-height:37rem;
-border-radius:100%;
-background-color:#38DB83;
-margin-left:15rem;
-
+    width:37rem;
+    height:37rem;
+    border-radius:100%;
+    background-color:#38DB83;
+    margin-left:8rem;
+    cursor:pointer;
 `
 
 //----------------------------------
