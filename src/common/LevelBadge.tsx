@@ -12,6 +12,7 @@ const Badge = styled.div`
   font-weight: 700;
   border-radius: 5px;
   margin-left: 4px;
+  display: inline-block;
 `;
 
 export default function LevelBadge({ children }: LevelBadgeProps) {
