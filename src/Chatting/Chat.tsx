@@ -12,7 +12,6 @@ function Chat() {
     };
 
     return(
-        // <MobileWrap style={{display:"flex",flexDirection:"column",height:"844px"}}>
         <MobileWrap >
 
                 <ChatHeader/>
@@ -63,9 +62,9 @@ const Message =styled.div`
 `
 const ChattingArea =styled.div`
     width:100%;
-    // background-color:pink;
+    background-color:pink;
     margin-top:141rem;  
-    height: 625rem;
+    // height: 625rem;
     overflow: auto;
 `
 //------------------
@@ -74,17 +73,18 @@ interface SendChatProps {
   }
 function SendChat({ updateChatInfo }:SendChatProps){
 
-    const sendChatAreaRef = useRef<HTMLDivElement>(null);
-    const inputTextRef = useRef<HTMLTextAreaElement>(null);
+    const inputTextRef = useRef<HTMLTextAreaElement>(null!);
 
     const [inputValue, setInputValue] = useState('');
     const updateHeight=()=>{
-        if (sendChatAreaRef.current && inputTextRef.current) {
-            inputTextRef.current.style.height = '20rem';
+        if (inputTextRef.current) {
+            inputTextRef.current.style.height = '40rem';
             inputTextRef.current.style.height = inputTextRef.current.scrollHeight.toString() + 'px';
           }
         }
     useEffect(()=>{
+        console.log("inputTextRef.current:", inputTextRef.current);
+    
         updateHeight();
     },[])
 
@@ -96,8 +96,9 @@ function SendChat({ updateChatInfo }:SendChatProps){
 
     const handleSubmit = () => {
         if (inputValue.trim() !== '') {
-          updateChatInfo(inputValue);
           setInputValue('');
+          inputTextRef.current.style.height = '40rem';
+          updateChatInfo(inputValue);
         }
       };
     
@@ -132,7 +133,6 @@ const InputText=styled.textarea`
     white-space: pre-wrap;
     padding:5px;
     font-size:20rem;
-    rows: 1;
     border:none;
     border-radius:7rem;
     outline: none;
