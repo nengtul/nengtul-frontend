@@ -65,7 +65,19 @@ export default RecipeSection
 
 
 const RecipeArea=styled.div`
-    
+    flex: 1; 
+    overflow: auto;
+    &::-webkit-scrollbar {
+    width: 2px;
+    }
+    &::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0);
+    }
+    &::-webkit-scrollbar-thumb {
+    background-color: #b5b5b5;
+    border-radius: 10px;
+    width: 2px;
+}
 `
 
 

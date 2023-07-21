@@ -53,10 +53,7 @@ function Login() {
 
 
 const Wrapper= styled.div`
-    // width:390px;
-    // height:844px;
     min-height:844px;
-    // height:100%;
     background-color:#38DB83;
     
     `
@@ -72,7 +69,6 @@ const EggImg=styled.div`
 
 const SquareInput=styled.div`
     width: 90%;
-    // height: 6%;
     height: 54rem;
     background-color:#38DB83;
     border: 2rem solid white;

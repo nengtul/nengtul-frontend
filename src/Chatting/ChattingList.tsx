@@ -4,8 +4,8 @@ import MobileWrap from "../common/MobileWrap";
 import Header from "../common/Header";
 function ChattingList() {
 
-    const chattings=Array.from({ length: 8 }, () => (
-                    <Chat>
+    const chattings=Array.from({ length: 8 }, (_,index) => (
+                    <Chat key={index}>
                         <UserPic></UserPic>
                         <UserText>
                             <UserInfo>
@@ -14,7 +14,6 @@ function ChattingList() {
                                 <ChatTime>1달 전</ChatTime>
                             </UserInfo>
                         
-                            {/* <ChatContent>안녕하세요 이거 가능한가요? 에눌되나요??가능합니다</ChatContent> */}
                             <ChatContent>안녕하세요 가능합니다닷</ChatContent>
                         </UserText>
                         <NewChat>2</NewChat>
@@ -38,7 +37,7 @@ function ChattingList() {
 export default ChattingList;
 
 const ContentWrapper = styled.div`
-  padding-top: 43px; 
+  padding-top: 57px; 
   display: flex;
   flex-direction: column;
   height:100%;
@@ -51,7 +50,7 @@ const Title=styled.div`
     color:#38DB83;
     font-size: 24rem;
     font-weight:700;
-    padding-left:1%;
+    padding-left:2%;
     padding-top:20rem;
     z-index:2;
     position:fixed;
@@ -85,7 +84,6 @@ const UserText=styled.div`
     flex-direction: column;
     margin: 0 10rem 0 10rem;
     width: 200rem;
-    
     `
     
 const UserInfo=styled.div`
