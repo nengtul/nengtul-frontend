@@ -11,28 +11,40 @@ function Chat() {
         setChatMessages(prevMessages => [...prevMessages, newInfo]);
     };
 
+
     return(
         <MobileWrap >
-
+            <ChatWrap>
                 <ChatHeader/>
                 <Info/> 
-                <Chatting chatMessages={chatMessages} />
-
+                <Chatting chatMessages={chatMessages}  />
                 <SendChat updateChatInfo={handleChatInfoChange}/>
-
-
-            
+            </ChatWrap>
         </MobileWrap>
     )
 }
 
 
-function Chatting({chatMessages}: { chatMessages: string[]}){
+const ChatWrap= styled.div`
+    display:flex;
+    height:100%;
+    width:inherit;
+    flex-direction: column;
+`
 
+//------------------
+
+function Chatting({chatMessages}: { chatMessages: string[]}){
+    const scrollRef = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight; //현재 스크롤의 위치를 스크롤의 길이만큼 설정해 놓으면 항상 채팅 젤 밑을 볼 수 있다.
+          }
+        }, [chatMessages]);
     return (
-        <ChattingArea>
+        <ChattingArea ref={scrollRef}>
         {chatMessages.map((message, index) => (
-            <div key={index}>
+            <div key={index} >
                 <Message>
                     {message}
                 </Message>
@@ -46,7 +58,6 @@ function Chatting({chatMessages}: { chatMessages: string[]}){
 const Message =styled.div`
     font-size: 14rem;
     display:inline-block;
-    // width:auto;
     max-width: 200rem;
     height:auto;
     background-color: #38DB83;
@@ -55,17 +66,29 @@ const Message =styled.div`
     white-space: pre-wrap;
     word-wrap: break-word;
 
-    margin: 10rem 10rem 0 180rem;
+    margin: 10rem 10rem 0rem 180rem;
     line-height:1.3;
     float:right;
   
 `
 const ChattingArea =styled.div`
-    width:100%;
-    background-color:pink;
+    // background-color:pink;
     margin-top:141rem;  
-    // height: 625rem;
-    overflow: auto;
+    overflow-y: scroll;
+    flex-grow: 1; 
+
+    &::-webkit-scrollbar {
+    width: 2px;
+    }
+    &::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0);
+    }
+    &::-webkit-scrollbar-thumb {
+    background-color: #b5b5b5;
+    border-radius: 10px;
+    width: 2px;
+    }
+    
 `
 //------------------
 interface SendChatProps {
@@ -82,12 +105,13 @@ function SendChat({ updateChatInfo }:SendChatProps){
             inputTextRef.current.style.height = inputTextRef.current.scrollHeight.toString() + 'px';
           }
         }
-    useEffect(()=>{
-        console.log("inputTextRef.current:", inputTextRef.current);
-    
-        updateHeight();
-    },[])
 
+    useEffect(() => {
+            
+        updateHeight();
+          
+    }, [inputValue]);
+        
 
     const handleChange = (event :ChangeEvent<HTMLTextAreaElement>) => {
         updateHeight();
@@ -114,8 +138,8 @@ function SendChat({ updateChatInfo }:SendChatProps){
 
 const SendChatArea=styled.div`
     width:inherit;
-    min-height:65rem;
-    position:absolute;
+    // min-height:65rem;  
+    // position:absolute;   왜 이거 삭제하니까 되는거지
     bottom:0;
     display:flex;
     align-items:center;
@@ -136,6 +160,7 @@ const InputText=styled.textarea`
     border:none;
     border-radius:7rem;
     outline: none;
+    overflow:hidden;
 `
 const SendButton = styled.button`
     width:37rem;

@@ -9,15 +9,11 @@ function IngreAfterRecipePage(){
     return(
         <MobileWrap>
             <Wrap>
-            <Header/>
-            <ChoosedListSection/>
-            <FlexContainer>
+                <Header/>
+                <ChoosedListSection/>
                 <RecipeSection/>
-            </FlexContainer>
             </Wrap>
         </MobileWrap>
-
-
     )
 }
 
@@ -25,23 +21,7 @@ function IngreAfterRecipePage(){
 const Wrap=styled.div`
     height:100%;
     display:flex;
-    flex-direction: column
-
+    flex-direction: column;
 `
 
-const FlexContainer = styled.div`
-  flex: 1; 
-  overflow: auto;
-  &::-webkit-scrollbar {
-    width: 2px;
-  }
-  &::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0);
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #b5b5b5;
-    border-radius: 10px;
-    width: 2px;
-  }
-`;
 export default IngreAfterRecipePage
