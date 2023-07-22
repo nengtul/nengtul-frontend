@@ -1,8 +1,8 @@
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect } from "react";
 import Header from "../common/Header";
 import MobileWrap from "../common/MobileWrap";
 import { LatLng, Map, Marker } from "kakao-maps";
-import axios from "axios";
+// import axios from "axios";
 
 declare global {
   interface Window {
@@ -16,44 +16,40 @@ declare global {
   }
 }
 
-interface Post {
-  id: number;
-  title: string;
-  thumb: string;
-  price: number;
-  writer: string;
-  Lat: number;
-  Lng: number;
-}
+// interface Post {
+//   id: number;
+//   title: string;
+//   thumb: string;
+//   price: number;
+//   writer: string;
+//   Lat: number;
+//   Lng: number;
+// }
 
 export default function IngredientMap() {
   const { kakao } = window;
   const mapRef = useRef<HTMLDivElement | null>(null);
 
-  const fetchPosts = useCallback(async () => {
-    try {
-      // 가상 서버에서 데이터를 받아옴
-      const response = await axios.get<Post[]>(
-        "http://localhost:5000/location"
-      );
-      const postData: Post[] = response.data;
+  // const fetchPosts = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get<Post[]>(
+  //       "http://localhost:5000/location"
+  //     );
+  //     const postData: Post[] = response.data;
+  //     postData.forEach((data) => {
+  //       const markerPosition = new kakao.maps.LatLng(data.Lat, data.Lng);
+  //       const marker = new kakao.maps.Marker({ position: markerPosition });
 
-      // 받아온 데이터를 이용하여 마커 생성
-      postData.forEach((data) => {
-        const markerPosition = new kakao.maps.LatLng(data.Lat, data.Lng);
-        const marker = new kakao.maps.Marker({ position: markerPosition });
-        // marker.setMap(map); // map 객체는 아래의 useEffect 내부에서 생성한 것을 사용합니다.
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
+  //     });
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }, []);
 
   useEffect(() => {
-    // 더미 데이터 받아오는 함수 호출
-    fetchPosts().catch((err) => {
-      console.error(err);
-    });
+    // fetchPosts().catch((err) => {
+    //   console.error(err);
+    // });
 
     const container = mapRef.current;
     if (!container) return;
@@ -64,10 +60,8 @@ export default function IngredientMap() {
     };
 
     const map = new kakao.maps.Map(container, options);
-
-    // map 객체를 fetchPosts 함수에서도 사용할 수 있도록 노출
-    // window.map = map;
-  }, [fetchPosts]);
+    console.log(map);
+  }, [kakao]);
 
   return (
     <>

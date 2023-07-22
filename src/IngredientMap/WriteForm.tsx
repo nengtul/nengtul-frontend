@@ -1,13 +1,10 @@
 import styled from "styled-components";
 import theme from "../common/theme";
 import TrandingLocation from "./TrandingLocation";
-import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import RecipeWriteSubmit from "../RecipeBoard/RecipeWriteSubmit";
 export default function WriteForm() {
-  const [price, setPrice] = useState(0);
-
   return (
     <>
       <WriteWrap>
@@ -25,7 +22,7 @@ export default function WriteForm() {
             <label htmlFor="chk-box"></label>
             <span>무료 나눔이라면 체크해주세요!</span>
           </div>
-          <input type="text" placeholder="가격을 입력해주세요." value={price} />
+          <input type="text" placeholder="가격을 입력해주세요." />
           <div className="input-file">
             <label htmlFor="img-file">
               <FontAwesomeIcon icon={faPlus} />
