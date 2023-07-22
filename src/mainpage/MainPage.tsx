@@ -10,7 +10,7 @@ export default function MainPage() {
   return (
     <MobileWrap>
       <Header />
-      <div className="MainWrap" style={{ paddingTop: "40px" }}>
+      <div className="MainWrap" style={{ paddingTop: "58px" }}>
         <MainBanner />
         <RecipeSlide />
         <Shadow />
