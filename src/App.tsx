@@ -12,6 +12,7 @@ import ChattingList from "./Chatting/ChattingList";
 import Chat from "./Chatting/Chat";
 import RecipeView from "./RecipeBoard/RecipeViewPage";
 import IngredientMap from "./IngredientMap/IngredientMap";
+import IngredientWrite from "./IngredientMap/IngredientWrite";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/newUser" element={<NewUser />} />
           <Route path="/search" element={<IngredientSearch />} />
           <Route path="/ingredientRecipe" element={<IngreAfterRecipePage />} />
+          <Route path="/ingredientWrite" element={<IngredientWrite />} />
           <Route path="/recipeList" element={<RecipeListPage />} />
           <Route path="/recipeWrite" element={<RecipeWritePage />} />
           <Route path="/recipeView" element={<RecipeView />} />

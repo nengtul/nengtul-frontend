@@ -700,5 +700,25 @@
       "like": 281,
       "writer": "Emalee"
     }
+  ],
+  "location": [
+    {
+      "id": 1,
+      "title": "당근 무료로 나눠드려요",
+      "thumb": "http://dummyimage.com/343x360.png/dddddd/000000",
+      "price": 0,
+      "Lat": 37.367173,
+      "Lng": 126.730095,
+      "writer": "박진완"
+    },
+    {
+      "id": 2,
+      "title": "당일직송 해산물 판매합니다.",
+      "thumb": "http://dummyimage.com/343x360.png/dddddd/000000",
+      "price": 19000,
+      "Lat": 37.3660433,
+      "Lng": 126.7321598,
+      "writer": "수산수산"
+    }
   ]
 }
