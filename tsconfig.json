@@ -20,13 +20,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    "types":[
-      "node",
-      "kakao.maps.d.ts"
-    ]
+    "types": ["node", "kakao.maps.d.ts"]
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }],
+  "include": ["src", "kakao-maps-d.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }]
   // "types":[
   //   "node",
   //   "kakao.maps.d.ts"
