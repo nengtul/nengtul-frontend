@@ -1,12 +1,10 @@
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera,faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import MobileWrap from "../common/MobileWrap";
-import {useRef,useEffect,useState,ChangeEvent} from 'react';
 import ChatHeader from "./ChatHeader";
 import Chatting from "./Chatting";
 import SendChat from "./SendChat";
 import Info from "./Info";
+import {useState} from 'react';
 function Chat() {
     const [chatMessages, setChatMessages] = useState<string[]>([]);
 
@@ -35,10 +33,4 @@ const ChatWrap= styled.div`
     flex-direction: column;
 `
 
-//----------------------------------
-
-
-//----------------------------------
-
-//----------------------------------
 export default Chat
