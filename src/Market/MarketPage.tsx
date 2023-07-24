@@ -5,9 +5,9 @@ import Banner from './Banner'
 import MarketInfo from './MarketInfo'
 import MarketMap from "./MarketMap";
 
-import {useState} from 'react'
+
 function MarketPage(){
-    const [selectedPlace, setSelectedPlace] = useState(null);
+   
     // function handleMarketInfoChange(info) {
     //     setSelectedPlace(info);
     // }
