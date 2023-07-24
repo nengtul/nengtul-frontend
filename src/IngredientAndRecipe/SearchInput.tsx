@@ -11,11 +11,7 @@ interface SearchInputProps {
   width?: string;
 }
 
-export default function SearchInput({
-  searchText,
-  setSearchText,
-  onEnter,
-}: SearchInputProps) {
+export default function SearchInput({ searchText, setSearchText, onEnter }: SearchInputProps) {
   function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       onEnter();

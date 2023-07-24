@@ -1,10 +1,6 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronLeft,
-  faCamera,
-  faArrowUp,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faCamera, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import MobileWrap from "../common/MobileWrap";
 import { useRef, useEffect, useState, ChangeEvent } from "react";
 
@@ -99,8 +95,7 @@ function SendChat({ updateChatInfo }: SendChatProps) {
   const updateHeight = () => {
     if (inputTextRef.current) {
       inputTextRef.current.style.height = "40rem";
-      inputTextRef.current.style.height =
-        inputTextRef.current.scrollHeight.toString() + "px";
+      inputTextRef.current.style.height = inputTextRef.current.scrollHeight.toString() + "px";
     }
   };
 
@@ -132,11 +127,7 @@ function SendChat({ updateChatInfo }: SendChatProps) {
           cursor: "pointer",
         }}
       />
-      <InputText
-        ref={inputTextRef}
-        value={inputValue}
-        onChange={handleChange}
-      ></InputText>
+      <InputText ref={inputTextRef} value={inputValue} onChange={handleChange}></InputText>
       <SendButton type="submit" onClick={handleSubmit}>
         <FontAwesomeIcon
           icon={faArrowUp}
@@ -238,10 +229,7 @@ function ChatHeader() {
         <UserName>user1</UserName>
       </Header>
       <GoBack>
-        <FontAwesomeIcon
-          icon={faChevronLeft}
-          style={{ height: "23rem", color: "black" }}
-        />
+        <FontAwesomeIcon icon={faChevronLeft} style={{ height: "23rem", color: "black" }} />
       </GoBack>
     </ChtHeader>
   );
