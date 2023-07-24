@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import MobileWrap from "../common/MobileWrap";
 import Header from "../common/Header";
-function ChattingList() {
+function ChattingListPage() {
   const chattings = Array.from({ length: 8 }, (_, index) => (
     <Chat key={index}>
       <UserPic></UserPic>
@@ -30,7 +30,7 @@ function ChattingList() {
   );
 }
 
-export default ChattingList;
+export default ChattingListPage;
 
 const ContentWrapper = styled.div`
   padding-top: 57px;
