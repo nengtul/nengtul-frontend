@@ -8,10 +8,12 @@ import IngreAfterRecipePage from "./IngredientAndRecipe/IngreAfterRecipePage";
 import RecipeListPage from "./RecipeBoard/RecipeListPage";
 import RecipeWritePage from "./RecipeBoard/RecipeWritePage";
 
-import ChattingList from "./Chatting/ChattingList";
-import Chat from "./Chatting/Chat";
+import ChattingList from "./Chatting/ChattingListPage";
+import Chat from "./Chatting/ChatPage";
 import RecipeView from "./RecipeBoard/RecipeView";
 
+
+import MarketPage from './Market/MarketPage'
 function App() {
   return (
     <>
@@ -27,6 +29,7 @@ function App() {
           <Route path="/recipeView" element={<RecipeView />} />
           <Route path="/chattingList" element={<ChattingList />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/market" element={<MarketPage />} />
         </Routes>
       </BrowserRouter>
     </>
