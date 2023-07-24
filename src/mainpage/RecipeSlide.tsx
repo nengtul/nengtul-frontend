@@ -51,19 +51,19 @@ export default function RecipeSlide() {
       <MainSlider>
         <Slider {...sliderSettings}>
           <div>
-            <Link to="/">
+            <Link to="/recipeview">
               <img src={SlideImg} alt="recipe-slide" />
               <SliderP>비빔국수의 핵심은 양념장!</SliderP>
             </Link>
           </div>
           <div>
-            <Link to="/">
+            <Link to="/recipeview">
               <img src={SlideImg} alt="recipe-slide" />
               <SliderP>비빔국수의 핵심은 양념장!</SliderP>
             </Link>
           </div>
           <div>
-            <Link to="/">
+            <Link to="/recipeview">
               <img src={SlideImg} alt="recipe-slide" />
               <SliderP>비빔국수의 핵심은 양념장!</SliderP>
             </Link>

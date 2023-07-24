@@ -5,7 +5,7 @@ import Chatting from "./Chatting";
 import SendChat from "./SendChat";
 import Info from "./Info";
 import {useState} from 'react';
-function Chat() {
+function ChatPage() {
     const [chatMessages, setChatMessages] = useState<string[]>([]);
 
     const handleChatInfoChange = (newInfo:string) => {
@@ -33,4 +33,4 @@ const ChatWrap= styled.div`
     flex-direction: column;
 `
 
-export default Chat
+export default ChatPage

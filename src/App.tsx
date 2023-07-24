@@ -8,9 +8,15 @@ import IngreAfterRecipePage from "./IngredientAndRecipe/IngreAfterRecipePage";
 import RecipeListPage from "./RecipeBoard/RecipeListPage";
 import RecipeWritePage from "./RecipeBoard/RecipeWritePage";
 
-import ChattingList from "./Chatting/ChattingListPage";
-import Chat from "./Chatting/ChatPage";
-import RecipeView from "./RecipeBoard/RecipeView";
+
+
+
+import ChattingListPage from "./Chatting/ChattingListPage";
+import ChatPage from "./Chatting/ChatPage";
+import RecipeView from "./RecipeBoard/RecipeViewPage";
+import IngredientMap from "./IngredientMap/IngredientMap";
+import IngredientWrite from "./IngredientMap/IngredientWrite";
+
 
 
 import MarketPage from './Market/MarketPage'
@@ -24,12 +30,17 @@ function App() {
           <Route path="/newUser" element={<NewUser />} />
           <Route path="/search" element={<IngredientSearch />} />
           <Route path="/ingredientRecipe" element={<IngreAfterRecipePage />} />
+          <Route path="/ingredientWrite" element={<IngredientWrite />} />
           <Route path="/recipeList" element={<RecipeListPage />} />
           <Route path="/recipeWrite" element={<RecipeWritePage />} />
           <Route path="/recipeView" element={<RecipeView />} />
-          <Route path="/chattingList" element={<ChattingList />} />
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/chattingList" element={<ChattingListPage />} />
+          <Route path="/chat" element={<ChatPage />} />
           <Route path="/market" element={<MarketPage />} />
+
+
+          <Route path="/ingredientMap" element={<IngredientMap />} />
+
         </Routes>
       </BrowserRouter>
     </>

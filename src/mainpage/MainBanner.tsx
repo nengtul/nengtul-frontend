@@ -1,15 +1,20 @@
 import styled from "styled-components";
+import BannerImg from "../assets/mainpage/mainBanner.png";
 
 const Banner = styled.div`
   width: 100%;
-  height: 230px;
-  background: #505050;
+  img {
+    width: 100%;
+    object-fit: cover;
+  }
 `;
 
 export default function MainBanner() {
   return (
     <>
-      <Banner />
+      <Banner>
+        <img src={BannerImg} alt="main-banner-img" />
+      </Banner>
     </>
   );
 }
