@@ -81,6 +81,7 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
         // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
         function placesSearchCB(data:kakao.maps.services.PlacesSearchResult, status: kakao.maps.services.Status, pagination: kakao.maps.Pagination) {
         // function placesSearchCB(data: Place[], status: any, pagination: any): void {
+            console.log(pagination)
             if (status === kakao.maps.services.Status.OK) {
                 
                 // 정상적으로 검색이 완료됐으면 지도에 마커를 표출합니다
