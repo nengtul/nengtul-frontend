@@ -11,6 +11,4 @@ declare module "kakao-maps" {
     constructor(options: any);
     setMap(map: any): void;
   }
-
-  // 기타 다른 타입들도 필요하면 추가할 수 있습니다.
 }
