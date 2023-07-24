@@ -1,18 +1,23 @@
 import styled from "styled-components";
-
 import MobileWrap from '../common/MobileWrap'
 import Header from '../common/Header'
 import Banner from './Banner'
-// import MarketInfo from './MarketInfo'
-// import MarketMap from "./MarketMap";
+import MarketInfo from './MarketInfo'
+import MarketMap from "./MarketMap";
+
+
 function MarketPage(){
+   
+    // function handleMarketInfoChange(info) {
+    //     setSelectedPlace(info);
+    // }
     return (
         <MobileWrap>
             <MarketPageArea>
                 <Header/>
                 <Banner/>
-                {/* <MarketMap/> */}
-                {/* <MarketInfo/> */}
+                <MarketMap />
+                <MarketInfo />
             </MarketPageArea>
         </MobileWrap>
     )
