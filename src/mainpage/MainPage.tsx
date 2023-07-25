@@ -1,5 +1,6 @@
 import Header from "../common/Header";
 import MobileWrap from "../common/MobileWrap";
+import TabMenu from "../common/TabMenu";
 import { Shadow } from "./CommonStyle";
 import MainBanner from "./MainBanner";
 import MyRecipe from "./MyRecipe";
@@ -18,6 +19,7 @@ export default function MainPage() {
         <Shadow />
         <MyRecipe />
       </div>
+      <TabMenu />
     </MobileWrap>
   );
 }
