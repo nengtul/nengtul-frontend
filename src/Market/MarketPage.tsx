@@ -1,18 +1,26 @@
 import styled from "styled-components";
-
 import MobileWrap from '../common/MobileWrap'
 import Header from '../common/Header'
 import Banner from './Banner'
-// import MarketInfo from './MarketInfo'
-// import MarketMap from "./MarketMap";
+import MarketInfo from './MarketInfo'
+import MarketMap from "./MarketMap";
+// import { Provider } from "react-redux";
+// import store from '../Redux/store';
+
 function MarketPage(){
+   
+    // function handleMarketInfoChange(info) {
+    //     setSelectedPlace(info);
+    // }
     return (
         <MobileWrap>
             <MarketPageArea>
                 <Header/>
                 <Banner/>
-                {/* <MarketMap/> */}
-                {/* <MarketInfo/> */}
+                {/* <Provider store={store}> */}
+                <MarketMap />
+                <MarketInfo />
+                {/* </Provider> */}
             </MarketPageArea>
         </MobileWrap>
     )
