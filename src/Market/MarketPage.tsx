@@ -4,8 +4,8 @@ import Header from '../common/Header'
 import Banner from './Banner'
 import MarketInfo from './MarketInfo'
 import MarketMap from "./MarketMap";
-// import { Provider } from "react-redux";
-// import store from '../Redux/store';
+import { Provider } from "react-redux";
+import store from '../Redux/store';
 
 function MarketPage(){
    
@@ -17,10 +17,10 @@ function MarketPage(){
             <MarketPageArea>
                 <Header/>
                 <Banner/>
-                {/* <Provider store={store}> */}
-                <MarketMap />
-                <MarketInfo />
-                {/* </Provider> */}
+                <Provider store={store}>
+                    <MarketMap />
+                    <MarketInfo />
+                </Provider>
             </MarketPageArea>
         </MobileWrap>
     )

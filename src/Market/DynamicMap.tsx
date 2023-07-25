@@ -1,7 +1,7 @@
 import {useEffect,useRef} from 'react'
 import styled from 'styled-components'
-// import kakao from 'kakao.maps';S
-
+import { useDispatch } from 'react-redux';
+import {setPlace} from '../Redux/marketInfoSlice'
 
 interface DynamicMapProps {
     latitude: number;
@@ -10,14 +10,13 @@ interface DynamicMapProps {
 const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
     console.log('지도 띄우기로 넘어옴!',latitude,longitude)
     const kakaoMapRef=useRef<HTMLDivElement>(null)
-
+    const dispatch=useDispatch()
 
   
     useEffect(()=>{
         if (!kakaoMapRef.current){
             return 
         }
-        // console.log('여기서 div가 map인게 떠야함',kakaoMapRef.current)
         const targetPoint=new kakao.maps.LatLng(latitude,longitude)
         const options={
             center:targetPoint,
@@ -41,7 +40,6 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
         const placeOverlay = new kakao.maps.CustomOverlay(optioning), 
                             contentNode = document.createElement('div'), // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다 
                             markers = [] as kakao.maps.Marker[], // 마커를 담을 배열입니다
-                            // currCategory = ['CS2','MT1']; 
                             currCategory = ['CS2','MT1']; 
 
         // 장소 검색 객체를 생성합니다
@@ -58,17 +56,12 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
         // 커스텀 오버레이 컨텐츠를 설정합니다
         placeOverlay.setContent(contentNode); 
         // 각 카테고리에 클릭 이벤트를 등록합니다
-        // addCategoryClickEvent(); 
 
         // 엘리먼트에 이벤트 핸들러를 등록하는 함수입니다
         function addEventHandle(target:HTMLElement | Document, type: string, callback:EventListenerOrEventListenerObject) {
             if (target.addEventListener) {
                 target.addEventListener(type, callback);
             } 
-            // else if (target instanceof Document)
-            //  {
-            //     target.attachEvent('on' + type, callback);
-            // }
         }
 
         // 카테고리 검색을 요청하는 함수입니다
@@ -86,7 +79,6 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
 
         // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
         function placesSearchCB(data:kakao.maps.services.PlacesSearchResult, status: kakao.maps.services.Status, pagination: kakao.maps.Pagination) {
-        // function placesSearchCB(data: Place[], status: any, pagination: any): void {
             console.log(pagination)
             if (status === kakao.maps.services.Status.OK) {
                 console.log('데이터',data)
@@ -114,7 +106,6 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
             // 몇번째 카테고리가 선택되어 있는지 얻어옵니다
             // 이 순서는 스프라이트 이미지에서의 위치를 계산하는데 사용됩니다
             const categoryElement = document.getElementById(category);
-            // console.log('일단 이거 떠야 다음으로 넘어감',categoryElement)
             if (categoryElement) {
                 const order = categoryElement.getAttribute('data-order');
                 console.log('order이건 뭐여',order)
@@ -178,19 +169,9 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
           }
           
         function displayPlaceInfo (place:Place) {
-            // const content = '<div class="placeinfo">' +
-            //                 '   <a class="title" href="' + place.place_url + '" target="_blank" title="' + place.place_name + '">' + place.place_name + '</a>';   
-        
-      
-                const content = '    <span title="' + place.place_name + '">' + place.place_name + '</span>' +
-                            '  <span class="jibun" title="' + place.place_name + '">(지번 : ' +place.place_name + ')</span>';
-                         
-           
-            // content += '    <span class="tel">' + place.phone + '</span>' + 
-            //             '</div>' + 
-            //             '<div class="after"></div>';
-         
-            contentNode.innerHTML = content;
+            console.log('이거 정보',place)           
+            // dispatch(setPlace(place))
+            dispatch(setPlace({...place,latitude,longitude}))
             placeOverlay.setPosition(new kakao.maps.LatLng(Number(place.y), Number(place.x)));
             placeOverlay.setMap(backgroundMap);  
         }
@@ -247,26 +228,10 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
         <DynamicMapOne>
             <div className="map_wrap">
                 <div id="map" style={{width:'100%', height:'100%', position:'relative',overflow:'hidden'}}></div>
-                <ul id="category">
-                    <li id="BK9" data-order="0"> 
-                        <span className="category_bg bank"></span>
-                        은행
-                        </li>       
+                <ul id="category">    
                     <li id="MT1" data-order="1" > 
                         <span className="category_bg mart"></span>
                         마트
-                    </li>  
-                    <li id="PM9" data-order="2"> 
-                        <span className="category_bg pharmacy"></span>
-                        약국
-                    </li>  
-                    <li id="OL7" data-order="3"> 
-                        <span className="category_bg oil"></span>
-                        주유소
-                    </li>  
-                    <li id="CE7" data-order="4"> 
-                        <span className="category_bg cafe"></span>
-                        카페
                     </li>  
                     <li id="CS2" data-order="5"> 
                         <span className="category_bg store"></span>
