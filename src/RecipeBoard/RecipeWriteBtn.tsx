@@ -23,8 +23,8 @@ const WriteBtn = styled(Link)`
   justify-content: center;
   position: fixed;
   left: auto;
-  bottom: 60px;
-  transform: translatex(10px);
+  bottom: 110px;
+  transform: translatex(5px);
   cursor: pointer;
   svg {
     color: #fff;

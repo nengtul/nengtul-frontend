@@ -16,7 +16,6 @@ export default function RecipeVideo() {
 
 const Player = styled.div`
   width: 100%;
-  height: 270px;
+  height: 220px;
   background-color: #333;
-  padding-top: 58px;
 `;

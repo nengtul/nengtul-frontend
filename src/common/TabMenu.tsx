@@ -4,13 +4,13 @@ export default function TabMenu() {
 }
 
 const MenuWrap = styled.div`
-  position: fixed;
+  position: absolute;
   left: auto;
-  bottom: auto;
+  bottom: 0;
   width: 390px;
-  border-radius: 10px 10px 0px 0px;
+  height: 56px;
   border-top: 1px solid #dadada;
-  background: #fff;
+  background: #333;
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.25);
   z-index: 88888;
   padding: 20px 0px;

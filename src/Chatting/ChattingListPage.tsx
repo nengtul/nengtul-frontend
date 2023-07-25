@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 import MobileWrap from "../common/MobileWrap";
 import Header from "../common/Header";
+import ContensWrap from "../common/ContentsWrap";
+import TabMenu from "../common/TabMenu";
 function ChattingListPage() {
   const chattings = Array.from({ length: 8 }, (_, index) => (
     <Chat key={index}>
@@ -22,10 +24,13 @@ function ChattingListPage() {
   return (
     <MobileWrap>
       <Header />
-      <ContentWrapper>
-        <Title>채팅</Title>
-        <ChatList>{chattings}</ChatList>
-      </ContentWrapper>
+      <ContensWrap>
+        <ContentWrapper>
+          <Title>채팅</Title>
+          <ChatList>{chattings}</ChatList>
+        </ContentWrapper>
+      </ContensWrap>
+      <TabMenu />
     </MobileWrap>
   );
 }
@@ -33,10 +38,8 @@ function ChattingListPage() {
 export default ChattingListPage;
 
 const ContentWrapper = styled.div`
-  padding-top: 57px;
   display: flex;
   flex-direction: column;
-  height: 100%;
 `;
 
 const Title = styled.div`
@@ -53,7 +56,7 @@ const Title = styled.div`
 `;
 
 const ChatList = styled.div`
-  padding-top: 65px;
+  padding-top: 60px;
   width: 100%;
   flex-grow: 1;
 `;
