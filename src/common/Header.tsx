@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import HomeButton from "../assets/icon/home.svg";
+import Back from "../assets/icon/back.svg";
 import Search from "../assets/icon/search.svg";
 import HeaderTabMenu from "./HeaderTabMenu";
 import { useState } from "react";
@@ -66,13 +67,23 @@ export default function Header() {
     <>
       <StyledHeader>
         <div>
-          <img
-            src={HomeButton}
-            alt="home-button"
-            onClick={() => {
-              navigate("/");
-            }}
-          />
+          {window.location.pathname === "/" ? (
+            <img
+              src={HomeButton}
+              alt="home-button"
+              onClick={() => {
+                navigate("/");
+              }}
+            />
+          ) : (
+            <img
+              src={Back}
+              alt="home-button"
+              onClick={() => {
+                navigate(-1);
+              }}
+            />
+          )}
         </div>
         <RightMenu>
           <Link to={"/search"}>
