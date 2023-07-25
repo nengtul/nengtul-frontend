@@ -41,10 +41,6 @@ export default function MarkerCard({ selectedMarker, setSelectedMarker }: Marker
               </button>
             </div>
           </div>
-          {/* <img src={selectedMarker.thumb} alt={selectedMarker.title} />
-        <h2>{selectedMarker.title}</h2>
-        <p>Price: {selectedMarker.price}</p>
-        <p>Writer: {selectedMarker.writer}</p> */}
         </div>
       </Card>
     </>

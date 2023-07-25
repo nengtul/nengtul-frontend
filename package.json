@@ -20,6 +20,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/react-slick": "^0.23.10",
     "axios": "^1.4.0",
+    "dotenv": "^16.3.1",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^5.0.0",
     "json-server": "^0.17.3",

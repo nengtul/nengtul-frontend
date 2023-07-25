@@ -78,7 +78,7 @@ export default function ServiceSection() {
           </CardLink>
         </CardWithRecipe>
         <CardWithShare>
-          <CardLink to={"/"}>
+          <CardLink to={"/ingredientMap"}>
             <CardCategory>식재료 아나바다</CardCategory>
             <CardTitle>
               요리하고 재료가 남으셨나요?
