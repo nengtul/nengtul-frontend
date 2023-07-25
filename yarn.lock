@@ -4847,6 +4847,11 @@ version-guard@^1.1.1:
   resolved "https://registry.npmjs.org/version-guard/-/version-guard-1.1.1.tgz"
   integrity sha512-MGQLX89UxmYHgDvcXyjBI0cbmoW+t/dANDppNPrno64rYr8nH4SHSuElQuSYdXGEs0mUzdQe1BY+FhVPNsAmJQ==
 
+vite-plugin-html-env@^1.2.8:
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/vite-plugin-html-env/-/vite-plugin-html-env-1.2.8.tgz#c4907e1222b773fc53e2c3567c17cf1f8c86f30c"
+  integrity sha512-Uqo2NqcmhVjuXv83oyRC80mZF+B2J3pcon8Bnm9F3T67EvkPYf64Gk0NReAE4MRGElt8pCGpCMQDIzs12NWUAA==
+
 vite@^4.4.0:
   version "4.4.7"
   resolved "https://registry.yarnpkg.com/vite/-/vite-4.4.7.tgz#71b8a37abaf8d50561aca084dbb77fa342824154"

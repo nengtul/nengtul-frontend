@@ -35,7 +35,8 @@
     "redux": "^4.2.1",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.0.4",
-    "v6": "^0.0.0"
+    "v6": "^0.0.0",
+    "vite-plugin-html-env": "^1.2.8"
   },
   "devDependencies": {
     "@types/node": "^20.4.2",
