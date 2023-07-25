@@ -41,6 +41,7 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
         const placeOverlay = new kakao.maps.CustomOverlay(optioning), 
                             contentNode = document.createElement('div'), // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다 
                             markers = [] as kakao.maps.Marker[], // 마커를 담을 배열입니다
+                            // currCategory = ['CS2','MT1']; 
                             currCategory = ['CS2','MT1']; 
 
         // 장소 검색 객체를 생성합니다
@@ -92,6 +93,7 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
                 // 정상적으로 검색이 완료됐으면 지도에 마커를 표출합니다
                 displayPlaces(data,'CS2');
                 displayPlaces(data,'MT1');
+            
                 
             } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
                 // 검색결과가 없는경우 해야할 처리가 있다면 이곳에 작성해 주세요
@@ -126,8 +128,6 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
                     // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
                     (function(marker, place) {
                         kakao.maps.event.addListener(marker, 'click', function() {
-                            console.log('클릭되긴 한 것인가')
-                            console.log(place)
                             displayPlaceInfo(place);
                         });
                     })(marker, places[i]);
@@ -139,7 +139,7 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
         // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
         function addMarker(position:kakao.maps.LatLng, order:string) {
             const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
-                imageSize = new kakao.maps.Size(27, 28),  // 마커 이미지의 크기
+                imageSize = new kakao.maps.Size(27, 28),  // 마커 이미지의 크기 // 마커 이미지의 크기
                 imgOptions =  {
                     spriteSize : new kakao.maps.Size(72, 208), // 스프라이트 이미지의 크기
                     spriteOrigin : new kakao.maps.Point(46, (Number(order)*36)), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
