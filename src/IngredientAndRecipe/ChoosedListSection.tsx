@@ -38,7 +38,6 @@ const GreenArea = styled.div`
   background-color: #38db83;
   width: 100%;
   height: auto;
-  margin-top: 56px;
 `;
 const MainArea = styled.div`
   padding: 20rem 0 16rem 0;

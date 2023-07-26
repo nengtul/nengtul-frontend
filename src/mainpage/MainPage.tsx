@@ -1,3 +1,4 @@
+import ContensWrap from "../common/ContentsWrap";
 import Header from "../common/Header";
 import MobileWrap from "../common/MobileWrap";
 import TabMenu from "../common/TabMenu";
@@ -11,14 +12,14 @@ export default function MainPage() {
   return (
     <MobileWrap>
       <Header />
-      <div className="MainWrap" style={{ paddingTop: "58px" }}>
+      <ContensWrap className="MainWrap" style={{ paddingTop: "58px" }}>
         <MainBanner />
         <RecipeSlide />
         <Shadow />
         <ServiceSection />
         <Shadow />
         <MyRecipe />
-      </div>
+      </ContensWrap>
       <TabMenu />
     </MobileWrap>
   );

@@ -1,3 +1,4 @@
+
 import styled from "styled-components"
 import EggIcon from '../assets/icon/EggIcon_png.png'
 import HomePart from './HomePart'
@@ -67,75 +68,72 @@ function NewUser (){
         </Wrapper>
         </MobileWrap>
     )
+
 }
 
-
-function EggPart(){
-    return (
-        <Egg>
-            <EggImg>
-                <img src={EggIcon} alt="EggIcon" />
-            </EggImg>
-        </Egg>
-    )
+function EggPart() {
+  return (
+    <Egg>
+      <EggImg>
+        <img src={EggIcon} alt="EggIcon" />
+      </EggImg>
+    </Egg>
+  );
 }
-const Wrapper= styled.div`
-    height:100%;
-    background-color:#38DB83;
-    margin: 0 auto;
-    `
-const Egg=styled.div`
-    width :150px;
-    margin: 0 auto;
-`
-const EggImg=styled.div`
-`
-const InputPart=styled.div`
-    
-    margin: 0 auto;
-    width:90%;
-    margin-bottom:20rem;
-`
+const Wrapper = styled.div`
+  height: 844px;
+  background-color: #38db83;
+  margin: 0 auto;
+`;
+const Egg = styled.div`
+  width: 150px;
+  margin: 0 auto;
+`;
+const EggImg = styled.div``;
+const InputPart = styled.div`
+  margin: 0 auto;
+  width: 90%;
+  margin-bottom: 20rem;
+`;
 
-const InputArea=styled.div`
-    width:100%;
-    height: 85rem;
-    margin-bottom:5rem;
-    // background-color:white;
-`
+const InputArea = styled.div`
+  width: 100%;
+  height: 85rem;
+  margin-bottom: 5rem;
+  // background-color:white;
+`;
 
-const Title=styled.div`
-    font-size:16rem;
-    font-weight:700;
-    color:white;
-    margin-bottom:8rem;
-`
-const InputWrapper=styled.div`
-    position: relative;
-    width: 99%;
-    height: 45rem;
-    border: 2rem solid white;
-    border-radius:4rem;
-    input {
-        padding-left:5%;
-        padding-right:5%;
-        width: 90%;
-        height: 95%;
-        font-size:16rem;
-        background-color: #38DB83;
-       
-        outline: none;
-        border: none;
-        color: white;
-    }
+const Title = styled.div`
+  font-size: 16rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 8rem;
+`;
+const InputWrapper = styled.div`
+  position: relative;
+  width: 99%;
+  height: 45rem;
+  border: 2rem solid white;
+  border-radius: 4rem;
+  input {
+    padding-left: 5%;
+    padding-right: 5%;
+    width: 90%;
+    height: 95%;
+    font-size: 16rem;
+    background-color: #38db83;
 
-    input::placeholder {
+    outline: none;
+    border: none;
     color: white;
-}
-`
+  }
 
-const SquareButton=styled.button`
+  input::placeholder {
+    color: white;
+  }
+`;
 
+const SquareButton = styled.button`
     width: 100%;
     height: 55rem;
     background-color:white;
