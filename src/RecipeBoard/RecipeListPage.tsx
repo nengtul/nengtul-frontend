@@ -9,6 +9,8 @@ import RecipeListCard from "./RecipeListCard";
 import axios from "axios";
 import { useInView } from "react-intersection-observer";
 import RecipeWriteBtn from "./RecipeWriteBtn";
+import ContensWrap from "../common/ContentsWrap";
+import TabMenu from "../common/TabMenu";
 
 export interface Post {
   id: number;
@@ -71,74 +73,74 @@ export default function RecipeListPage() {
   return (
     <MobileWrap>
       <Header />
-      <ListWrap>
-        <CategoryBtn>
-          <button
-            onClick={() => {
-              setCategoryView(!categoryView);
-            }}
-          >
-            {category}
-            <FontAwesomeIcon icon={faAngleDown} />
-          </button>
-          {categoryView && (
-            <ul>
-              <li>
-                <button onClick={selectOpt} value="전체">
-                  전체
-                </button>
-              </li>
-              <li>
-                <button onClick={selectOpt} value="한식">
-                  한식
-                </button>
-              </li>
-              <li>
-                <button onClick={selectOpt} value="중식">
-                  중식
-                </button>
-              </li>
-              <li>
-                <button onClick={selectOpt} value="일식">
-                  일식
-                </button>
-              </li>
-            </ul>
-          )}
-        </CategoryBtn>
-        <CategoryBtn>
-          <button
-            onClick={() => {
-              setViewCountView(!viewCountView);
-            }}
-          >
-            {viewCount}
-            <FontAwesomeIcon icon={faAngleDown} />
-          </button>
-          {viewCountView && (
-            <ul>
-              <li>
-                <button onClick={selectViewOpt} value="인기순">
-                  인기순
-                </button>
-              </li>
-              <li>
-                <button onClick={selectViewOpt} value="최신순">
-                  최신순
-                </button>
-              </li>
-            </ul>
-          )}
-        </CategoryBtn>
-        <CardWrap>
-          {posts?.map((post) => (
-            <RecipeListCard key={post.id} post={post} />
-          ))}
-          <div ref={ref} />
-        </CardWrap>
-      </ListWrap>
-
-      <RecipeWriteBtn />
+      <ContensWrap>
+        <ListWrap>
+          <CategoryBtn>
+            <button
+              onClick={() => {
+                setCategoryView(!categoryView);
+              }}
+            >
+              {category}
+              <FontAwesomeIcon icon={faAngleDown} />
+            </button>
+            {categoryView && (
+              <ul>
+                <li>
+                  <button onClick={selectOpt} value="전체">
+                    전체
+                  </button>
+                </li>
+                <li>
+                  <button onClick={selectOpt} value="한식">
+                    한식
+                  </button>
+                </li>
+                <li>
+                  <button onClick={selectOpt} value="중식">
+                    중식
+                  </button>
+                </li>
+                <li>
+                  <button onClick={selectOpt} value="일식">
+                    일식
+                  </button>
+                </li>
+              </ul>
+            )}
+          </CategoryBtn>
+          <CategoryBtn>
+            <button
+              onClick={() => {
+                setViewCountView(!viewCountView);
+              }}
+            >
+              {viewCount}
+              <FontAwesomeIcon icon={faAngleDown} />
+            </button>
+            {viewCountView && (
+              <ul>
+                <li>
+                  <button onClick={selectViewOpt} value="인기순">
+                    인기순
+                  </button>
+                </li>
+                <li>
+                  <button onClick={selectViewOpt} value="최신순">
+                    최신순
+                  </button>
+                </li>
+              </ul>
+            )}
+          </CategoryBtn>
+          <CardWrap>
+            {posts?.map((post) => <RecipeListCard key={post.id} post={post} />)}
+            <div ref={ref} />
+          </CardWrap>
+        </ListWrap>
+        <RecipeWriteBtn />
+      </ContensWrap>
+      <TabMenu />
     </MobileWrap>
   );
 }
@@ -146,7 +148,7 @@ export default function RecipeListPage() {
 const ListWrap = styled.div`
   width: 92%;
   margin: 0 auto;
-  padding-top: 70px;
+  padding-top: 20px;
 `;
 
 export const CategoryBtn = styled.div`

@@ -1,16 +1,21 @@
-import styled from 'styled-components';
-import MobileWrap from '../common/MobileWrap';
-import Header from '../common/Header';
-import ChoosedListSection from './ChoosedListSection';
-import RecipeSection from './RecipeSection';
+import styled from "styled-components";
+import MobileWrap from "../common/MobileWrap";
+import Header from "../common/Header";
+import ChoosedListSection from "./ChoosedListSection";
+import RecipeSection from "./RecipeSection";
+import ContensWrap from "../common/ContentsWrap";
+import TabMenu from "../common/TabMenu";
 
 function IngreAfterRecipePage() {
   return (
     <MobileWrap>
       <Wrap>
         <Header />
-        <ChoosedListSection />
-        <RecipeSection />
+        <ContensWrap>
+          <ChoosedListSection />
+          <RecipeSection />
+        </ContensWrap>
+        <TabMenu />
       </Wrap>
     </MobileWrap>
   );

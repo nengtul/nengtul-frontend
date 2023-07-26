@@ -41,7 +41,7 @@ export default function WriteForm() {
 const WriteWrap = styled.div`
   width: 92%;
   margin: 0 auto;
-  padding: 80px 0px 20px;
+  padding: 20px 0px 20px;
 
   h4 {
     font-size: 16rem;

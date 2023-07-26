@@ -11,6 +11,8 @@ import { useState } from "react";
 import RecipeNumberInput from "./RecipeNumberInpuit";
 import Button from "../common/Button";
 import RecipeWriteSubmit from "./RecipeWriteSubmit";
+import ContensWrap from "../common/ContentsWrap";
+import TabMenu from "../common/TabMenu";
 
 export default function RecipeWritePage() {
   const [category, setCategory] = useState("");
@@ -52,65 +54,68 @@ export default function RecipeWritePage() {
     <>
       <MobileWrap>
         <Header />
-        <CategoryWrap>
-          <form>
-            <CategoryBtn>
-              <button
-                onClick={() => {
-                  setCategoryView(!categoryView);
-                }}
-                type="button"
-              >
-                {category || "카테고리"}
-                <FontAwesomeIcon icon={faAngleDown} />
-              </button>
-              {categoryView && (
-                <ul>
-                  <li>
-                    <button type="button" onClick={selectOpt} value="한식">
-                      한식
-                    </button>
-                  </li>
-                  <li>
-                    <button type="button" onClick={selectOpt} value="중식">
-                      중식
-                    </button>
-                  </li>
-                  <li>
-                    <button type="button" onClick={selectOpt} value="일식">
-                      일식
-                    </button>
-                  </li>
-                </ul>
-              )}
-            </CategoryBtn>
+        <ContensWrap>
+          <CategoryWrap>
+            <form>
+              <CategoryBtn>
+                <button
+                  onClick={() => {
+                    setCategoryView(!categoryView);
+                  }}
+                  type="button"
+                >
+                  {category || "카테고리"}
+                  <FontAwesomeIcon icon={faAngleDown} />
+                </button>
+                {categoryView && (
+                  <ul>
+                    <li>
+                      <button type="button" onClick={selectOpt} value="한식">
+                        한식
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" onClick={selectOpt} value="중식">
+                        중식
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" onClick={selectOpt} value="일식">
+                        일식
+                      </button>
+                    </li>
+                  </ul>
+                )}
+              </CategoryBtn>
 
-            <FormInput type="text" placeholder="제목을 입력해주세요." />
+              <FormInput type="text" placeholder="제목을 입력해주세요." />
 
-            <div className="input-ingredient">
-              <p>재료 등록</p>
-              <SearchInput
-                searchText={searchText}
-                setSearchText={setSearchText}
-                onEnter={handleEnter}
-              />
-            </div>
-            <SearchList searchData={searchData} removeItem={removeItem} />
-            <div className="finishRecipe">
-              <p>레시피 설명</p>
-              <textarea placeholder="요리에 대한 설명을 입력해주세요."></textarea>
-            </div>
-            {Array.from({ length: listNum }, (_, index) => (
-              <RecipeNumberInput key={index} step={index + 1} />
-            ))}
-            <CountButtonWrap>
-              <Button onClick={inputMinus}>-</Button>
-              <p>STEP</p>
-              <Button onClick={inputPlus}>+</Button>
-            </CountButtonWrap>
-            <RecipeWriteSubmit />
-          </form>
-        </CategoryWrap>
+              <div className="input-ingredient">
+                <p>재료 등록</p>
+                <SearchInput
+                  searchText={searchText}
+                  setSearchText={setSearchText}
+                  onEnter={handleEnter}
+                />
+              </div>
+              <SearchList searchData={searchData} removeItem={removeItem} />
+              <div className="finishRecipe">
+                <p>레시피 설명</p>
+                <textarea placeholder="요리에 대한 설명을 입력해주세요."></textarea>
+              </div>
+              {Array.from({ length: listNum }, (_, index) => (
+                <RecipeNumberInput key={index} step={index + 1} />
+              ))}
+              <CountButtonWrap>
+                <Button onClick={inputMinus}>-</Button>
+                <p>STEP</p>
+                <Button onClick={inputPlus}>+</Button>
+              </CountButtonWrap>
+              <RecipeWriteSubmit />
+            </form>
+          </CategoryWrap>
+        </ContensWrap>
+        <TabMenu />
       </MobileWrap>
     </>
   );
@@ -119,7 +124,7 @@ export default function RecipeWritePage() {
 const CategoryWrap = styled.div`
   width: 92%;
   margin: 0 auto;
-  padding: 80px 0px;
+  padding: 20px 0px;
 
   .input-ingredient {
     margin-top: 20px;
