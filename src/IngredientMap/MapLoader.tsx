@@ -1,12 +1,15 @@
 import { useEffect, useState, ReactNode } from "react";
+
 const KAKAO_MAP_SCRIPT_ID = "kakao-map-script";
-const KAKAO_MAP_APP_KEY = "9542ff19f956b37363005f4b1adb6dbf";
+const KAKAO_MAP_APP_KEY = "b762e38f98faa6f9dc8ad7dfc173b261"; // 여기에 자신의 KakaoMap API 키를 입력하세요
 
 interface KakaoMapScriptLoaderProps {
   children: ReactNode;
 }
-export default function Map(props: KakaoMapScriptLoaderProps) {
+
+export default function MapLoader(props: KakaoMapScriptLoaderProps) {
   const [mapScriptLoaded, setMapScriptLoaded] = useState(false);
+
   useEffect(() => {
     const script = document.createElement("script");
     script.id = KAKAO_MAP_SCRIPT_ID;
@@ -21,5 +24,6 @@ export default function Map(props: KakaoMapScriptLoaderProps) {
     };
     document.getElementById("root")?.appendChild(script);
   }, []);
+
   return <>{mapScriptLoaded ? props.children : <div>지도를 가져오는 중입니다. </div>}</>;
 }
