@@ -1,58 +1,10 @@
 import styled from "styled-components";
 import HomeButton from "../assets/icon/home.svg";
 import Back from "../assets/icon/back.svg";
-import Search from "../assets/icon/search.svg";
 import HeaderTabMenu from "./HeaderTabMenu";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-
-const StyledHeader = styled.header`
-  padding: 12px 10px;
-  padding-right: 2px;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #dfdfdf;
-  position: fixed;
-  left: auto;
-  top: auto;
-  width: 390px;
-  z-index: 999999;
-  border-radius: 20px 20px 0px 0px;
-  img {
-    cursor: pointer;
-  }
-`;
-
-const RightMenu = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const HamburgerIcon = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 35px;
-  height: 30px;
-  cursor: pointer;
-
-  span {
-    width: 5px;
-    height: 5px;
-    background-color: #000;
-    margin-bottom: 6px;
-    border-radius: 50%;
-    transition: background-color 0.3s ease;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-`;
+import Alarm from "./Alarm";
 
 export default function Header() {
   const [showTabMenu, setShowTabMenu] = useState(false);
@@ -78,7 +30,8 @@ export default function Header() {
           ) : (
             <img
               src={Back}
-              alt="home-button"
+              alt="back-button"
+              style={{ width: "33px" }}
               onClick={() => {
                 navigate(-1);
               }}
@@ -86,9 +39,7 @@ export default function Header() {
           )}
         </div>
         <RightMenu>
-          <Link to={"/search"}>
-            <img src={Search} alt="search-button" />
-          </Link>
+          <Alarm />
           <HamburgerIcon onClick={toggleTabMenu}>
             <span></span>
             <span></span>
@@ -100,3 +51,55 @@ export default function Header() {
     </>
   );
 }
+
+const StyledHeader = styled.header`
+  padding: 0px 10px;
+  padding-right: 2px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #dfdfdf;
+  position: fixed;
+  left: auto;
+  top: auto;
+  width: 390px;
+  height: 60px;
+  z-index: 999999;
+  border-radius: 20px 20px 0px 0px;
+  img {
+    cursor: pointer;
+  }
+`;
+
+const RightMenu = styled.div`
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 33px;
+  }
+`;
+
+const HamburgerIcon = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 30px;
+  cursor: pointer;
+
+  span {
+    width: 5px;
+    height: 5px;
+    background-color: #000;
+    margin-bottom: 6px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
