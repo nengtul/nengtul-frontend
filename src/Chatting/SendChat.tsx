@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera,faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import {useRef,useEffect,useState,ChangeEvent} from 'react';
+import {useRef,useEffect,useState,ChangeEvent,KeyboardEvent} from 'react';
 
 interface SendChatProps {
     updateChatInfo: (newInfo: string) => void; 
+    onEnter: () => void;
   }
 function SendChat({ updateChatInfo }:SendChatProps){
 
@@ -17,7 +18,12 @@ function SendChat({ updateChatInfo }:SendChatProps){
             inputTextRef.current.style.height = inputTextRef.current.scrollHeight.toString() + 'px';
           }
         }
-
+    function handleKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
+        if (e.key === "Enter") {
+            e.preventDefault(); // 엔터 키의 기본 동작인 줄바꿈 방지
+            handleSubmit();
+        }
+    }
     useEffect(() => {
             
         updateHeight();
@@ -41,7 +47,7 @@ function SendChat({ updateChatInfo }:SendChatProps){
     return(
         <SendChatArea >
             <FontAwesomeIcon icon={faCamera} style={{color: "#000000",height:"30rem",padding:"0 11rem 0 17rem",cursor:"pointer"}} />
-            <InputText  ref={inputTextRef} value={inputValue} onChange={handleChange} ></InputText>
+            <InputText  ref={inputTextRef} value={inputValue} onChange={handleChange} onKeyDown={handleKeyDown}></InputText>
             <SendButton type="submit"  onClick={handleSubmit} ><FontAwesomeIcon icon={faArrowUp} style={{color: "#fff",height:"30rem",padding:"2rem"}} /></SendButton>
         </SendChatArea>
         
