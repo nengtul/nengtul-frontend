@@ -1,6 +1,6 @@
 import { useEffect, useState, ReactNode } from "react";
 const KAKAO_MAP_SCRIPT_ID = "kakao-map-script";
-const KAKAO_MAP_APP_KEY = "b762e38f98faa6f9dc8ad7dfc173b261";
+const KAKAO_MAP_APP_KEY = import.meta.env.VITE_APP_KAKAO_API_KEY;
 
 interface KakaoMapScriptLoaderProps {
   children: ReactNode;
