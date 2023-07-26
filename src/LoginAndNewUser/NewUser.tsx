@@ -3,7 +3,13 @@ import EggIcon from '../assets/icon/EggIcon_png.png'
 import HomePart from './HomePart'
 import MobileWrap from '../common/MobileWrap'
 function NewUser (){
-
+    const handleSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        // console.log(e.currentTarget);
+        const id = formData.get('Id');
+        console.log('아이디:', id);
+    }
     
 
     return (
@@ -11,9 +17,9 @@ function NewUser (){
         <Wrapper>
             <HomePart/>
             <EggPart/>
-
+            <form onSubmit={handleSubmit}>
             <InputPart>
-                <InputArea id="Id">
+                <InputArea id="Id"  >
                     <Title>아이디</Title>
                     <InputWrapper>
                         <input type='text' ></input>
@@ -54,8 +60,9 @@ function NewUser (){
                 
             </InputPart>
             <Button>
-                <SquareButton id='newUser'>회원가입</SquareButton>
+                <SquareButton type='submit' id='newUser'>회원가입</SquareButton>
             </Button>
+            </form>
 
         </Wrapper>
         </MobileWrap>
@@ -130,7 +137,7 @@ const InputWrapper=styled.div`
 const SquareButton=styled.button`
 
     width: 100%;
-    height: 100%;
+    height: 55rem;
     background-color:white;
     border: 2rem solid white;
     border-radius:4rem;
