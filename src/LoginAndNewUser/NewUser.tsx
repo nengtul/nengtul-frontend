@@ -23,6 +23,18 @@ function NewUser() {
               <input type="text"></input>
             </InputWrapper>
           </InputArea>
+          <InputArea id="Email">
+            <Title>이메일</Title>
+            <InputWrapper>
+              <input type="email"></input>
+            </InputWrapper>
+          </InputArea>
+          <InputArea id="PhoneNumber">
+            <Title>휴대폰번호</Title>
+            <InputWrapper>
+              <input type="tel"></input>
+            </InputWrapper>
+          </InputArea>
           <InputArea id="Password">
             <Title>비밀번호</Title>
             <InputWrapper>
@@ -63,19 +75,17 @@ const Egg = styled.div`
   width: 150px;
   margin: 0 auto;
 `;
-const EggImg = styled.div`
-  padding-top: 32rem;
-`;
+const EggImg = styled.div``;
 const InputPart = styled.div`
   margin: 0 auto;
   width: 90%;
-  margin-bottom: 30rem;
+  margin-bottom: 20rem;
 `;
 
 const InputArea = styled.div`
   width: 100%;
   height: 85rem;
-  margin-bottom: 19rem;
+  margin-bottom: 5rem;
   // background-color:white;
 `;
 

@@ -117,7 +117,6 @@ const MarketTel=styled.a`
     font-size:16rem;
     font-weight:bold;
     color:white;
-
 `
 
 export default MarketInfo
