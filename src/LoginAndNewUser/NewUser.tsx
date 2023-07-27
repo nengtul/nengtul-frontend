@@ -1,8 +1,9 @@
-import axios from "axios";
+import axios,{ AxiosError }  from "axios";
 import styled from "styled-components"
 import EggIcon from '../assets/icon/EggIcon_png.png'
 import HomePart from './HomePart'
 import MobileWrap from '../common/MobileWrap'
+// import {useState,useCallback,ChangeEvent} from 'react'
 function NewUser (){
     const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
         e.preventDefault();
@@ -14,36 +15,15 @@ function NewUser (){
         const password = formData.get('password') as string;
         console.log(typeof(nickname) ,name,email,tel,password)
         
-        const jsonData = JSON.stringify({
-            "name": name,
-            "nickname": nickname,
-            "password": password,
-            "phoneNumber": tel,
-            "email": email,
-        });
-        console.log(jsonData); 
-
-        // fetch('/v1/user/join', {
-        // fetch('http://43.200.162.72:8080/v1/user/join' , {
-        //     method: "POST",
-        //     body: JSON.stringify({
-        //         "name": name,
-        //         "nickname": nickname,
-        //         "password": password,
-        //         "phoneNumber": tel,
-        //         "email": email,
-        //     }),
-        // }
-        // )
-        // .then(response => response.json())
-        // .then(data => {
-        //     console.log(data);
-        // })
-        // .catch(error => {
-        //     console.error("Error", (error as Error).message);
+        // const jsonData = JSON.stringify({
+        //     name: name,
+        //     nickname: nickname,
+        //     password: password,
+        //     phoneNumber: tel,
+        //     email: email,
         // });
+        // console.log(jsonData); 
 
-        //진완님 방법
         handleNewUser(name,nickname,password,tel,email).catch((err)=>{
             console.error(err);
         })
@@ -53,19 +33,41 @@ function NewUser (){
         try{
             const url="http://43.200.162.72:8080/v1/user/join "
             const data ={
-                "name": name,
-                "nickname": nickname,
-                "password": password,
-                "phoneNumber": tel,
-                "email": email,
+                name: name,
+                nickname: nickname,
+                password: password,
+                phoneNumber: tel,
+                email: email,
             }
             const response = await axios.post(url, data);
             console.log(response);
         }catch (err) {
-            console.error("로그인 요청 실패", err);
+          if (axios.isAxiosError(err)) {
+            const axiosError: AxiosError = err;
+            console.error("회원가입 요청 실패", axiosError);
+            if (axiosError.response) {
+                console.log((axiosError.response.data as any).message);
+            }
+        } else {
+            console.error("기타 오류", err);
+        }
           }
     }
-
+    // const [password, setPassword] = useState('');
+    // const [passwordMessage, setPasswordMessage] = useState('');
+    // const [isPassword, setIsPassword] = useState<boolean>(false)
+    // const onChangePassword=useCallback((e:ChangeEvent<HTMLInputElement>)=>{
+    //     const passwordRegex = /^.{6,}$/;
+    //     const passwordCurrent=e.target.value
+    //     setPassword(passwordCurrent)
+    //     if (!passwordRegex.test(passwordCurrent)){
+    //         setPasswordMessage('8자리 이상의 비밀번호를 입력해주세요')
+    //         setIsPassword(false)
+    //     }else{
+    //         setPasswordMessage('안전한 비밀번호에요 :) ')
+    //         setIsPassword(true)
+    //     }
+    // },[])
     return (
         <MobileWrap>
         <Wrapper>
@@ -78,7 +80,7 @@ function NewUser (){
                         <InputWrapper>
                             <input type='text' name="nickname"></input>
                         </InputWrapper>
-                        <Message> * 사용가능한 아이디 입니다 </Message>
+                        {/* <Message> * 사용가능한 아이디 입니다 </Message> */}
                     </InputArea>
                     <InputArea id="Name">
                         <Title>이름</Title>
@@ -101,7 +103,9 @@ function NewUser (){
                     <InputArea id="Password">
                         <Title>비밀번호</Title>
                         <InputWrapper>
+                            {/* <input type='password' name="password"onChange={onChangePassword}></input> */}
                             <input type='password' name="password"></input>
+                            {/* <Message isPassword={isPassword}> {passwordMessage} </Message> */}
                         </InputWrapper>
                     </InputArea>
                     <InputArea id="PasswordCheck">
@@ -212,6 +216,10 @@ const Button=styled.div`
     position:relative;
     
 `
+// interface MessageProps {
+//     isPassword: boolean;
+//   }
+// const Message=styled.div<MessageProps>`
 const Message=styled.div`
     width:90%;
     color:white;
@@ -220,5 +228,10 @@ const Message=styled.div`
     // height:10px;
     font-size:14rem;
     text-align:center;
+    
 `
+// background-color: ${({ isPassword }) => (isPassword ? 'green' : 'red')};
+// Message.attrs<MessageProps>(({ isPassword }) => ({
+//     $isPassword: isPassword,
+//   }))``
 export default NewUser

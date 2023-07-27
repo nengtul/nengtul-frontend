@@ -8,6 +8,7 @@ import IngreAfterRecipePage from "./IngredientAndRecipe/IngreAfterRecipePage";
 import RecipeListPage from "./RecipeBoard/RecipeListPage";
 import RecipeWritePage from "./RecipeBoard/RecipeWritePage";
 
+import FindId from './LoginAndNewUser/FindIdPage';
 
 
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="/chattingList" element={<ChattingListPage />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/market" element={<MarketPage />} />
+          <Route path="/findId" element={<FindId />} />
 
 
           <Route path="/ingredientMap" element={<IngredientMap />} />
