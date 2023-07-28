@@ -16,12 +16,13 @@ function FindIdForm(){
     }
     const handleNewUser=async(name:string,tel:string)=>{
         try{
+            // const url="http://43.200.162.72:8080/v1/user/findid/${name}/${phoneNumber}"
             const url="http://43.200.162.72:8080/v1/user/findid"
             const data ={
                 name: name,
                 phoneNumber: tel
             }
-            const response = await axios.get(url, data);
+            const response = await axios.post(url,data);
             console.log('이거',response);
         }catch (err) {
             console.error("아이디 찾기 실패", err);
@@ -118,7 +119,6 @@ const Button=styled.div`
     margin: 0 auto;
     margin-bottom:14rem;
     position:relative;
-    
 `
 
 export default FindIdForm
