@@ -9,7 +9,7 @@ import RecipeListPage from "./RecipeBoard/RecipeListPage";
 import RecipeWritePage from "./RecipeBoard/RecipeWritePage";
 
 import FindId from './LoginAndNewUser/FindIdPage';
-
+import MyPage from './User/MyPage'
 
 
 import ChattingListPage from "./Chatting/ChattingListPage";
@@ -39,6 +39,7 @@ function App() {
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/market" element={<MarketPage />} />
           <Route path="/findId" element={<FindId />} />
+          <Route path="/myPage" element={<MyPage />} />
 
 
           <Route path="/ingredientMap" element={<IngredientMap />} />
