@@ -6,7 +6,7 @@ const ContensWrap = styled.div`
   height: 844px;
   max-height: 844px;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   &::-webkit-scrollbar {
     width: 2px;
   }

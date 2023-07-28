@@ -89,7 +89,7 @@ export default function ServiceSection() {
           </CardLink>
         </CardWithShare>
         <CardWithMart>
-          <CardLink to={"/"}>
+          <CardLink to={"/market"}>
             <CardCategory>근처 마트 찾기</CardCategory>
             <CardTitle>
               재료가 부족하거나 없다면
