@@ -12,7 +12,7 @@ import IngreAfterRecipePage from "./IngredientAndRecipe/IngreAfterRecipePage";
 import RecipeListPage from "./RecipeBoard/RecipeListPage";
 import RecipeWritePage from "./RecipeBoard/RecipeWritePage";
 import FindId from "./LoginAndNewUser/FindIdPage";
-
+import MyPage from "./User/MyPage";
 import ChattingListPage from "./Chatting/ChattingListPage";
 import ChatPage from "./Chatting/ChatPage";
 import RecipeView from "./RecipeBoard/RecipeViewPage";
@@ -35,7 +35,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path={"/"} element={<MainPage />}></Route>
         <Route path="/login" element={<Login />} />
         <Route path="/newUser" element={<NewUser />} />
         <Route path="/search" element={<IngredientSearch />} />
@@ -48,6 +48,7 @@ function App() {
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/market" element={<MarketPage />} />
         <Route path="/findId" element={<FindId />} />
+        <Route path="/myPage" element={<MyPage />} />
         <Route path="/ingredientMap" element={<IngredientMap />} />
 
         <Route path="/heartLecipe" element={<HeartLecipePage />} />
