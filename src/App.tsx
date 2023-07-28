@@ -1,5 +1,10 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Provider, useDispatch } from "react-redux";
+import { setLoggedIn } from "./AuthStore/authSlice";
+import { useEffect } from "react";
+
+import store from "./AuthStore/store";
 import MainPage from "./mainpage/MainPage";
 import Login from "./LoginAndNewUser/Login";
 import NewUser from "./LoginAndNewUser/NewUser";
@@ -7,26 +12,32 @@ import IngredientSearch from "./IngredientAndRecipe/IngredientSearch";
 import IngreAfterRecipePage from "./IngredientAndRecipe/IngreAfterRecipePage";
 import RecipeListPage from "./RecipeBoard/RecipeListPage";
 import RecipeWritePage from "./RecipeBoard/RecipeWritePage";
-
-import FindId from './LoginAndNewUser/FindIdPage';
-
-
+import FindId from "./LoginAndNewUser/FindIdPage";
 
 import ChattingListPage from "./Chatting/ChattingListPage";
 import ChatPage from "./Chatting/ChatPage";
 import RecipeView from "./RecipeBoard/RecipeViewPage";
 import IngredientMap from "./IngredientMap/IngredientMap";
 import IngredientWrite from "./IngredientMap/IngredientWrite";
+import MarketPage from "./Market/MarketPage";
+import MyRecipePage from "./MyInfo/MyRecipePage";
+import HeartLecipePage from "./MyInfo/HeartLecipePage";
 
-
-
-import MarketPage from './Market/MarketPage'
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      dispatch(setLoggedIn(true));
+    }
+  }, [dispatch]);
+
   return (
-    <>
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path={"/"} element={<MainPage />}></Route>
+          <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/newUser" element={<NewUser />} />
           <Route path="/search" element={<IngredientSearch />} />
@@ -39,13 +50,13 @@ function App() {
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/market" element={<MarketPage />} />
           <Route path="/findId" element={<FindId />} />
-
-
           <Route path="/ingredientMap" element={<IngredientMap />} />
 
+          <Route path="/heartLecipe" element={<HeartLecipePage />} />
+          <Route path="/MyRecipe" element={<MyRecipePage />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </Provider>
   );
 }
 

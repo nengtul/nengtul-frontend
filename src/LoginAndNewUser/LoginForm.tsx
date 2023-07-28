@@ -1,11 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
+interface ServerResponse {
+  AccessToken: string;
+  RefreshToken: string;
+}
+
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,12 +32,14 @@ export default function LoginForm() {
         "Content-Type": "application/json",
       };
 
-      const response = await axios.post(url, data, {
+      const response = await axios.post<ServerResponse>(url, data, {
         withCredentials: true,
         headers: headers,
       });
 
-      console.log(response);
+      const accessToken = response.data.AccessToken;
+      localStorage.setItem("accessToken", accessToken);
+      navigate("/");
     } catch (err) {
       console.error("로그인 요청 실패", err);
     }

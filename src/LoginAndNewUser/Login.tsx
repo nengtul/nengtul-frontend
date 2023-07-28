@@ -1,16 +1,16 @@
 import styled from "styled-components";
-import EggPart from "./EggPart.tsx"
+import EggPart from "./EggPart.tsx";
 import HomePart from "./HomePart.tsx";
 import MobileWrap from "../common/MobileWrap.tsx";
 import LoginForm from "./LoginForm.tsx";
 import LoginSNS from "./LoginSNS.tsx";
 
-function Login() {
+export default function Login() {
   return (
     <MobileWrap>
       <Wrapper>
         <HomePart />
-        <EggPart/>
+        <EggPart />
         <LoginForm />
         <LoginSNS />
       </Wrapper>
@@ -22,5 +22,3 @@ const Wrapper = styled.div`
   min-height: 844px;
   background-color: #38db83;
 `;
-
-export default Login;
