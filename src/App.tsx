@@ -1,10 +1,9 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Provider, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setLoggedIn } from "./AuthStore/authSlice";
 import { useEffect } from "react";
 
-import store from "./AuthStore/store";
 import MainPage from "./mainpage/MainPage";
 import Login from "./LoginAndNewUser/Login";
 import NewUser from "./LoginAndNewUser/NewUser";
@@ -34,29 +33,27 @@ function App() {
   }, [dispatch]);
 
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/newUser" element={<NewUser />} />
-          <Route path="/search" element={<IngredientSearch />} />
-          <Route path="/ingredientRecipe" element={<IngreAfterRecipePage />} />
-          <Route path="/ingredientWrite" element={<IngredientWrite />} />
-          <Route path="/recipeList" element={<RecipeListPage />} />
-          <Route path="/recipeWrite" element={<RecipeWritePage />} />
-          <Route path="/recipeView" element={<RecipeView />} />
-          <Route path="/chattingList" element={<ChattingListPage />} />
-          <Route path="/chat" element={<ChatPage />} />
-          <Route path="/market" element={<MarketPage />} />
-          <Route path="/findId" element={<FindId />} />
-          <Route path="/ingredientMap" element={<IngredientMap />} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/newUser" element={<NewUser />} />
+        <Route path="/search" element={<IngredientSearch />} />
+        <Route path="/ingredientRecipe" element={<IngreAfterRecipePage />} />
+        <Route path="/ingredientWrite" element={<IngredientWrite />} />
+        <Route path="/recipeList" element={<RecipeListPage />} />
+        <Route path="/recipeWrite" element={<RecipeWritePage />} />
+        <Route path="/recipeView" element={<RecipeView />} />
+        <Route path="/chattingList" element={<ChattingListPage />} />
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/market" element={<MarketPage />} />
+        <Route path="/findId" element={<FindId />} />
+        <Route path="/ingredientMap" element={<IngredientMap />} />
 
-          <Route path="/heartLecipe" element={<HeartLecipePage />} />
-          <Route path="/MyRecipe" element={<MyRecipePage />} />
-        </Routes>
-      </BrowserRouter>
-    </Provider>
+        <Route path="/heartLecipe" element={<HeartLecipePage />} />
+        <Route path="/MyRecipe" element={<MyRecipePage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
