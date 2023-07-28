@@ -1,4 +1,5 @@
-import { styled } from "styled-components";
+import styled from "styled-components";
+import theme from "./theme";
 
 const LatestWrap = styled.div`
   width: 100%;
@@ -15,11 +16,26 @@ const LatestWrap = styled.div`
     margin-top: 10px;
     overflow-x: scroll;
 
+    &::-webkit-scrollbar {
+      height: 6px;
+      cursor: grab;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: ${theme.colors.main};
+      border-radius: 10px;
+      width: 2px;
+    }
+
     li {
       width: 100px;
       height: 100px;
       background-color: #333;
       flex-shrink: 0;
+      font-size: 20rem;
+      color: #fff;
     }
 
     li:not(:nth-of-type(1)) {
@@ -34,12 +50,12 @@ export default function HeaderLatest() {
       <LatestWrap>
         <p>최근 본 레시피</p>
         <ul>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+          <li>4</li>
+          <li>5</li>
+          <li>6</li>
         </ul>
       </LatestWrap>
     </>

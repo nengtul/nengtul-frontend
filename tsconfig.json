@@ -22,7 +22,7 @@
 
     "types": ["node", "kakao.maps.d.ts"]
   },
-  "include": ["src", "kakao-maps-d.ts"],
+  "include": ["src", "kakao-maps-d.ts", "vite.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
   // "types":[
   //   "node",

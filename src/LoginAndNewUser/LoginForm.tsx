@@ -9,7 +9,6 @@ export default function LoginForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // 여기서 서버로 POST 요청을 보내는 로직을 작성합니다.
     handleLogin().catch((err) => {
       console.error(err);
     });
@@ -17,13 +16,20 @@ export default function LoginForm() {
 
   const handleLogin = async () => {
     try {
-      const url = "http://43.200.162.72:8080/v1/login";
+      const url = "http://43.200.162.72:8080/v1/user/login";
       const data = {
         email: email,
         password: password,
       };
+      const headers = {
+        "Content-Type": "application/json",
+      };
 
-      const response = await axios.post(url, data);
+      const response = await axios.post(url, data, {
+        withCredentials: true,
+        headers: headers,
+      });
+
       console.log(response);
     } catch (err) {
       console.error("로그인 요청 실패", err);
@@ -36,7 +42,7 @@ export default function LoginForm() {
         <SquareInput id="id">
           <IdInputWrapper>
             <input
-              type="email"
+              type="text"
               placeholder="아이디를 입력해주세요"
               value={email}
               onChange={(e) => {
