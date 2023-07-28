@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import HomeButton from "../assets/icon/home.svg";
+import HomeButton from "../assets/common/logo.svg";
 import Back from "../assets/icon/back.svg";
 import HeaderTabMenu from "./HeaderTabMenu";
 import { useState } from "react";
@@ -60,7 +60,7 @@ const StyledHeader = styled.header`
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #dfdfdf;
-  position: fixed;
+  position: absolute;
   left: auto;
   top: auto;
   width: 390px;
