@@ -24,6 +24,12 @@ function FindIdForm(){
             }
             const response = await axios.post(url,data);
             console.log('이거',response);
+            if(response.data){
+                const responseData = response.data  as { email?: string }
+                alert(responseData.email)
+            }else{
+                console.log('회원 정보가 없거나 이름/전화번호를 잘못 입력하셨습니다')
+            }
         }catch (err) {
             console.error("아이디 찾기 실패", err);
           }
