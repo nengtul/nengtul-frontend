@@ -2,15 +2,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { setLoggedIn } from "../AuthStore/authSlice";
 
 interface ServerResponse {
   AccessToken: string;
-  RefreshToken: string;
+  refreshToken: string;
 }
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -38,7 +41,13 @@ export default function LoginForm() {
       });
 
       const accessToken = response.data.AccessToken;
-      localStorage.setItem("accessToken", accessToken);
+      const refreshToken = response.data.refreshToken;
+      const expirationTime = new Date().getTime() + 3600000;
+
+      sessionStorage.setItem("accessToken", accessToken);
+      sessionStorage.setItem("refreshToken", refreshToken);
+      sessionStorage.setItem("expirationTime", expirationTime.toString());
+      dispatch(setLoggedIn(true));
       navigate("/");
     } catch (err) {
       console.error("로그인 요청 실패", err);

@@ -1,4 +1,3 @@
-import LevelBadge from "./LevelBadge";
 import { Link } from "react-router-dom";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,17 +6,12 @@ import theme from "./theme";
 import { faBowlRice, faMapPin } from "@fortawesome/free-solid-svg-icons";
 import HeaderLatest from "./HeaderLatest";
 import styled, { keyframes } from "styled-components";
+import HeaderInfo from "./HeaderInfo";
 
 export default function HeaderTabMenu() {
   return (
     <TabMenuWrapper>
-      <HeaderLoginInfo>
-        <MemberThumb />
-        <MemberName>
-          박진완 <span>님</span>
-        </MemberName>
-        <LevelBadge>견습요리사</LevelBadge>
-      </HeaderLoginInfo>
+      <HeaderInfo />
       <TabUl>
         <li>
           <Link to={"/"}>
@@ -93,34 +87,6 @@ const TabMenuWrapper = styled.div`
     width: 0px;
   }
   animation: ${slideInAnimation} 0.3s ease;
-`;
-
-const HeaderLoginInfo = styled.div`
-  width: 100%;
-  padding: 20px 10px;
-  background-color: #f6f6f6;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.25) inset;
-`;
-
-const MemberThumb = styled.div`
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  background-color: #666;
-`;
-
-const MemberName = styled.p`
-  font-size: 20rem;
-  font-weight: 800;
-  text-align: center;
-  margin: 10px 0px 5px;
-  span {
-    font-size: 14rem;
-  }
 `;
 
 const TabUl = styled.ul`

@@ -26,9 +26,20 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      dispatch(setLoggedIn(true));
+    const accessToken = sessionStorage.getItem("accessToken");
+    const refreshToken = sessionStorage.getItem("refreshToken");
+    const expirationTime = sessionStorage.getItem("expirationTime") as string;
+    if (accessToken && accessToken && refreshToken) {
+      const currentTime = new Date().getTime();
+      if (currentTime >= parseInt(expirationTime)) {
+        sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("refreshToken");
+        sessionStorage.removeItem("expirationTime");
+        dispatch(setLoggedIn(false));
+        console.log("토큰이 만료되었습니다.");
+      } else {
+        dispatch(setLoggedIn(true));
+      }
     }
   }, [dispatch]);
 
