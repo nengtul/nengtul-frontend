@@ -5,6 +5,7 @@ import { setLoggedIn } from "../AuthStore/authSlice";
 
 export default function LogoutBtn() {
   const dispatch = useDispatch();
+
   const handleLogout = () => {
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("refreshToken");

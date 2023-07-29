@@ -14,10 +14,13 @@ import defaultThumb from "../assets/common/defaultThumb.svg";
 interface UserData {
   name: string;
   point: string;
+  profileImageUrl: string;
 }
 
+const DEFAULT_USER_DATA: UserData = { name: "", point: "", profileImageUrl: "" };
+
 export default function HeaderInfo() {
-  const [data, setData] = useState<UserData>({ name: "", point: "" });
+  const [data, setData] = useState(DEFAULT_USER_DATA);
   const isLoggedin = useSelector((state: RootState) => state.auth.isLoggedin);
   const token = sessionStorage.getItem("accessToken");
   console.log(isLoggedin);
@@ -50,7 +53,9 @@ export default function HeaderInfo() {
         {isLoggedin ? (
           <>
             <LogoutBtn />
-            <MemberThumb style={{ backgroundImage: `url(${defaultThumb})` }} />
+            <MemberThumb
+              style={{ backgroundImage: `url(${data.profileImageUrl || defaultThumb})` }}
+            />
             <MemberName>
               {data.name} <span>님</span>
             </MemberName>
