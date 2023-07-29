@@ -5,7 +5,6 @@ import {useRef,useEffect,useState,ChangeEvent,KeyboardEvent} from 'react';
 
 interface SendChatProps {
     updateChatInfo: (newInfo: string) => void; 
-    onEnter: () => void;
   }
 function SendChat({ updateChatInfo }:SendChatProps){
 
