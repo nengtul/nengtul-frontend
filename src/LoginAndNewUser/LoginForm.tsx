@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { setLoggedIn } from "../AuthStore/authSlice";
+import Modal from "../common/Modal";
 
 interface ServerResponse {
   AccessToken: string;
@@ -13,6 +14,7 @@ interface ServerResponse {
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [modalOpen, setModalOpen] = useState<{ error: AxiosError | null }>({ error: null });
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -33,16 +35,17 @@ export default function LoginForm() {
       };
       const headers = {
         "Content-Type": "application/json",
+        // application/json 기능 찾아보기
       };
 
       const response = await axios.post<ServerResponse>(url, data, {
-        withCredentials: true,
+        withCredentials: true, //withCredentials
         headers: headers,
       });
 
       const accessToken = response.data.AccessToken;
       const refreshToken = response.data.refreshToken;
-      const expirationTime = new Date().getTime() + 3600000;
+      const expirationTime = new Date().getTime() + 3600000; // 시간 가독성 나누기
 
       sessionStorage.setItem("accessToken", accessToken);
       sessionStorage.setItem("refreshToken", refreshToken);
@@ -51,11 +54,19 @@ export default function LoginForm() {
       navigate("/");
     } catch (err) {
       console.error("로그인 요청 실패", err);
+      setModalOpen({ error: err as AxiosError }); // true가 아닌 객체로 상태 전달
     }
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen({ error: null });
   };
 
   return (
     <>
+      {modalOpen.error && (
+        <Modal error={modalOpen.error} onClose={handleCloseModal} title="로그인"></Modal>
+      )}
       <InputAndButton onSubmit={handleSubmit}>
         <SquareInput id="id">
           <IdInputWrapper>
@@ -63,6 +74,7 @@ export default function LoginForm() {
               type="text"
               placeholder="아이디를 입력해주세요"
               value={email}
+              required
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
@@ -75,6 +87,7 @@ export default function LoginForm() {
               type="password"
               placeholder="비밀번호를 입력해주세요"
               value={password}
+              required
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
