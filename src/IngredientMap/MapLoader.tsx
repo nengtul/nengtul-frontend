@@ -1,7 +1,7 @@
 import { useEffect, useState, ReactNode } from "react";
 
 const KAKAO_MAP_SCRIPT_ID = "kakao-map-script";
-const KAKAO_MAP_APP_KEY = import.meta.env.VITE_APP_KAKAO_API_KEY; // 여기에 자신의 KakaoMap API 키를 입력하세요
+const KAKAO_MAP_APP_KEY = import.meta.env.VITE_APP_KAKAO_API_KEY;
 
 interface KakaoMapScriptLoaderProps {
   children: ReactNode;
