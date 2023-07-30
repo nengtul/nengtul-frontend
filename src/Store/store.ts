@@ -6,12 +6,17 @@ import { authReducer } from "./reducers";
 const persistConfig = {
   key: "root",
   storage,
+  whitelist: ["authReducer"],
 };
 
 const persistedReducer = persistReducer(persistConfig, authReducer);
 
 const store = configureStore({
   reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 const persistor = persistStore(store);
