@@ -17,40 +17,40 @@ interface UserData {
   profileImageUrl: string;
 }
 
-const DEFAULT_USER_DATA: UserData = { name: "", point: "", profileImageUrl: "" };
+// const DEFAULT_USER_DATA: UserData = { name: "", point: "", profileImageUrl: "" };
 
 export default function HeaderInfo() {
-  const [data, setData] = useState(DEFAULT_USER_DATA);
-  const isLoggedin = useSelector((state: RootState) => state.auth.isLoggedin);
-  const token = sessionStorage.getItem("accessToken");
-  console.log(isLoggedin);
-  const getUserInfo = useCallback(async () => {
-    try {
-      const response = await axios.get<UserData>("http://43.200.162.72:8080/v1/user/detail", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const userData = response.data;
-      setData(userData);
-      console.log(userData);
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
+  // const [data, setData] = useState(DEFAULT_USER_DATA);
+  // const isLoggedin = useSelector((state: RootState) => state.auth.isLoggedin);
+  // const token = sessionStorage.getItem("accessToken");
+  // console.log(isLoggedin);
+  // const getUserInfo = useCallback(async () => {
+  //   try {
+  //     const response = await axios.get<UserData>("http://43.200.162.72:8080/v1/user/detail", {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     const userData = response.data;
+  //     setData(userData);
+  //     console.log(userData);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    if (isLoggedin) {
-      getUserInfo().catch((err) => {
-        console.error(err);
-      });
-    }
-  }, [isLoggedin, getUserInfo]);
+  // useEffect(() => {
+  //   if (isLoggedin) {
+  //     getUserInfo().catch((err) => {
+  //       console.error(err);
+  //     });
+  //   }
+  // }, [isLoggedin, getUserInfo]);
 
   return (
     <>
       <HeaderLoginInfo>
-        {isLoggedin ? (
+        {/* {isLoggedin ? (
           <>
             <LogoutBtn />
             <MemberThumb
@@ -67,7 +67,12 @@ export default function HeaderInfo() {
             <h4>로그인을 해주세요.</h4>
             <FontAwesomeIcon icon={faAngleRight} />
           </Link>
-        )}
+        )} */}
+        <Link to={"/login"} className="login-form">
+          <div className="default-img" style={{ backgroundImage: `url(${defaultThumb})` }}></div>
+          <h4>로그인을 해주세요.</h4>
+          <FontAwesomeIcon icon={faAngleRight} />
+        </Link>
       </HeaderLoginInfo>
     </>
   );

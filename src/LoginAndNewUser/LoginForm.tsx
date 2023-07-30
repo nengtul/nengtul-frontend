@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { setLoggedIn } from "../AuthStore/authSlice";
+import { setToken } from "../Store/actions";
 import Modal from "../common/Modal";
 
 interface ServerResponse {
@@ -42,15 +42,10 @@ export default function LoginForm() {
         withCredentials: true, //withCredentials
         headers: headers,
       });
+      console.log(response.data.AccessToken);
+      console.log(response.data.refreshToken);
+      dispatch(setToken(response.data.AccessToken));
 
-      const accessToken = response.data.AccessToken;
-      const refreshToken = response.data.refreshToken;
-      const expirationTime = new Date().getTime() + 3600000; // 시간 가독성 나누기
-
-      sessionStorage.setItem("accessToken", accessToken);
-      sessionStorage.setItem("refreshToken", refreshToken);
-      sessionStorage.setItem("expirationTime", expirationTime.toString());
-      dispatch(setLoggedIn(true));
       navigate("/");
     } catch (err) {
       console.error("로그인 요청 실패", err);

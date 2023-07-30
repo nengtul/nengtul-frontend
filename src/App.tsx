@@ -1,8 +1,5 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setLoggedIn } from "./AuthStore/authSlice";
-import { useEffect } from "react";
 
 import MainPage from "./mainpage/MainPage";
 import Login from "./LoginAndNewUser/Login";
@@ -21,27 +18,16 @@ import IngredientWrite from "./IngredientMap/IngredientWrite";
 import MarketPage from "./Market/MarketPage";
 import MyRecipePage from "./MyInfo/MyRecipePage";
 import HeartLecipePage from "./MyInfo/HeartLecipePage";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "./Store/types";
 
 function App() {
-  const dispatch = useDispatch();
+  const token = useSelector((state: RootState) => state.auth?.token);
 
   useEffect(() => {
-    const accessToken = sessionStorage.getItem("accessToken");
-    const refreshToken = sessionStorage.getItem("refreshToken");
-    const expirationTime = sessionStorage.getItem("expirationTime") as string;
-    if (accessToken && accessToken && refreshToken) {
-      const currentTime = new Date().getTime();
-      if (currentTime >= parseInt(expirationTime)) {
-        sessionStorage.removeItem("accessToken");
-        sessionStorage.removeItem("refreshToken");
-        sessionStorage.removeItem("expirationTime");
-        dispatch(setLoggedIn(false));
-        console.log("토큰이 만료되었습니다.");
-      } else {
-        dispatch(setLoggedIn(true));
-      }
-    }
-  }, [dispatch]);
+    console.log(token);
+  }, [token]);
 
   return (
     <BrowserRouter>
