@@ -8,7 +8,6 @@ interface DynamicMapProps {
     longitude: number;
 }
 const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
-    console.log('지도 띄우기로 넘어옴!',latitude,longitude)
     const kakaoMapRef=useRef<HTMLDivElement>(null)
     const dispatch=useDispatch()
 
@@ -46,7 +45,8 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
         const ps = new kakao.maps.services.Places(backgroundMap)
           
         // 지도에 idle 이벤트를 등록합니다
-        kakao.maps.event.addListener(backgroundMap,'idle',searchPlaces)
+        kakao.maps.event.addListener(backgroundMap,'idle',searchPlaces)  //idle 일때 말고 load일떄 
+        searchPlaces();
         contentNode.className = 'placeinfo_wrap';
         // 커스텀 오버레이의 컨텐츠 노드에 mousedown, touchstart 이벤트가 발생했을때
         // 지도 객체에 이벤트가 전달되지 않도록 이벤트 핸들러로 kakao.maps.event.preventMap 메소드를 등록합니다 
@@ -81,7 +81,6 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
         function placesSearchCB(data:kakao.maps.services.PlacesSearchResult, status: kakao.maps.services.Status, pagination: kakao.maps.Pagination) {
             console.log(pagination)
             if (status === kakao.maps.services.Status.OK) {
-                console.log('데이터',data)
                 // 정상적으로 검색이 완료됐으면 지도에 마커를 표출합니다
                 displayPlaces(data,'CS2');
                 displayPlaces(data,'MT1');
@@ -108,7 +107,6 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
             const categoryElement = document.getElementById(category);
             if (categoryElement) {
                 const order = categoryElement.getAttribute('data-order');
-                console.log('order이건 뭐여',order)
                 if (order !== null) {
                 for ( let i=0; i<places.length; i++ ) {
                 
@@ -168,59 +166,13 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
             phone?:string;//"031-201-8000"
           }
           
-        function displayPlaceInfo (place:Place) {
-            console.log('이거 정보',place)           
+        function displayPlaceInfo (place:Place) {       
             // dispatch(setPlace(place))
             dispatch(setPlace({...place,latitude,longitude}))
             placeOverlay.setPosition(new kakao.maps.LatLng(Number(place.y), Number(place.x)));
             placeOverlay.setMap(backgroundMap);  
         }
 
-        // 각 카테고리에 클릭 이벤트를 등록합니다
-        // function addCategoryClickEvent() {
-        //     const category = document.getElementById('category')
-                
-        //     if (category) {
-        //         const children = category.children;
-        //         for (let i=0; i<children.length; i++) {
-        //             const child = children[i] as HTMLAnchorElement;
-        //             // child.addEventListener('click', onClickCategory);
-        //         }
-        //     }
-        // }
-        // 카테고리를 클릭했을 때 호출되는 함수입니다
-        // function onClickCategory(this: HTMLElement) {
-            // const id = this.id,
-            //     className = this.className;
-        
-            // placeOverlay.setMap(null);
-        
-            // if (className === 'on') {
-            //     currCategory = '';
-            //     changeCategoryClass();
-            //     removeMarker();
-            // } else {
-                // currCategory = 'CS2';
-
-                // changeCategoryClass(this);
-                // searchPlaces();
-            // }
-        // }
-
-        // 클릭된 카테고리에만 클릭된 스타일을 적용하는 함수입니다
-        // function changeCategoryClass(el) {
-        //     const category = document.getElementById('category'),
-        //         children = category.children,
-        //         i;
-        
-        //     for (let  i=0; i<children.length; i++ ) {
-        //         children[i].className = '';
-        //     }
-        
-        //     if (el) {
-        //         el.className = 'on';
-        //     } 
-        // } 
     }
     ,[latitude,longitude])
 

@@ -18,6 +18,7 @@ import IngredientWrite from "./IngredientMap/IngredientWrite";
 import MarketPage from "./Market/MarketPage";
 import MyRecipePage from "./MyInfo/MyRecipePage";
 import HeartLecipePage from "./MyInfo/HeartLecipePage";
+import NoticeViewPage from "./Notice/NoticeViewPage";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "./Store/types";
@@ -53,6 +54,7 @@ function App() {
         <Route path="/MyRecipe" element={<MyRecipePage />} />
 
         <Route path="/notice" element={<NoticeListPage />} />
+        <Route path="/noticeView" element={<NoticeViewPage />} />
       </Routes>
     </BrowserRouter>
   );
