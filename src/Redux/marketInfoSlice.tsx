@@ -34,24 +34,6 @@ interface Place {
 
 }
 
-// interface MarketInfoState {
-//     place: Place | null;
-// }
-
-// const initialState: MarketInfoState = {
-//     place: null, 
-// };
-
-// const marketInfoSlice = createSlice({
-//   name: "marketInfo",
-//   initialState,
-
-//   reducers: {
-//     setPlace: (state, action: PayloadAction<Place>) => {
-//       state.place = action.payload;
-//     },
-//   },
-// });
 
 export const { setPlace } = marketInfoSlice.actions;
 export default marketInfoSlice.reducer;
