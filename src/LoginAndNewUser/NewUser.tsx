@@ -4,7 +4,9 @@ import EggIcon from '../assets/icon/EggIcon_png.png'
 import HomePart from './HomePart'
 import MobileWrap from '../common/MobileWrap'
 import {useState,useCallback,ChangeEvent} from 'react';
+import {useNavigate} from 'react-router-dom';
 function NewUser (){
+    const navigate = useNavigate();
     const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -31,6 +33,7 @@ function NewUser (){
             }
             const response = await axios.post(url, data);
             console.log(response);
+            navigate("/");
         }catch (err) {
           if (axios.isAxiosError(err)) {
             const axiosError: AxiosError = err;
@@ -55,33 +58,28 @@ function NewUser (){
     // 유효성검사
     //8자리 이상 비밀번호 확인
     const [password, setPassword] = useState('');
-    // const [passwordMessage, setPasswordMessage] = useState('8자리 이상의 비밀번호를 입력해주세요');
     const [ispassword, setIsPassword] = useState<boolean>(false)
     const onChangePassword=useCallback((e:ChangeEvent<HTMLInputElement>)=>{
         const passwordRegex = /^.{8,}$/;
         const passwordCurrent=e.target.value
         setPassword(passwordCurrent)
         if (!passwordRegex.test(passwordCurrent)){
-            // setPasswordMessage('8자리 이상의 비밀번호를 입력해주세요')
             setIsPassword(false)
         }else{
-            // setPasswordMessage('안전한 비밀번호에요 :) ')
             setIsPassword(true)
         }
     },[])
 
     //비밀번호 확인
     const [passwordCheck, setPasswordCheck] = useState('');
-    // const [passwordCheckMessage, setPasswordCheckMessage] = useState('')
+
     const [ispasswordcheck, setIsPasswordCheck] = useState<boolean>(false)
     const onChangePasswordCheck=useCallback((e:ChangeEvent<HTMLInputElement>)=>{
         const passwordCheckCurrent=e.target.value
         setPasswordCheck(passwordCheckCurrent)
         if (password === passwordCheckCurrent) {
-            // setPasswordCheckMessage('비밀번호를 똑같이 입력했어요 : )')
             setIsPasswordCheck(true)
           } else {
-            // setPasswordCheckMessage('비밀번호가 틀려요. 다시 확인해주세요 ㅜ ㅜ')
             setIsPasswordCheck(false)
           }
     },[password])
@@ -97,7 +95,6 @@ function NewUser (){
                         <InputWrapper>
                             <input type='text' name="nickname"></input>
                         </InputWrapper>
-                        {/* <Message> * 사용가능한 아이디 입니다 </Message> */}
                     </InputArea>
                     <InputArea id="Name">
                         <Title>이름</Title>

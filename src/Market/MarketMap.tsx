@@ -12,25 +12,20 @@ function MarketMap() {
   };
   useEffect(() => {
     if (isChecked) {
-      console.log("동의함");
       if (navigator.geolocation) {
         // GeoLocation을 이용해서 접속 위치를 얻어옵니다
         navigator.geolocation.getCurrentPosition(function (position) {
           const lat = position.coords.latitude, // 위도
             lon = position.coords.longitude; // 경도
-
-          console.log("내위치", lat, lon);
           setLatitude(lat);
           setLongitude(lon);
         });
       }
     } else {
-      console.log("동의 안함");
       const latStandard = 37.5667;
       const lonStandard = 126.9783;
       setLatitude(latStandard);
       setLongitude(lonStandard);
-      console.log("서울 특별시 기준", latStandard, lonStandard);
     }
   }, [isChecked]);
 
