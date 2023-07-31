@@ -3,7 +3,7 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import theme from "./theme";
-import { faBowlRice, faMapPin } from "@fortawesome/free-solid-svg-icons";
+import { faBowlRice, faBullhorn, faMapPin } from "@fortawesome/free-solid-svg-icons";
 import HeaderLatest from "./HeaderLatest";
 import styled, { keyframes } from "styled-components";
 import HeaderInfo from "./HeaderInfo";
@@ -20,6 +20,15 @@ export default function HeaderTabMenu() {
               style={{ height: "16rem", color: `${theme.colors.main}` }}
             />
             내 정보
+          </Link>
+        </li>
+        <li>
+          <Link to={"/notice"}>
+            <FontAwesomeIcon
+              icon={faBullhorn}
+              style={{ height: "16rem", color: `${theme.colors.main}` }}
+            />
+            공지사항
           </Link>
         </li>
         <li>
@@ -102,6 +111,7 @@ const TabUl = styled.ul`
 
       svg {
         margin-right: 10px;
+        width: 20px;
       }
 
       span {
