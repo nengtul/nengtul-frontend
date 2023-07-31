@@ -1,16 +1,17 @@
 import styled from "styled-components";
 import theme from "./theme";
 import { useDispatch } from "react-redux";
-import { setLoggedIn } from "../AuthStore/authSlice";
-
+import { getAccessToken } from "../Store/reducers";
+import { useNavigate } from "react-router-dom";
+import { PURGE } from "redux-persist";
 export default function LogoutBtn() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    sessionStorage.removeItem("accessToken");
-    sessionStorage.removeItem("refreshToken");
-    sessionStorage.removeItem("expirationTime");
-    dispatch(setLoggedIn(false));
+    dispatch(getAccessToken(null));
+    dispatch({ type: PURGE, key: ["root"], result: () => null });
+    navigate("/");
   };
 
   return (

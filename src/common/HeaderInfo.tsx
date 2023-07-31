@@ -8,6 +8,7 @@ import getLogin from "../ApiCall/getLogin";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import LevelBadge from "./LevelBadge";
+import LogoutBtn from "./LogoutBtn";
 
 interface UserData {
   name: string;
@@ -52,6 +53,7 @@ export default function HeaderInfo() {
       <HeaderLoginInfo>
         {data.name ? (
           <>
+            <LogoutBtn />
             <MemberThumb
               style={{ backgroundImage: `url(${data.profileImageUrl || defaultThumb})` }}
             />
