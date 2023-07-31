@@ -46,7 +46,8 @@ const DynamicMap=({latitude,longitude}:DynamicMapProps)=>{
         const ps = new kakao.maps.services.Places(backgroundMap)
           
         // 지도에 idle 이벤트를 등록합니다
-        kakao.maps.event.addListener(backgroundMap,'idle',searchPlaces)
+        // kakao.maps.event.addListener(backgroundMap,'idle',searchPlaces)  //idle 일때 말고 load일떄 
+        searchPlaces();
         contentNode.className = 'placeinfo_wrap';
         // 커스텀 오버레이의 컨텐츠 노드에 mousedown, touchstart 이벤트가 발생했을때
         // 지도 객체에 이벤트가 전달되지 않도록 이벤트 핸들러로 kakao.maps.event.preventMap 메소드를 등록합니다 
