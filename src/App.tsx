@@ -21,6 +21,7 @@ import HeartLecipePage from "./MyInfo/HeartLecipePage";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "./Store/types";
+import NoticeListPage from "./Notice/NoticeListPage";
 
 function App() {
   const token = useSelector((state: RootState) => state.auth?.token);
@@ -50,6 +51,8 @@ function App() {
 
         <Route path="/heartLecipe" element={<HeartLecipePage />} />
         <Route path="/MyRecipe" element={<MyRecipePage />} />
+
+        <Route path="/notice" element={<NoticeListPage />} />
       </Routes>
     </BrowserRouter>
   );
