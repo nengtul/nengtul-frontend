@@ -1,58 +1,57 @@
-import LevelBadge from "./LevelBadge";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
-import { RootState } from "../AuthStore/store";
-import { useEffect, useState, useCallback } from "react";
-import axios from "axios";
 import theme from "./theme";
-import LogoutBtn from "./LogoutBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import defaultThumb from "../assets/common/defaultThumb.svg";
+import getLogin from "../ApiCall/getLogin";
+import { useEffect, useState, useCallback } from "react";
+import axios from "axios";
+import LevelBadge from "./LevelBadge";
 
 interface UserData {
   name: string;
   point: string;
   profileImageUrl: string;
 }
-
-// const DEFAULT_USER_DATA: UserData = { name: "", point: "", profileImageUrl: "" };
+const DEFAULT_USER_DATA: UserData = { name: "", point: "", profileImageUrl: "" };
 
 export default function HeaderInfo() {
-  // const [data, setData] = useState(DEFAULT_USER_DATA);
-  // const isLoggedin = useSelector((state: RootState) => state.auth.isLoggedin);
-  // const token = sessionStorage.getItem("accessToken");
-  // console.log(isLoggedin);
-  // const getUserInfo = useCallback(async () => {
-  //   try {
-  //     const response = await axios.get<UserData>("http://43.200.162.72:8080/v1/user/detail", {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     const userData = response.data;
-  //     setData(userData);
-  //     console.log(userData);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }, []);
+  const [data, setData] = useState(DEFAULT_USER_DATA);
 
-  // useEffect(() => {
-  //   if (isLoggedin) {
-  //     getUserInfo().catch((err) => {
-  //       console.error(err);
-  //     });
-  //   }
-  // }, [isLoggedin, getUserInfo]);
+  const getUserInfo = useCallback(async () => {
+    try {
+      const token = getLogin();
+      console.log(token);
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+      const response = await axios.get<UserData>("/api/v1/user/detail", {
+        headers: headers,
+      });
+      const userData = response.data;
+      setData(userData);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  useEffect(() => {
+    getUserInfo().catch((err) => {
+      console.error(err);
+    });
+  }, []);
+
+  if (data === DEFAULT_USER_DATA) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
       <HeaderLoginInfo>
-        {/* {isLoggedin ? (
+        {data.name ? (
           <>
-            <LogoutBtn />
             <MemberThumb
               style={{ backgroundImage: `url(${data.profileImageUrl || defaultThumb})` }}
             />
@@ -67,12 +66,7 @@ export default function HeaderInfo() {
             <h4>로그인을 해주세요.</h4>
             <FontAwesomeIcon icon={faAngleRight} />
           </Link>
-        )} */}
-        <Link to={"/login"} className="login-form">
-          <div className="default-img" style={{ backgroundImage: `url(${defaultThumb})` }}></div>
-          <h4>로그인을 해주세요.</h4>
-          <FontAwesomeIcon icon={faAngleRight} />
-        </Link>
+        )}
       </HeaderLoginInfo>
     </>
   );
