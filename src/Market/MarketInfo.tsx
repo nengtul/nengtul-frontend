@@ -3,7 +3,6 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../Redux/store";
 function MarketInfo(){
     const place = useSelector((state: RootState) => state.marketInfo.place);
-    console.log('이게 떴으면 좋겠다!!',place)
     let distance = 0;
    
     if (place) {
