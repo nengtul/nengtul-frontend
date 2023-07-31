@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { setToken } from "../Store/actions";
+import { getAccessToken } from "../Store/reducers";
 import Modal from "../common/Modal";
 
 interface ServerResponse {
@@ -44,7 +44,8 @@ export default function LoginForm() {
       });
       console.log(response.data.AccessToken);
       console.log(response.data.refreshToken);
-      dispatch(setToken(response.data.AccessToken));
+      console.log(response);
+      dispatch(getAccessToken(response.data.AccessToken));
 
       navigate("/");
     } catch (err) {

@@ -1,17 +1,31 @@
-import { AuthAction, AuthState } from "./types";
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
-const AuthInitialState: AuthState = {
-  token: null,
+export type accessToken = {
+  accessTokenValue: string | null;
 };
 
-export const authReducer = (state = AuthInitialState, action: AuthAction): AuthState => {
-  switch (action.type) {
-    case "SET_TOKEN":
-      return {
-        ...state,
-        token: action.payload,
-      };
-    default:
-      return state;
-  }
+const initialState: accessToken = {
+  accessTokenValue: null,
 };
+
+export const accessTokenSlice = createSlice({
+  name: "accesstoken",
+  initialState,
+  reducers: {
+    getAccessToken: (state, action: PayloadAction<string | null>) => {
+      state.accessTokenValue = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, (state) => {
+      console.log(state);
+      return initialState;
+    });
+  },
+});
+
+export const { getAccessToken } = accessTokenSlice.actions;
+
+export default accessTokenSlice.reducer;

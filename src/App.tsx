@@ -19,18 +19,9 @@ import MarketPage from "./Market/MarketPage";
 import MyRecipePage from "./MyInfo/MyRecipePage";
 import HeartLecipePage from "./MyInfo/HeartLecipePage";
 import NoticeViewPage from "./Notice/NoticeViewPage";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "./Store/types";
 import NoticeListPage from "./Notice/NoticeListPage";
 
 function App() {
-  const token = useSelector((state: RootState) => state.auth?.token);
-
-  useEffect(() => {
-    console.log(token);
-  }, [token]);
-
   return (
     <BrowserRouter>
       <Routes>
