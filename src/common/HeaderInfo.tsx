@@ -24,15 +24,19 @@ export default function HeaderInfo() {
     try {
       const token = getLogin();
       console.log(token);
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      };
-      const response = await axios.get<UserData>("/api/v1/user/detail", {
-        headers: headers,
-      });
-      const userData = response.data;
-      setData(userData);
+      if (token) {
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
+        const response = await axios.get<UserData>("/api/v1/user/detail", {
+          headers: headers,
+        });
+        const userData = response.data;
+        setData(userData);
+      } else {
+        setData(DEFAULT_USER_DATA);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -42,7 +46,11 @@ export default function HeaderInfo() {
     getUserInfo().catch((err) => {
       console.error(err);
     });
-  }, []);
+  }, [data]);
+
+  const setLogOut = () => {
+    setData(DEFAULT_USER_DATA);
+  };
 
   if (data === DEFAULT_USER_DATA) {
     return <div>Loading...</div>;
@@ -53,7 +61,7 @@ export default function HeaderInfo() {
       <HeaderLoginInfo>
         {data.name ? (
           <>
-            <LogoutBtn />
+            <LogoutBtn setLogOut={setLogOut} />
             <MemberThumb
               style={{ backgroundImage: `url(${data.profileImageUrl || defaultThumb})` }}
             />
