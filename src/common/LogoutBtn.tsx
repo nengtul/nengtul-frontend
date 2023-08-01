@@ -4,13 +4,21 @@ import { useDispatch } from "react-redux";
 import { getAccessToken } from "../Store/reducers";
 import { useNavigate } from "react-router-dom";
 import { PURGE } from "redux-persist";
-export default function LogoutBtn() {
+
+type SetLogOutFunction = () => void;
+
+interface LogoutBtnProps {
+  setLogOut: SetLogOutFunction;
+}
+
+export default function LogoutBtn({ setLogOut }: LogoutBtnProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     dispatch(getAccessToken(null));
     dispatch({ type: PURGE, key: ["root"], result: () => null });
+    setLogOut();
     navigate("/");
   };
 
