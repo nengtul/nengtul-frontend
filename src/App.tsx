@@ -8,7 +8,8 @@ import IngredientSearch from "./IngredientAndRecipe/IngredientSearch";
 import IngreAfterRecipePage from "./IngredientAndRecipe/IngreAfterRecipePage";
 import RecipeListPage from "./RecipeBoard/RecipeListPage";
 import RecipeWritePage from "./RecipeBoard/RecipeWritePage";
-import FindId from "./LoginAndNewUser/FindIdPage";
+import FindId from "./FindAndCertify/FindIdPage";
+import FindPasswordPage from "./FindAndCertify/FindPasswordPage";
 import MyPage from "./User/MyPage";
 import ChattingListPage from "./Chatting/ChattingListPage";
 import ChatPage from "./Chatting/ChatPage";
@@ -20,7 +21,7 @@ import MyRecipePage from "./MyInfo/MyRecipePage";
 import HeartLecipePage from "./MyInfo/HeartLecipePage";
 import NoticeViewPage from "./Notice/NoticeViewPage";
 import NoticeListPage from "./Notice/NoticeListPage";
-
+import ChangePassowordPage from "./User/ChangePasswordPage";
 function App() {
   return (
     <BrowserRouter>
@@ -38,7 +39,10 @@ function App() {
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/market" element={<MarketPage />} />
         <Route path="/findId" element={<FindId />} />
+        <Route path="/findPassword" element={<FindPasswordPage />} />
         <Route path="/myPage" element={<MyPage />} />
+        <Route path="/changePassword" element={<ChangePassowordPage/>} />
+
         <Route path="/ingredientMap" element={<IngredientMap />} />
 
         <Route path="/heartLecipe" element={<HeartLecipePage />} />

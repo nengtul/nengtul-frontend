@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import EggPart from "./EggPart.tsx"
-import HomePart from "./HomePart.tsx";
+import EggPart from "../LoginAndNewUser/EggPart.tsx"
+import HomePart from "../LoginAndNewUser/HomePart.tsx";
 import MobileWrap from "../common/MobileWrap.tsx";
 import FindIdForm from './FindIdForm.tsx';
 function FindId(){
