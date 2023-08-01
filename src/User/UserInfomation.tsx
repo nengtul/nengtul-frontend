@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import getLogin from "../ApiCall/getLogin";
 import { Link } from "react-router-dom";
+// import CertifyPage from "../FindAndCertify/CertifyPage"
 //1.회원정보보여주기  2.회원정보 수정하기  3.회원 탈퇴하기
 function UserInfomation  () {
     interface UserData {
@@ -10,16 +11,14 @@ function UserInfomation  () {
         nickname: string;
         phoneNumber: string;
         profileImageUrl:string;
+        emailVerifiedYn:boolean;
       }
     interface UpdateUserData {
         nickname: string;
         phoneNumber: string;
         profileImageUrl:string;
-        // address:null;
-        // addressDetail: null;
       }
     const [data, setData] = useState<UserData | null>(null);
-    // const MY_TOKEN= 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5MDgwNzY4NiwiZW1haWwiOiJiZXJyeTAxMTJAbmF2ZXIuY29tIn0._VjnOkwMuZdDbqwUXJD8TwUtKpH1CJGML0_VtY_vGAJznoMToeUxbpkxme-YwxyJKcdlxqNNHqmlxC5qJ98aJA'
     const MY_TOKEN = getLogin();
     useEffect(() => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
@@ -27,13 +26,12 @@ function UserInfomation  () {
           .then((response) => {
                 setData(response.data);
                 setEditedData(response.data);
-                // console.log(response.data)
           })
           .catch((error) => {
             console.error(error);
           });
       }, []);
-    // console.log('data',data)
+
 
     const [editing, setEditing] = useState(false);
     const [editedData, setEditedData] = useState<UpdateUserData>({
@@ -45,7 +43,7 @@ function UserInfomation  () {
     const onModify=()=>{
         setEditing(!editing);
     }
-
+    console.log('이거 확인해봐',data)
     //회원정보 수정
     const onUpdate=()=>{
         try{
@@ -80,6 +78,11 @@ function UserInfomation  () {
           console.error(error);
         })
     }
+
+    //이메일 인증
+    const onVerify=()=>{
+        
+    }
     return (
         <UserInfoArea>
         <UserPic src={data?.profileImageUrl}></UserPic>
@@ -97,6 +100,17 @@ function UserInfomation  () {
                 <EachArea>
                     <Category>전화번호</Category>
                     <UserPhoneNumber>{data.phoneNumber}</UserPhoneNumber>
+                </EachArea>
+                <EachArea>
+                    <Category>메일인증</Category>
+                    
+                        {data.emailVerifiedYn===false?(
+                            <Verify onClick={onVerify}>인증하기</Verify>
+                            // <CertifyPage/>
+                        ):(
+                            <UserPhoneNumber >인증됨</UserPhoneNumber>
+                        )}
+                    
                 </EachArea>
             </EachAreaPart>
             <ModifyButton onClick={onModify}>회원정보 수정하기</ModifyButton>
@@ -172,6 +186,7 @@ const EachAreaPart=styled.div`
 `
 const EachArea=styled.div`   
     display:flex;
+    align-items: center
 `
 const Category=styled.div`   
     font-size:20rem;
@@ -243,5 +258,17 @@ const PasswordButton=styled.div`
     margin: 10rem auto;
     border:1px solid #38DB83;
     border-radius:40rem;
+`
+
+const Verify=styled.div`
+    width:25%;
+    background-color:#5b90fb;
+    font-size:20rem;
+    color:white;
+    text-align:center;
+    height:40rem;
+    border-radius:10rem;
+    padding-top:10rem;
+    cursor:pointer;
 `
 export default UserInfomation
