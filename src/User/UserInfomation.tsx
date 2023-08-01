@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import getLogin from "../ApiCall/getLogin";
+import { Link } from "react-router-dom";
 //1.회원정보보여주기  2.회원정보 수정하기  3.회원 탈퇴하기
 function UserInfomation  () {
     interface UserData {
@@ -9,21 +10,17 @@ function UserInfomation  () {
         nickname: string;
         phoneNumber: string;
         profileImageUrl:string;
-        password:string;
       }
     interface UpdateUserData {
         nickname: string;
         phoneNumber: string;
         profileImageUrl:string;
-        password:string;
         // address:null;
         // addressDetail: null;
       }
     const [data, setData] = useState<UserData | null>(null);
     // const MY_TOKEN= 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5MDgwNzY4NiwiZW1haWwiOiJiZXJyeTAxMTJAbmF2ZXIuY29tIn0._VjnOkwMuZdDbqwUXJD8TwUtKpH1CJGML0_VtY_vGAJznoMToeUxbpkxme-YwxyJKcdlxqNNHqmlxC5qJ98aJA'
     const MY_TOKEN = getLogin();
-
-
     useEffect(() => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
         axios.get<UserData>('http://43.200.162.72:8080/v1/user/detail')
@@ -43,7 +40,6 @@ function UserInfomation  () {
         nickname: "",
         phoneNumber: "",
         profileImageUrl:"",
-        password:"",
       });
     console.log('editiedData',editedData)
     const onModify=()=>{
@@ -56,11 +52,8 @@ function UserInfomation  () {
             const url="http://43.200.162.72:8080/v1/user/detail"
             const data ={
                 nickname: editedData.nickname,
-                password: editedData.password,
                 phoneNumber: editedData.phoneNumber,
                 profileImageUrl:editedData.profileImageUrl,
-                // address:null,
-                // addressDetail: null,
             }
             console.log('수정할데이터',data)
             axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
@@ -68,12 +61,11 @@ function UserInfomation  () {
             .then((response) => {
               console.log('response',response);
               console.log('수정완료!');
+              window.location.reload();
             })
             .catch((error) => {
               console.error(error);
             });
-           
-        
         }catch (err) {
             console.log(err)
         }
@@ -107,7 +99,7 @@ function UserInfomation  () {
                     <UserPhoneNumber>{data.phoneNumber}</UserPhoneNumber>
                 </EachArea>
             </EachAreaPart>
-            <ModifyButton onClick={onModify}>수정하기</ModifyButton>
+            <ModifyButton onClick={onModify}>회원정보 수정하기</ModifyButton>
             <DeleteButton onClick={onDelete}>탈퇴하기</DeleteButton>
             </>
         )}
@@ -151,6 +143,7 @@ function UserInfomation  () {
                     </UserPhoneNumber>
                 </EachArea>
             </EachAreaPart>
+            <Link to="/changePassword"><PasswordButton>비밀번호 변경하기</PasswordButton></Link>
             <UpdateButton onClick={onUpdate} >완료</UpdateButton>
             <ModifyButton onClick={onModify} >취소</ModifyButton>
             </>
@@ -160,7 +153,7 @@ function UserInfomation  () {
     )
 }
 const UserInfoArea=styled.div`   
-    margin-top: 90rem;
+    margin-top: 70rem;
 
 `
 const UserPic=styled.img`
@@ -236,7 +229,18 @@ const UpdateButton=styled.div`
     text-align:center;
     padding:20rem 40rem ;
     font-size:20rem;
-    margin: 30rem auto;
+    margin: 30rem auto 10rem auto;
+    border:1px solid #38DB83;
+    border-radius:40rem;
+`
+const PasswordButton=styled.div`
+    cursor:pointer;
+    color:#38DB83;
+    width:70%;
+    text-align:center;
+    padding:20rem 40rem ;
+    font-size:20rem;
+    margin: 10rem auto;
     border:1px solid #38DB83;
     border-radius:40rem;
 `
