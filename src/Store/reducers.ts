@@ -2,20 +2,27 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
 
-export type accessToken = {
+export type TokenState = {
   accessTokenValue: string | null;
+  refreshTokenValue: string | null;
 };
 
-const initialState: accessToken = {
+const initialState: TokenState = {
   accessTokenValue: null,
+  refreshTokenValue: null,
 };
 
 export const accessTokenSlice = createSlice({
   name: "accesstoken",
   initialState,
   reducers: {
-    getAccessToken: (state, action: PayloadAction<string | null>) => {
-      state.accessTokenValue = action.payload;
+    setTokens: (
+      state,
+      action: PayloadAction<{ accessToken: string | null; refreshToken: string | null }>
+    ) => {
+      const { accessToken, refreshToken } = action.payload;
+      state.accessTokenValue = accessToken;
+      state.refreshTokenValue = refreshToken;
     },
   },
   extraReducers: (builder) => {
@@ -26,6 +33,6 @@ export const accessTokenSlice = createSlice({
   },
 });
 
-export const { getAccessToken } = accessTokenSlice.actions;
+export const { setTokens } = accessTokenSlice.actions;
 
 export default accessTokenSlice.reducer;

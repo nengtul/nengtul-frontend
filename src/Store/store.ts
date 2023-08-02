@@ -10,13 +10,13 @@ import {
   REGISTER,
   persistStore,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import storageSession from "redux-persist/lib/storage/session";
 
 import accessTokenReducer from "./reducers";
 
 const accessTokenPersistConfig = {
   key: "root",
-  storage,
+  storage: storageSession,
 };
 
 const persistedAcceessTokenReducer = persistReducer(accessTokenPersistConfig, accessTokenReducer);
