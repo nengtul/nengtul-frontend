@@ -9,6 +9,9 @@ import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import LevelBadge from "./LevelBadge";
 import LogoutBtn from "./LogoutBtn";
+import { useDispatch } from "react-redux";
+import { setTokens } from "../Store/reducers";
+import { Tokens } from "../ApiCall/getLogin";
 
 interface UserData {
   name: string;
@@ -18,15 +21,16 @@ interface UserData {
 const DEFAULT_USER_DATA: UserData = { name: "", point: "", profileImageUrl: "" };
 
 export default function HeaderInfo() {
+  const dispatch = useDispatch();
   const [data, setData] = useState(DEFAULT_USER_DATA);
 
   const getUserInfo = useCallback(async () => {
     try {
-      const token = getLogin();
-      console.log(token);
-      if (token) {
+      const tokens: Tokens | null = await getLogin();
+      if (tokens) {
+        const { accessToken, refreshToken } = tokens;
         const headers = {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         };
         const response = await axios.get<UserData>("/api/v1/user/detail", {
@@ -34,6 +38,12 @@ export default function HeaderInfo() {
         });
         const userData = response.data;
         setData(userData);
+        dispatch(
+          setTokens({
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+          })
+        );
       } else {
         setData(DEFAULT_USER_DATA);
       }
@@ -46,7 +56,7 @@ export default function HeaderInfo() {
     getUserInfo().catch((err) => {
       console.error(err);
     });
-  }, [data]);
+  }, []);
 
   const setLogOut = () => {
     setData(DEFAULT_USER_DATA);
