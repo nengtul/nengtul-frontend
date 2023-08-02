@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import getLogin from "../ApiCall/getLogin";
+import { Link } from "react-router-dom";
+// import CertifyPage from "../FindAndCertify/CertifyPage"
 //1.회원정보보여주기  2.회원정보 수정하기  3.회원 탈퇴하기
 function UserInfomation  () {
     interface UserData {
@@ -9,58 +11,47 @@ function UserInfomation  () {
         nickname: string;
         phoneNumber: string;
         profileImageUrl:string;
-        password:string;
+        emailVerifiedYn:boolean;
       }
     interface UpdateUserData {
         nickname: string;
         phoneNumber: string;
         profileImageUrl:string;
-        password:string;
-        // address:null;
-        // addressDetail: null;
       }
     const [data, setData] = useState<UserData | null>(null);
-    // const MY_TOKEN= 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5MDgwNzY4NiwiZW1haWwiOiJiZXJyeTAxMTJAbmF2ZXIuY29tIn0._VjnOkwMuZdDbqwUXJD8TwUtKpH1CJGML0_VtY_vGAJznoMToeUxbpkxme-YwxyJKcdlxqNNHqmlxC5qJ98aJA'
     const MY_TOKEN = getLogin();
-
-
     useEffect(() => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
         axios.get<UserData>('http://43.200.162.72:8080/v1/user/detail')
           .then((response) => {
                 setData(response.data);
                 setEditedData(response.data);
-                // console.log(response.data)
           })
           .catch((error) => {
             console.error(error);
           });
       }, []);
-    // console.log('data',data)
+
 
     const [editing, setEditing] = useState(false);
     const [editedData, setEditedData] = useState<UpdateUserData>({
         nickname: "",
         phoneNumber: "",
         profileImageUrl:"",
-        password:"",
       });
     console.log('editiedData',editedData)
     const onModify=()=>{
         setEditing(!editing);
     }
-
+    console.log('이거 확인해봐',data)
     //회원정보 수정
     const onUpdate=()=>{
         try{
             const url="http://43.200.162.72:8080/v1/user/detail"
             const data ={
                 nickname: editedData.nickname,
-                password: editedData.password,
                 phoneNumber: editedData.phoneNumber,
                 profileImageUrl:editedData.profileImageUrl,
-                // address:null,
-                // addressDetail: null,
             }
             console.log('수정할데이터',data)
             axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
@@ -68,12 +59,11 @@ function UserInfomation  () {
             .then((response) => {
               console.log('response',response);
               console.log('수정완료!');
+              window.location.reload();
             })
             .catch((error) => {
               console.error(error);
             });
-           
-        
         }catch (err) {
             console.log(err)
         }
@@ -87,6 +77,11 @@ function UserInfomation  () {
         .catch((error) => {
           console.error(error);
         })
+    }
+
+    //이메일 인증
+    const onVerify=()=>{
+        
     }
     return (
         <UserInfoArea>
@@ -106,8 +101,19 @@ function UserInfomation  () {
                     <Category>전화번호</Category>
                     <UserPhoneNumber>{data.phoneNumber}</UserPhoneNumber>
                 </EachArea>
+                <EachArea>
+                    <Category>메일인증</Category>
+                    
+                        {data.emailVerifiedYn===false?(
+                            <Verify onClick={onVerify}>인증하기</Verify>
+                            // <CertifyPage/>
+                        ):(
+                            <UserPhoneNumber >인증됨</UserPhoneNumber>
+                        )}
+                    
+                </EachArea>
             </EachAreaPart>
-            <ModifyButton onClick={onModify}>수정하기</ModifyButton>
+            <ModifyButton onClick={onModify}>회원정보 수정하기</ModifyButton>
             <DeleteButton onClick={onDelete}>탈퇴하기</DeleteButton>
             </>
         )}
@@ -151,6 +157,7 @@ function UserInfomation  () {
                     </UserPhoneNumber>
                 </EachArea>
             </EachAreaPart>
+            <Link to="/changePassword"><PasswordButton>비밀번호 변경하기</PasswordButton></Link>
             <UpdateButton onClick={onUpdate} >완료</UpdateButton>
             <ModifyButton onClick={onModify} >취소</ModifyButton>
             </>
@@ -160,7 +167,7 @@ function UserInfomation  () {
     )
 }
 const UserInfoArea=styled.div`   
-    margin-top: 90rem;
+    margin-top: 70rem;
 
 `
 const UserPic=styled.img`
@@ -179,6 +186,7 @@ const EachAreaPart=styled.div`
 `
 const EachArea=styled.div`   
     display:flex;
+    align-items: center
 `
 const Category=styled.div`   
     font-size:20rem;
@@ -236,8 +244,31 @@ const UpdateButton=styled.div`
     text-align:center;
     padding:20rem 40rem ;
     font-size:20rem;
-    margin: 30rem auto;
+    margin: 30rem auto 10rem auto;
     border:1px solid #38DB83;
     border-radius:40rem;
+`
+const PasswordButton=styled.div`
+    cursor:pointer;
+    color:#38DB83;
+    width:70%;
+    text-align:center;
+    padding:20rem 40rem ;
+    font-size:20rem;
+    margin: 10rem auto;
+    border:1px solid #38DB83;
+    border-radius:40rem;
+`
+
+const Verify=styled.div`
+    width:25%;
+    background-color:#5b90fb;
+    font-size:20rem;
+    color:white;
+    text-align:center;
+    height:40rem;
+    border-radius:10rem;
+    padding-top:10rem;
+    cursor:pointer;
 `
 export default UserInfomation

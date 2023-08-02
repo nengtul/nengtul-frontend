@@ -25,7 +25,7 @@ export default function LoginSNS() {
 const SNSButtonArea = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 20rem;
+  margin: 20rem 0;
 `;
 const SNSButton = styled.button`
   width: 62rem;
