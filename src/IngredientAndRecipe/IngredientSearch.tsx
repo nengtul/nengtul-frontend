@@ -11,11 +11,11 @@ import ContensWrap from "../common/ContentsWrap";
 import TabMenu from "../common/TabMenu";
 
 export default function IngredientSearch() {
-  const [searchData, setSearchData] = useState<string[]>([]);
+  const [ingredient, setIngredient] = useState<string[]>([]);
   const [searchText, setSearchText] = useState("");
 
   const removeItem = (index: number) => {
-    setSearchData((prevData) => {
+    setIngredient((prevData) => {
       const newData = [...prevData];
       newData.splice(index, 1);
       return newData;
@@ -23,7 +23,7 @@ export default function IngredientSearch() {
   };
 
   const handleEnter = () => {
-    setSearchData((prevData) => [...prevData, searchText]);
+    setIngredient((prevData) => [...prevData, searchText]);
     setSearchText("");
   };
 
@@ -40,7 +40,7 @@ export default function IngredientSearch() {
                 setSearchText={setSearchText}
                 onEnter={handleEnter}
               />
-              <SearchList searchData={searchData} removeItem={removeItem} />
+              <SearchList ingredient={ingredient} removeItem={removeItem} />
             </div>
             <SearchButton to={"/ingredientRecipe"}>레시피 조회</SearchButton>
           </SearchWrap>
