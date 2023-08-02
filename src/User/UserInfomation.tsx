@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import getLogin from "../ApiCall/getLogin";
 import { Link } from "react-router-dom";
@@ -12,14 +12,16 @@ function UserInfomation  () {
         phoneNumber: string;
         profileImageUrl:string;
         emailVerifiedYn:boolean;
+        id:number;
       }
     interface UpdateUserData {
         nickname: string;
         phoneNumber: string;
-        profileImageUrl:string;
+        // profileImageUrl:File;
       }
     const [data, setData] = useState<UserData | null>(null);
     const MY_TOKEN = getLogin();
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
     useEffect(() => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
         axios.get<UserData>('http://43.200.162.72:8080/v1/user/detail')
@@ -37,33 +39,72 @@ function UserInfomation  () {
     const [editedData, setEditedData] = useState<UpdateUserData>({
         nickname: "",
         phoneNumber: "",
-        profileImageUrl:"",
+        // profileImageUrl: new File(["fileData"], "example.jpg", { type: "image/jpeg" }),
       });
+    const [profileImage, setProfileImage] = useState<Blob | string>('');
     console.log('editiedData',editedData)
     const onModify=()=>{
         setEditing(!editing);
     }
-    console.log('이거 확인해봐',data)
+    // console.log('이거 확인해봐',data)
+    const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+          }
+        
+      };
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file=e.target.files?.[0];
+        console.log('file',file)
+        // editedData.profileImage에 파일 정보 저장
+        if (file) {
+            setProfileImage(file);
+            console.log('file',file)
+          } else {
+            setProfileImage('');
+          }
+        // console.log('file',editedData)
+      }
+     
+    // console.log('여기는 이미지', profileImage);
+     
     //회원정보 수정
     const onUpdate=()=>{
         try{
             const url="http://43.200.162.72:8080/v1/user/detail"
-            const data ={
+            const userUpdateDto = {
                 nickname: editedData.nickname,
                 phoneNumber: editedData.phoneNumber,
-                profileImageUrl:editedData.profileImageUrl,
-            }
-            console.log('수정할데이터',data)
-            axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-            axios.put(url, data)
-            .then((response) => {
-              console.log('response',response);
-              console.log('수정완료!');
-              window.location.reload();
-            })
-            .catch((error) => {
-              console.error(error);
-            });
+              };
+            const formData = new FormData();
+            console.log('image!!!',profileImage)
+            if (profileImage instanceof Blob) {
+                formData.append("image", profileImage);
+              }
+            console.log('image!!!',profileImage)
+            console.log('userUpdateDto:', userUpdateDto);
+            
+            
+           const blob=new Blob([JSON.stringify(userUpdateDto)],{
+            type:'application/json'
+           });
+           formData.append("userUpdateDto", blob)
+           const config = {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          };
+          axios.post(url,formData,config)
+          .then((response) => {
+            console.log('response', response);
+            console.log('수정완료!'); // 모달창으로 바꾸기
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
         }catch (err) {
             console.log(err)
         }
@@ -73,6 +114,7 @@ function UserInfomation  () {
         axios.delete<UserData>('http://43.200.162.72:8080/v1/user/detail')
         .then((response) => {
               console.log(response)
+                console.log('탈퇴되었습니다')//모달창으로 바꾸기
         })
         .catch((error) => {
           console.error(error);
@@ -81,13 +123,23 @@ function UserInfomation  () {
 
     //이메일 인증
     const onVerify=()=>{
-        
+        axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+        axios.post(`http://43.200.162.72:8080/v1/user/verify/reset/${data?.id}`)
+        .then((response) => {
+              console.log(response)
+              console.log('인증메일이 전송됨') //모달창으로 바꾸기
+              window.location.reload();
+        })
+        .catch((error) => {
+          console.error(error);
+        })
     }
+    console.log('data',data)
     return (
         <UserInfoArea>
-        <UserPic src={data?.profileImageUrl}></UserPic>
         {data && !editing && (
             <>
+            <UserPic src={data?.profileImageUrl}></UserPic>
             <EachAreaPart>
                 <EachArea>
                     <Category>닉네임</Category>
@@ -106,9 +158,8 @@ function UserInfomation  () {
                     
                         {data.emailVerifiedYn===false?(
                             <Verify onClick={onVerify}>인증하기</Verify>
-                            // <CertifyPage/>
                         ):(
-                            <UserPhoneNumber >인증됨</UserPhoneNumber>
+                            <VerifyCheck>인증됨</VerifyCheck>
                         )}
                     
                 </EachArea>
@@ -119,6 +170,10 @@ function UserInfomation  () {
         )}
         {data && editing &&(
             <>
+            <form>
+            <UserPic src={data?.profileImageUrl}></UserPic>
+            <ModifyProfileBtn onClick={handleButtonClick}>+</ModifyProfileBtn>
+            <input type="file" style={{ display: 'none' }} ref={fileInputRef} onChange={handleImageChange} />
             <EachAreaPart>
                 <EachArea>
                     <Category>닉네임</Category>
@@ -160,6 +215,7 @@ function UserInfomation  () {
             <Link to="/changePassword"><PasswordButton>비밀번호 변경하기</PasswordButton></Link>
             <UpdateButton onClick={onUpdate} >완료</UpdateButton>
             <ModifyButton onClick={onModify} >취소</ModifyButton>
+            </form>
             </>
         )}
      
@@ -167,7 +223,7 @@ function UserInfomation  () {
     )
 }
 const UserInfoArea=styled.div`   
-    margin-top: 70rem;
+    margin-top: 60rem;
 
 `
 const UserPic=styled.img`
@@ -178,6 +234,7 @@ const UserPic=styled.img`
     margin: 0 auto;
     margin-bottom:50rem;
     display:block;
+    position:relative;
 `
 const EachAreaPart=styled.div`   
    border-top: 1px solid rgb(239, 239, 239);
@@ -224,6 +281,7 @@ const ModifyButton=styled.div`
     padding:20rem 40rem ;
     font-size:20rem;
     margin: 30rem auto;
+    margin-bottom:0;
     border-radius:40rem;
 `
 const DeleteButton=styled.div`
@@ -270,5 +328,27 @@ const Verify=styled.div`
     border-radius:10rem;
     padding-top:10rem;
     cursor:pointer;
+`
+
+const VerifyCheck=styled.div`
+    color:#5b90fb;
+    font-size:20rem;
+    padding:10rem;
+    border-radius:10rem;
+    border:1px solid #5b90fb;
+`
+
+const ModifyProfileBtn=styled.button`
+    width:40rem;
+    height:40rem;
+    font-size:37rem;
+    color:white;
+    background-color:pink;
+    border-radius:100%;
+    position: absolute;
+    top:210rem;
+    right:130rem;
+    cursor:pointer;
+    
 `
 export default UserInfomation
