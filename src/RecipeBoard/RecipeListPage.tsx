@@ -185,17 +185,19 @@ export const CategoryBtn = styled.div`
     top: 120%;
     left: 0;
     border: 1px solid #333;
-    width: 100%;
+    width: 300%;
     box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.31);
     border-radius: 9px;
     border: 2px solid ${theme.colors.main};
     overflow: hidden;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    background-color: #fff;
     li {
-      width: 100%;
+      width: 33.33333%;
       height: 38px;
-      &:not(:nth-of-type(1)) {
-        border-top: 1px solid #c5ffe0;
-      }
+      border: 1px solid #c5ffe0;
     }
   }
 `;

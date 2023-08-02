@@ -5,7 +5,7 @@ export default function RequirerIngredient() {
   return (
     <IngredientWrap>
       <h4>필요한 재료</h4>
-      <SearchList searchData={["참치액", "참기름", "들기름"]}></SearchList>
+      <SearchList ingredient={["참치액", "참기름", "들기름"]}></SearchList>
     </IngredientWrap>
   );
 }

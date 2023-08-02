@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 
 interface SearchListProps {
-  searchData: string[];
+  ingredient: string[];
   removeItem?: (index: number) => void;
 }
 
 export default function SearchList({
-  searchData,
+  ingredient,
   removeItem = () => {
     return;
   },
@@ -17,7 +17,7 @@ export default function SearchList({
   return (
     <SearchListWrap>
       <ul>
-        {searchData.map((item, index) => (
+        {ingredient.map((item, index) => (
           <li key={index}>
             {item}
             <FontAwesomeIcon

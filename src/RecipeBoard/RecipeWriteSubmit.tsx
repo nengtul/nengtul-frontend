@@ -1,9 +1,15 @@
 import { styled } from "styled-components";
 
-export default function RecipeWriteSubmit() {
+interface RecipeWriteSubmitProps {
+  handleSubmit: () => void;
+}
+
+export default function RecipeWriteSubmit({ handleSubmit }: RecipeWriteSubmitProps) {
   return (
     <>
-      <SubmitBtn type="submit">작성하기</SubmitBtn>
+      <SubmitBtn type="button" onClick={handleSubmit}>
+        작성하기
+      </SubmitBtn>
     </>
   );
 }
