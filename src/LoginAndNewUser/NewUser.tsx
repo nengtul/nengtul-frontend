@@ -23,7 +23,7 @@ function NewUser (){
     }
     const handleNewUser=async(name:string,nickname:string,password:string,tel:string,email:string)=>{
         try{
-            const url="http://43.200.162.72:8080/v1/user/join "
+            const url="https://nengtul.shop/v1/user/join "
             const data ={
                 name: name,
                 nickname: nickname,

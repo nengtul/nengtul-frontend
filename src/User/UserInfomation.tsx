@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef,useCallback } from "react";
 import axios from "axios";
 import getLogin from "../ApiCall/getLogin";
+import { Tokens } from "../ApiCall/getLogin";
 import { Link } from "react-router-dom";
 // import CertifyPage from "../FindAndCertify/CertifyPage"
 //1.회원정보보여주기  2.회원정보 수정하기  3.회원 탈퇴하기
@@ -17,21 +18,81 @@ function UserInfomation  () {
     interface UpdateUserData {
         nickname: string;
         phoneNumber: string;
-        // profileImageUrl:File;
       }
+
+      const getUserInfo = useCallback(async () => {
+        try {
+          const tokens: Tokens | null = await getLogin();
+          if (tokens){
+            const { accessToken} = tokens;
+            console.log('여기1',accessToken)
+            return accessToken
+        
+        } else{
+            console.log('여기2')
+            return null;
+        }
+        } catch (err) {
+            console.log('여기3')
+          console.error(err);
+          return null;
+        }
+      }, []);
+
+    // useEffect(() => {
+    //     getUserInfo().catch((err) => {
+    //       console.error(err);
+    //     });
+    //   },[]);  
+
+
     const [data, setData] = useState<UserData | null>(null);
-    const MY_TOKEN = getLogin();
+    // const MY_TOKEN = getLogin();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const MY_TOKEN: string | null = await getUserInfo();
+    //         console.log('여기4',MY_TOKEN)
+    //         // const MY_TOKEN: string | null = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5MTA0NjMzMiwiZW1haWwiOiJiZXJyeTAxMTJAbmF2ZXIuY29tIn0.m0KkFGwFSZvgPugjYUnyhC3d_40PqRwW8tTXimiMq90R-2SicQfEwXmyyB2FiSzsacNxPRJ9tcqh4vBi0GKCXg';
+    //         if (MY_TOKEN) {
+    //             console.log('여기에 들어왔나?',MY_TOKEN)
+    //             axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+    //             axios.get<UserData>('https://nengtul.shop/v1/user/detail')
+    //             .then((response) => {
+    //                 setData(response.data);
+    //                 setEditedData(response.data);
+    //             })
+    //             .catch((error) => {
+    //                 console.error(error);
+    //             });
+    //         }
+    //      }
+    //     fetchData().catch((err)=>{
+    //         console.error(err);
+    //     });
+    // },[]);
     useEffect(() => {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-        axios.get<UserData>('http://43.200.162.72:8080/v1/user/detail')
-          .then((response) => {
-                setData(response.data);
-                setEditedData(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        getUserInfo()
+        .then((MY_TOKEN: string | null) => {
+            if (MY_TOKEN) {
+                console.log('여기에 들어왔나?',MY_TOKEN)
+                axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+                axios.get<UserData>('https://nengtul.shop/v1/user/detail')
+                    .then((response) => {
+                        setData(response.data);
+                        setEditedData(response.data);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }else {
+                console.error("토큰을 가져올 수 없습니다.");
+              }
+
+        })
+        .catch((err) => {
+          console.error(err);
+        });
       }, []);
 
 
@@ -39,7 +100,6 @@ function UserInfomation  () {
     const [editedData, setEditedData] = useState<UpdateUserData>({
         nickname: "",
         phoneNumber: "",
-        // profileImageUrl: new File(["fileData"], "example.jpg", { type: "image/jpeg" }),
       });
     const [profileImage, setProfileImage] = useState<Blob | string>('');
     console.log('editiedData',editedData)
@@ -73,7 +133,7 @@ function UserInfomation  () {
     //회원정보 수정
     const onUpdate=()=>{
         try{
-            const url="http://43.200.162.72:8080/v1/user/detail"
+            const url="https://nengtul.shop/v1/user/detail"
             const userUpdateDto = {
                 nickname: editedData.nickname,
                 phoneNumber: editedData.phoneNumber,
@@ -111,7 +171,7 @@ function UserInfomation  () {
     }
     //회원정보 삭제
     const onDelete=()=>{
-        axios.delete<UserData>('http://43.200.162.72:8080/v1/user/detail')
+        axios.delete<UserData>('https://nengtul.shop/v1/user/detail')
         .then((response) => {
               console.log(response)
                 console.log('탈퇴되었습니다')//모달창으로 바꾸기
@@ -124,7 +184,7 @@ function UserInfomation  () {
     //이메일 인증
     const onVerify=()=>{
         axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-        axios.post(`http://43.200.162.72:8080/v1/user/verify/reset/${data?.id}`)
+        axios.post(`https://nengtul.shop/v1/user/verify/reset/${data?.id}`)
         .then((response) => {
               console.log(response)
               console.log('인증메일이 전송됨') //모달창으로 바꾸기
