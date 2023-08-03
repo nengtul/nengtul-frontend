@@ -2,7 +2,7 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { styled } from "styled-components";
 import theme from "../common/theme";
-
+import { Link } from "react-router-dom";
 export default function TrandingLocation() {
   return (
     <LocationWrap>
@@ -12,7 +12,9 @@ export default function TrandingLocation() {
       <div>
         <p>번1동 동사무소</p>
       </div>
-      <button type="button">위치 수정</button>
+      <Link to="/tradePlace">
+        <button type="button">위치 수정</button>
+      </Link>
     </LocationWrap>
   );
 }

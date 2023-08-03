@@ -14,7 +14,7 @@ export default function HeaderTabMenu() {
       <HeaderInfo />
       <TabUl>
         <li>
-          <Link to={"/"}>
+          <Link to={"/myPage"}>
             <FontAwesomeIcon
               icon={faUser}
               style={{ height: "16rem", color: `${theme.colors.main}` }}

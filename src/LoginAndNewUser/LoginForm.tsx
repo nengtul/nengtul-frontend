@@ -28,7 +28,7 @@ export default function LoginForm() {
 
   const handleLogin = async () => {
     try {
-      const url = "http://43.200.162.72:8080/v1/user/login";
+      const url = "https://nengtul.shop/v1/user/login";
       const data = {
         email: email,
         password: password,

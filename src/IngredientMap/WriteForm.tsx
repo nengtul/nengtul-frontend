@@ -3,26 +3,35 @@ import theme from "../common/theme";
 import TrandingLocation from "./TrandingLocation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import RecipeWriteSubmit from "../RecipeBoard/RecipeWriteSubmit";
+import axios  from "axios";
+
 export default function WriteForm() {
+  const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
+    e.preventDefault();
+    console.log('클릭됨')
+    const formData = new FormData(e.currentTarget);
+    const title=formData.get('title') as string;
+    const content=formData.get('content') as string;
+    const price=formData.get('price') as string;
+  }
   return (
     <>
       <WriteWrap>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div>
             <h4>제목</h4>
-            <input type="text" placeholder="제목을 입력해주세요." />
+            <input type="text" name="title" placeholder="제목을 입력해주세요." />
           </div>
           <div style={{ marginTop: "20px" }}>
             <h4>내용</h4>
-            <textarea placeholder="내용을 입력해주세요."></textarea>
+            <textarea name="content" placeholder="내용을 입력해주세요."></textarea>
           </div>
           <div className="price-chk">
             <input type="checkbox" id="chk-box" />
             <label htmlFor="chk-box"></label>
             <span>무료 나눔이라면 체크해주세요!</span>
           </div>
-          <input type="text" placeholder="가격을 입력해주세요." />
+          <input type="text" name="price" placeholder="가격을 입력해주세요." />
           <div className="input-file">
             <label htmlFor="img-file">
               <FontAwesomeIcon icon={faPlus} />
@@ -31,7 +40,9 @@ export default function WriteForm() {
           </div>
 
           <TrandingLocation />
-          <RecipeWriteSubmit />
+          <SubmitBtn type="submit" >
+              작성하기
+          </SubmitBtn>
         </form>
       </WriteWrap>
     </>
@@ -116,4 +127,17 @@ const WriteWrap = styled.div`
       display: none;
     }
   }
+`;
+
+const SubmitBtn = styled.button`
+  width: 100%;
+  background-color: #38db83;
+  font-size: 20rem;
+  font-weight: bold;
+  color: #fff;
+  padding: 13px 0px;
+  margin-top: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
 `;

@@ -1,38 +1,104 @@
 import getLogin from "../ApiCall/getLogin";
+import { Tokens } from "../ApiCall/getLogin";
 import styled from "styled-components";
-import {useState,useCallback,ChangeEvent } from "react";
+import {useState,useCallback,ChangeEvent ,useEffect} from "react";
 import axios from "axios";
 import {useNavigate} from 'react-router-dom';
 function ChangePassword(){
-    const MY_TOKEN = getLogin();
+    // const MY_TOKEN = getLogin();
     const navigate = useNavigate();
+    
 
-    const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
+    const getUserInfo = useCallback(async () => {
+        try {
+          const tokens: Tokens | null = await getLogin();
+          if (tokens){
+            // const url="https://nengtul.shop/v1/user/detail/password";
+            const { accessToken} = tokens;
+            return accessToken
+            // const data ={
+            //             password:goPassword
+            //         }
+            // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+            // axios.put(url, data)
+            // .then((response)=>{
+
+            
+            // console.log('response',response);
+            // console.log('비밀번호가 변경되었습니다');
+            // navigate('/myPage')
+            // })  
+            // .catch((error)=>{
+            //     console.error(error)
+            // })  
+        } else{
+            return null;
+        }
+        } catch (err) {
+          console.error(err);
+          return null;
+        }
+      }, []);
+    useEffect(() => {
+        getUserInfo().catch((err) => {
+          console.error(err);
+        });
+      },[]);
+    const handleSubmit=(e:React.FormEvent<HTMLFormElement>):void=>{
         e.preventDefault();
+        
         const formData = new FormData(e.currentTarget);
         const password = formData.get('password') as string;
-        try{
-            const url="http://43.200.162.72:8080/v1/user/detail/password"
-            const data ={
-                password:password
-            }
-            console.log('수정할데이터',data)
-            axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-            axios.put(url, data)
-            .then((response) => {
-              console.log('response',response);
-              console.log('비밀번호가 변경되었습니다');
-              navigate('/myPage')
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }catch (err) {
-            console.log(err)
+        getUserInfo()
+    .then((MY_TOKEN: string | null) => {
+      if (MY_TOKEN) {
+        const url = "https://nengtul.shop/v1/user/detail/password";
+        const data = {
+          password: password,
+        };
+        console.log('수정할데이터', data);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+        axios.put(url, data)
+          .then((response) => {
+            console.log('response', response);
+            console.log('비밀번호가 변경되었습니다');
+            navigate('/myPage');
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        // MY_TOKEN이 null일 경우 처리
+        console.error("토큰을 가져올 수 없습니다.");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+        // try{
+        //     const MY_TOKEN: string | null = await getUserInfo();
+        //     const url="https://nengtul.shop/v1/user/detail/password"
+        //     const data ={
+        //         password:password
+        //     }
+        //     console.log('수정할데이터',data)
+        //     axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+        //     axios.put(url, data)
+        //     .then((response) => {
+        //       console.log('response',response);
+        //       console.log('비밀번호가 변경되었습니다');
+        //       navigate('/myPage')
+        //     })
+        //     .catch((error) => {
+        //       console.error(error);
+        //     });
+        // }catch (err) {
+        //     console.log(err)
+        // }
+        
+          
+            
         }
-    
-    }
-    
     const [password, setPassword] = useState('');
     const [ispassword, setIsPassword] = useState<boolean>(false)
     const onChangePassword=useCallback((e:ChangeEvent<HTMLInputElement>)=>{

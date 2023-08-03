@@ -22,6 +22,7 @@ import HeartLecipePage from "./MyInfo/HeartLecipePage";
 import NoticeViewPage from "./Notice/NoticeViewPage";
 import NoticeListPage from "./Notice/NoticeListPage";
 import ChangePassowordPage from "./User/ChangePasswordPage";
+import TradePlacePage from "./IngredientMap/TradePlacePage";
 function App() {
   return (
     <BrowserRouter>
@@ -50,6 +51,9 @@ function App() {
 
         <Route path="/notice" element={<NoticeListPage />} />
         <Route path="/noticeView" element={<NoticeViewPage />} />
+        <Route path="/tradePlace" element={<TradePlacePage/>} />
+        
+
       </Routes>
     </BrowserRouter>
   );
