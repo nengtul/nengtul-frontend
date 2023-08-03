@@ -4,8 +4,13 @@ import TrandingLocation from "./TrandingLocation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import axios  from "axios";
-
+import { Provider,useSelector } from "react-redux";
+import tradeStore from "../Redux/tradeStore";
+import { RootState } from "../Redux/tradeStore";
 export default function WriteForm() {
+  const LatLng=useSelector((state: RootState)=>state.latlngInfo)
+  console.log('뭐뜨냐',LatLng)
+
   const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
     e.preventDefault();
     console.log('클릭됨')
@@ -15,7 +20,7 @@ export default function WriteForm() {
     const price=formData.get('price') as string;
   }
   return (
-    <>
+    <Provider store={tradeStore}>
       <WriteWrap>
         <form onSubmit={handleSubmit}>
           <div>
@@ -45,7 +50,7 @@ export default function WriteForm() {
           </SubmitBtn>
         </form>
       </WriteWrap>
-    </>
+    </Provider>
   );
 }
 

@@ -1,10 +1,12 @@
 import styled from "styled-components";
-import { useEffect, useState, useRef,useCallback } from "react";
+import { useEffect, useState, useRef} from "react";
 import axios from "axios";
-import getLogin from "../ApiCall/getLogin";
-import { Tokens } from "../ApiCall/getLogin";
+// import getLogin from "../ApiCall/getLogin";
+// import { Tokens } from "../ApiCall/getLogin";
 import { Link } from "react-router-dom";
-// import CertifyPage from "../FindAndCertify/CertifyPage"
+// import { useSelector } from "react-redux/es/hooks/useSelector";
+// import { RootState } from "../Redux/store";
+
 //1.회원정보보여주기  2.회원정보 수정하기  3.회원 탈퇴하기
 function UserInfomation  () {
     interface UserData {
@@ -14,41 +16,53 @@ function UserInfomation  () {
         profileImageUrl:string;
         emailVerifiedYn:boolean;
         id:number;
-      }
+    }
     interface UpdateUserData {
         nickname: string;
         phoneNumber: string;
-      }
+    }
 
-      const getUserInfo = useCallback(async () => {
-        try {
-          const tokens: Tokens | null = await getLogin();
-          if (tokens){
-            const { accessToken} = tokens;
-            console.log('여기1',accessToken)
-            return accessToken
+    const storedData = sessionStorage.getItem("persist:root");
+
+    // 가져온 값을 JSON 파싱하여 객체로 변환합니다.
+    const parsedData = JSON.parse(storedData?.replace(/\\"/g, ''));
+
+    // accessTokenValue를 추출하여 사용합니다.
+    const MY_TOKEN = parsedData?.accessTokenValue;
+    console.log("이거 안뜨면 안디는디",MY_TOKEN)
+    // const getUserInfo = useCallback(async () => {
+    //     try {
+    //         const tokens: Tokens | null = await getLogin();
+    //         if (tokens){
+    //             const { accessToken} = tokens;
+    //             console.log('여기1',accessToken)
+    //             return accessToken
         
-        } else{
-            console.log('여기2')
-            return null;
-        }
-        } catch (err) {
-            console.log('여기3')
-          console.error(err);
-          return null;
-        }
-      }, []);
+    //         } else{
+    //             console.log('여기2')
+    //             return null;
+    //         }
+    //     } catch (err) {
+    //         console.log('여기3')
+    //         console.error(err);
+    //         return null;
+    //     }
+    // }, []);
 
-    // useEffect(() => {
-    //     getUserInfo().catch((err) => {
-    //       console.error(err);
-    //     });
-    //   },[]);  
-
-
+   
     const [data, setData] = useState<UserData | null>(null);
     // const MY_TOKEN = getLogin();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+    useEffect(() => {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+        axios.get<UserData>('http://43.200.162.72:8080/v1/user/detail')
+          .then((response) => {
+                setData(response.data);
+                setEditedData(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });},[])
     // useEffect(() => {
     //     const fetchData = async () => {
     //         const MY_TOKEN: string | null = await getUserInfo();
@@ -67,33 +81,32 @@ function UserInfomation  () {
     //             });
     //         }
     //      }
-    //     fetchData().catch((err)=>{
-    //         console.error(err);
-    //     });
+    //     fetchData()
     // },[]);
-    useEffect(() => {
-        getUserInfo()
-        .then((MY_TOKEN: string | null) => {
-            if (MY_TOKEN) {
-                console.log('여기에 들어왔나?',MY_TOKEN)
-                axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-                axios.get<UserData>('https://nengtul.shop/v1/user/detail')
-                    .then((response) => {
-                        setData(response.data);
-                        setEditedData(response.data);
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            }else {
-                console.error("토큰을 가져올 수 없습니다.");
-              }
+   
+    // useEffect(() => {
+    //     getUserInfo()
+    //     .then((MY_TOKEN: string | null) => {
+    //         if (MY_TOKEN) {
+    //             console.log('여기에 들어왔나?',MY_TOKEN)
+    //             axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+    //             axios.get<UserData>('https://nengtul.shop/v1/user/detail')
+    //                 .then((response) => {
+    //                     setData(response.data);
+    //                     setEditedData(response.data);
+    //                 })
+    //                 .catch((error) => {
+    //                     console.error(error);
+    //                 });
+    //         }else {
+    //             console.error("토큰을 가져올 수 없습니다.");
+    //           }
 
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-      }, []);
+    //     })
+    //     .catch((err) => {
+    //       console.error(err);
+    //     });
+    //   }, []);
 
 
     const [editing, setEditing] = useState(false);

@@ -1,11 +1,11 @@
 import Map from "../Market/Map";
+// import Map from "./Map";
 import TradeDynamicMap from "./TradeDynamicMap";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 function TradePlaceMap(){
     const [latitude, setLatitude] = useState(37.5667);
     const [longitude, setLongitude] = useState(126.9783);
-    // useEffect(()=>{
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(function (position) {
             const lat = position.coords.latitude;
@@ -14,14 +14,12 @@ function TradePlaceMap(){
             setLongitude(lon);
             })
     }
-    // },[])
     console.log(latitude,longitude)
     return(
         <MarketMapArea>
             <Map>
             <TradeDynamicMap latitude={latitude} longitude={longitude} />
             </Map>
-       
       </MarketMapArea>
     )
 }
