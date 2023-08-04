@@ -6,7 +6,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 // import { useSelector } from "react-redux/es/hooks/useSelector";
 // import { RootState } from "../Redux/store";
-
+import { USER_DETAIL_URL , USER_VERIFY_RESET_URL} from "../url";
 //1.회원정보보여주기  2.회원정보 수정하기  3.회원 탈퇴하기
 function UserInfomation  () {
     interface UserData {
@@ -55,7 +55,7 @@ function UserInfomation  () {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     useEffect(() => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-        axios.get<UserData>('http://43.200.162.72:8080/v1/user/detail')
+        axios.get<UserData>(USER_DETAIL_URL)
           .then((response) => {
                 setData(response.data);
                 setEditedData(response.data);
@@ -146,7 +146,7 @@ function UserInfomation  () {
     //회원정보 수정
     const onUpdate=()=>{
         try{
-            const url="https://nengtul.shop/v1/user/detail"
+            const url=USER_DETAIL_URL;
             const userUpdateDto = {
                 nickname: editedData.nickname,
                 phoneNumber: editedData.phoneNumber,
@@ -184,7 +184,7 @@ function UserInfomation  () {
     }
     //회원정보 삭제
     const onDelete=()=>{
-        axios.delete<UserData>('https://nengtul.shop/v1/user/detail')
+        axios.delete<UserData>(USER_DETAIL_URL)
         .then((response) => {
               console.log(response)
                 console.log('탈퇴되었습니다')//모달창으로 바꾸기
@@ -197,7 +197,7 @@ function UserInfomation  () {
     //이메일 인증
     const onVerify=()=>{
         axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-        axios.post(`https://nengtul.shop/v1/user/verify/reset/${data?.id}`)
+        axios.post(`${USER_VERIFY_RESET_URL}/${data?.id}`)
         .then((response) => {
               console.log(response)
               console.log('인증메일이 전송됨') //모달창으로 바꾸기

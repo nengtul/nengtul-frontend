@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import axios from "axios";
-
+import { USER_FINDID_URL } from "../url";
 function FindIdForm(){
     const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
         e.preventDefault();
@@ -17,7 +17,7 @@ function FindIdForm(){
     const handleNewUser=async(name:string,tel:string)=>{
         try{
             // const url="http://43.200.162.72:8080/v1/user/findid/${name}/${phoneNumber}"
-            const url="http://43.200.162.72:8080/v1/user/findid"
+            const url=USER_FINDID_URL;
             const data ={
                 name: name,
                 phoneNumber: tel
