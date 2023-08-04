@@ -20,31 +20,34 @@ export default function WriteForm() {
 
   //이미지
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  // const [profileImage, setProfileImage] = useState<Blob |"">(""); //사진 한장
-  const [tradeImage, setTradeImage] = useState<Blob[]>([]); //사진 여러장
+  // const  [tradeImage, setTradeImage]= useState<Blob |"">(""); //사진 한장
+  const [tradeImage, setTradeImage] = useState<Blob | null>(null);
+  // const [tradeImage, setTradeImage] = useState<Blob[]>([]); //사진 여러장
   //사진 한장일때 handleImageChange
-  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file=e.target.files?.[0];
-  //   console.log('file',file)
-  //   if (file) {
-  //       // const imageURL = URL.createObjectURL(profileImage); //화면에 보여주기 위해서 URL로 바꿔주기
-  //       setProfileImage(file);
-  //       console.log('file',file)
-  //     } else {
-  //       setProfileImage("");
-  //     }
-  // }
-  //사진 여러장일때
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      const imageArray: Blob[] = Array.from(files).map((file) => file);
-      setTradeImage(imageArray);
-    } else {
-      setTradeImage([]);
-    }
-  };
-  console.log('사진여러장 어떻게 들어가나 확인용',tradeImage)
+    const file=e.target.files?.[0];
+    console.log('file',file)
+    if (file) {
+        setTradeImage(file);
+        console.log('file',file)
+      } else {
+        // setTradeImage("");
+        setTradeImage(null);
+      }
+      
+  }
+  const imageURL = tradeImage ? URL.createObjectURL(tradeImage) : null;
+  //사진 여러장일때
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = e.target.files;
+  //   if (files) {
+  //     const imageArray: Blob[] = Array.from(files).map((file) => file);
+  //     setTradeImage(imageArray);
+  //   } else {
+  //     setTradeImage([]);
+  //   }
+  // };
+  // console.log('사진여러장 어떻게 들어가나 확인용',tradeImage)
   //이미지+shareBoardDto 같이 보내기
   const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
     e.preventDefault();
@@ -76,16 +79,17 @@ export default function WriteForm() {
       }
       console.log('image!!!',tradeImage)
       //사진 한장일때
-      // if (tradeImage instanceof Blob) {
-      //   formData.append("images", tradeImage);
-      // }
-      if (tradeImage.length > 0) {
-        tradeImage.forEach((image) => {
-          if (image instanceof Blob) {
-            formData.append("images", image);
-          }
-        });
+      if (tradeImage instanceof Blob) {
+        formData.append("image", tradeImage);
       }
+      //사진 여러장일때
+      // if (tradeImage.length > 0) {
+      //   tradeImage.forEach((image) => {
+      //     if (image instanceof Blob) {
+      //       formData.append("images", image);
+      //     }
+      //   });
+      // }
 
       console.log('shareBoardDto:', shareBoardDto);
       const blob=new Blob([JSON.stringify(shareBoardDto)],{
@@ -132,8 +136,8 @@ export default function WriteForm() {
             <label htmlFor="img-file">
               <FontAwesomeIcon icon={faPlus} />
             </label>
-            <input type="file" id="img-file" accept="image/*"  ref={fileInputRef} onChange={handleImageChange} multiple/>
-            {/* {profileImage ? <img src={URL.createObjectURL(profileImage)} alt="recipe-img" /> : <></>} */}
+            <input type="file" id="img-file" accept="image/*"  ref={fileInputRef} onChange={handleImageChange} />
+            {tradeImage instanceof Blob ? <img src={imageURL || ""} alt="recipe-img" /> : <></>}
             {tradeImage ? <></> : <span>* 이미지를 업로드해 주세요.</span>}
           </div>
 
@@ -207,6 +211,8 @@ const WriteWrap = styled.div`
     }
   }
   .input-file {
+    display: flex;
+    align-items: center;
     margin-top: 20px;
     label {
       display: inline-flex;
@@ -228,6 +234,12 @@ const WriteWrap = styled.div`
       color: #817f7f;
       margin-left: 4px;
     }
+    img{
+      width:70rem;
+      height:70rem;
+      margin-left:5rem;
+    }
+   
   }
 `;
 
