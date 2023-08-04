@@ -1,3 +1,4 @@
+//MarkerMap 원본 파일
 import { useRef, useEffect, useState } from "react";
 import { LatLng, Map, Marker } from "kakao-maps";
 import axios from "axios";
@@ -26,20 +27,13 @@ declare global {
   }
 }
 export interface Post {
-  id: number,
-  userId: number,
-  userNickname: string,
-  title: string,
-  content: string,
-  place: string,
-  shareImgList: string,
-  price: number,
-  lat: number,
-  lon: number,
-  createdAt: string,
-  modifiedAt: string,
-  closed: boolean
-  
+  id: number;
+  title: string;
+  thumb: string;
+  price: number;
+  writer: string;
+  Lat: number;
+  Lng: number;
 }
 
 export default function MarkerMap() {
@@ -57,7 +51,6 @@ export default function MarkerMap() {
       (position) => {
         const currentLocation = [position.coords.latitude, position.coords.longitude];
         setLocation(currentLocation);
-        console.log(location,'현재위치')
       },
       (error) => {
         console.error("Error getting current location:", error);
@@ -99,11 +92,10 @@ export default function MarkerMap() {
 
       const fetchPosts = async () => {
         try {
-          // const response = await axios.get<Post[]>("http://localhost:5000/location");
-          const response = await axios.get<Post[]>("https://nengtul.shop/v1/shareboard");
+          const response = await axios.get<Post[]>("http://localhost:5000/location");
           const postData: Post[] = response.data;
           postData.forEach((data) => {
-            const markerPosition = new window.kakao.maps.LatLng(data.lat, data.lon);
+            const markerPosition = new window.kakao.maps.LatLng(data.Lat, data.Lng);
             const marker = new window.kakao.maps.Marker({ position: markerPosition });
 
             window.kakao.maps.event.addListener(marker, "click", () => {

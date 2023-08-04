@@ -1,6 +1,6 @@
 import axios from "axios";
 import styled from "styled-components";
-
+import { USER_FINDPW_URL } from "../url";
 function FindPasswordForm(){
     const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
         e.preventDefault();
@@ -17,7 +17,7 @@ function FindPasswordForm(){
     }
     const handleNewUser=async(name:string,tel:string,email:string)=>{
         try{
-            const url="http://43.200.162.72:8080/v1/user/findpw"
+            const url=USER_FINDPW_URL;
             const data ={
                 name: name,
                 phoneNumber: tel,

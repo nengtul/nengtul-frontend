@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {useState,useCallback,ChangeEvent ,useEffect} from "react";
 import axios from "axios";
 import {useNavigate} from 'react-router-dom';
+import { USER_DETAIL_PASSWORD_URL } from "../url";
 function ChangePassword(){
     // const MY_TOKEN = getLogin();
     const navigate = useNavigate();
@@ -65,7 +66,7 @@ function ChangePassword(){
     // });
         try{
             // const MY_TOKEN: string | null = await getUserInfo();
-            const url="https://nengtul.shop/v1/user/detail/password"
+            const url=USER_DETAIL_PASSWORD_URL;
             const data ={
                 password:password
             }

@@ -7,6 +7,7 @@ import axios  from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/tradeStore";
 import {useState, useRef} from "react";
+import { SHAREBOARD_URL } from "../url";
 export default function WriteForm() {
   const LatLng=useSelector((state: RootState)=>state.latlngInfo)
   console.log('뭐뜨냐',LatLng)
@@ -68,7 +69,7 @@ export default function WriteForm() {
     
     try{
       axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-      const url="https://nengtul.shop/v1/shareboard"
+      const url=SHAREBOARD_URL;
       const shareBoardDto={
         title: title,
         content: content,

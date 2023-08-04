@@ -5,6 +5,7 @@ import HomePart from './HomePart'
 import MobileWrap from '../common/MobileWrap'
 import {useState,useCallback,ChangeEvent} from 'react';
 import {useNavigate} from 'react-router-dom';
+import { USER_JOIN_URL } from "../url";
 function NewUser (){
     const navigate = useNavigate();
     const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
@@ -23,7 +24,7 @@ function NewUser (){
     }
     const handleNewUser=async(name:string,nickname:string,password:string,tel:string,email:string)=>{
         try{
-            const url="https://nengtul.shop/v1/user/join "
+            const url=USER_JOIN_URL
             const data ={
                 name: name,
                 nickname: nickname,
