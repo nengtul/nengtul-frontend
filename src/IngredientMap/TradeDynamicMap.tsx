@@ -54,7 +54,7 @@ const TradeDynamicMap=({latitude,longitude}:TradeDynamicMapProps)=>{
         <DynamicMapOne>
             <DynamicMapTwo ref={kakaoMapRef}/>
             {/* <Link to='/ingredientWrite'> */}
-                <button onClick={goBack}>장소설정하기</button>
+                <GoBack onClick={goBack}>장소설정하기</GoBack>
             {/* </Link> */}
         </DynamicMapOne>
         
@@ -62,12 +62,19 @@ const TradeDynamicMap=({latitude,longitude}:TradeDynamicMapProps)=>{
 }
 
 const DynamicMapOne = styled.div`
-    // height:727rem;
-    height:600rem;
+    height:670rem;
     flex:1;
 `
 const DynamicMapTwo = styled.div`
     height:100%;
     width:100%;
+`
+const GoBack=styled.button`
+    width:100%;
+    height:60rem;
+    background-color:#38DB83;
+    cursor:pointer;
+    font-size:21rem;
+    color:white;
 `
 export default TradeDynamicMap
