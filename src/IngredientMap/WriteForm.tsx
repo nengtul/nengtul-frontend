@@ -11,7 +11,7 @@ import { SHAREBOARD_URL } from "../url";
 export default function WriteForm() {
   const LatLng=useSelector((state: RootState)=>state.latlngInfo)
   console.log('뭐뜨냐',LatLng)
-
+  const {moveLatitude,moveLongitude}=LatLng;
   //거래위치 props로 받아옴
   const [locationInfo, setLocationInfo] = useState<string>("");
   const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,8 +57,8 @@ export default function WriteForm() {
     const title=formData.get('title') as string;
     const content=formData.get('content') as string;
     const price=formData.get('price') as string;
-    const latitude=37.56701804257962;
-    const longitude=126.97935964638161;
+    const latitude=moveLatitude;
+    const longitude=moveLongitude;
     const place= locationInfo;
 
     //토큰가져오기
