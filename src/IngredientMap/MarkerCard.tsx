@@ -24,7 +24,7 @@ export default function MarkerCard({ selectedMarker, setSelectedMarker }: Marker
             <div className="thumb"></div>
             <div>
               <LevelBadge>견습 요리사</LevelBadge>
-              <p>{selectedMarker.writer} 님</p>
+              <p>{selectedMarker.userNickname} 님</p>
             </div>
           </div>
           <div className="item-box">

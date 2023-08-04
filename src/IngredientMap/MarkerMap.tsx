@@ -1,12 +1,13 @@
 import { useRef, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { LatLng, Map, Marker } from "kakao-maps";
 import axios from "axios";
 import MarkerCard from "./MarkerCard";
 import { styled } from "styled-components";
 import theme from "../common/theme";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
-
+import { faLocationDot,faPen } from "@fortawesome/free-solid-svg-icons";
+import { SHAREBOARD_URL } from "../url";
 type EventListener = (event: kakao.maps.event.MouseEvent) => void;
 
 declare global {
@@ -99,8 +100,9 @@ export default function MarkerMap() {
 
       const fetchPosts = async () => {
         try {
-          // const response = await axios.get<Post[]>("http://localhost:5000/location");
-          const response = await axios.get<Post[]>("https://nengtul.shop/v1/shareboard");
+          const lat = location[0];
+          const lon = location[1];
+          const response = await axios.get<Post[]>(`${SHAREBOARD_URL}?lat=${lat}&lon=${lon}&range=10000`);
           const postData: Post[] = response.data;
           postData.forEach((data) => {
             const markerPosition = new window.kakao.maps.LatLng(data.lat, data.lon);
@@ -123,12 +125,18 @@ export default function MarkerMap() {
       });
     }
   }, [location]);
-
+  const navigate = useNavigate();
+  const goToWrite=()=>{
+    navigate('/ingredientWrite')
+  }
   return (
     <MarkerWrap>
       <div ref={mapRef} style={{ width: "100%", height: "100%", position: "relative" }}>
         <button type="button" onClick={requestLocation} className="location-btn">
           <FontAwesomeIcon icon={faLocationDot} /> 현재 위치로
+        </button>
+        <button type="button"  className="write-btn" onClick={goToWrite}>
+        <FontAwesomeIcon icon={faPen} />
         </button>
       </div>
       {selectedMarker && (
@@ -161,4 +169,20 @@ const MarkerWrap = styled.div`
     bottom: 20px;
     z-index: 9999;
   }
+
+  .write-btn{
+    width:58rem;
+    height:58rem;
+    color:white;
+    background-color:${theme.colors.main};
+    display: inline-block;
+    cursor: pointer;
+    position: absolute;
+    left: 83%;
+    font-size:30rem;
+    bottom: 20px;
+    z-index: 9999;
+    border-radius:100%;
+  }
 `;
+
