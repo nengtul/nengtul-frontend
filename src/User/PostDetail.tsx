@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import axios from "axios";
 import { useState,useRef,useEffect} from "react";
-import {Item} from "./MyIngredientTradeList"
+import {Item} from "./MyIngredientTradeList";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 function PostDetail({ item }:{item:Item}) {
     const storedData = sessionStorage.getItem("persist:root");
     const parsedData = JSON.parse(storedData?.replace(/\\"/g, ''));
@@ -124,9 +126,12 @@ function PostDetail({ item }:{item:Item}) {
     return (
       <PostDetailSection>
         {isEditing ? (
-            <>
-            <h2>Post Detail</h2>
-            <p>Title: 
+            <div>
+            <div className='btns'>
+            <button  className="btn delete-btn" onClick={onModify}>취소</button >
+            <button  className="btn modify-btn" onClick={onSave}>완료</button >
+            </div>
+            <p className="p"><span>제목</span> <br/> 
                 <input 
                     value={editedData?.title}
                     onChange={(e) =>
@@ -137,18 +142,7 @@ function PostDetail({ item }:{item:Item}) {
                     }
                 />
             </p>
-            <p>Place: 
-                <input 
-                    value={editedData?.place}
-                    onChange={(e) =>
-                        setEditedData({
-                            ...editedData,
-                            place: e.target.value,
-                        })
-                    }
-                />
-            </p>
-            <p>Content: 
+            <p className="p"><span>내용</span> <br/>
                 <input 
                     value={editedData?.content}
                     onChange={(e) =>
@@ -159,7 +153,7 @@ function PostDetail({ item }:{item:Item}) {
                     }
                 />
             </p>
-            <p>가격: 
+            <p className="p"><span>가격</span> <br/>
                 <input 
                     value={editedData?.price}
                     onChange={(e) =>
@@ -170,24 +164,38 @@ function PostDetail({ item }:{item:Item}) {
                     }
                 />
             </p>
-            <p>작성일: {item.createdAt}</p>
+            <p className="p"><span>거래위치</span> <br/>
+                <input 
+                    value={editedData?.place}
+                    onChange={(e) =>
+                        setEditedData({
+                            ...editedData,
+                            place: e.target.value,
+                        })
+                    }
+                />
+            </p >
+            <div className="imgs">
             <img src={item.shareImg}/>
-            <ModifyProfileBtn onClick={handleButtonClick}>사진변경하기</ModifyProfileBtn>
+            <ModifyProfileBtn onClick={handleButtonClick}>
+                <FontAwesomeIcon icon={faPlus} />
+            </ModifyProfileBtn>
             <input type="file" style={{ display: 'none' }} ref={fileInputRef} onChange={handleImageChange} />
-            <button  onClick={onModify}>취소</button >
-            <button  onClick={onSave}>완료</button >
-            </>
+            </div>
+            {/* <p className="date">{item.createdAt}</p> */}
+            </div>
         ):(
             <>
-            <h2>Post Detail</h2>
-            <p>Title: {item.title}</p>
-            <p>Place: {item.place}</p>
-            <p>Content: {item.content}</p>
-            <p>가격: {item.price}</p>
-            <p>작성일: {item.createdAt}</p>
+            <div className='btns'>
+                <button className='delete-btn btn' onClick={onDelete}>삭제</button >
+                <button className='modify-btn btn' onClick={onModify}>수정</button >
+            </div>
+            <p className="p"><span>제목</span> <br/>{item.title}</p>
+            <p className="p"><span>내용</span> <br/>{item.content}</p>
+            <p className="p"><span>가격</span><br/> {item.price}원</p>
+            <p className="p"><span>거래위치</span> <br/>{item.place}</p>
             <img src={item.shareImg}/>
-            <button className='delete-btn' onClick={onDelete}>삭제</button >
-            <button className='modify-btn' onClick={onModify}>수정</button >
+            <p className="date"> {item.createdAt}</p>
             </>
         )}
   
@@ -196,26 +204,75 @@ function PostDetail({ item }:{item:Item}) {
   }
   
 const PostDetailSection=styled.div`
-  width:100%;
-  background-color:green;
-  h2{
-    font-size:20rem
-  }
-  p{
-    font-size:20rem;
-  }
+    width:100%;
+    background-color:#f3f3f3;
+    padding:10rem 15rem;
+    line-height:1.4;
+    h2{
+        font-size:20rem
+    }
+    .p{
+        font-size:20rem;
+        margin-bottom:7rem;
+    }
+    span{
+        color:#38DB83;
+        font-size: 20rem;
+        font-weight:800;
+        margin-bottom:3rem;
+    }
+    img{
+        width:150rem;
+        height:150rem;
+    }
+    .btn{
+        font-size: 18rem;
+        padding:4rem 10rem;
+        margin:3rem;
+        color:white;
+        
+    }
+    .btns{
+        position:relative;
+        display:inline-block;
+        right:5rem;
+        margin-bottom:5rem;
+    }
+    .date{
+        display:inline-block;
+        font-size:15rem;
+        position:relative;
+        right:-85rem;
+    }
+    input{
+        font-size: 20rem;
+        outline:none;
+        border:none;
+        color:gray;
+        padding:5rem;
+    }
+    .imgs{
+        display:flex;
+        align-items: flex-end
+    }
+    .delete-btn{
+        background-color:rgb(254, 98, 98);
+    }
+    .modify-btn{
+        background-color:rgb(96, 149, 255);
+    }
 `
 const ModifyProfileBtn=styled.button`
-    width:40rem;
-    height:40rem;
-    font-size:37rem;
-    color:white;
-    background-color:red;
-    border-radius:100%;
-    // position: absolute;
-    // top:210rem;
-    // right:130rem;
     cursor:pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 2px;
+    display: inline-block;
+    border: 1px solid #38DB83;
+    font-size:20rem;
+    color:#38DB83;
+    margin-left:5rem;
+
     
 `
   export default PostDetail;
