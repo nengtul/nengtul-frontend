@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { useEffect, useState, useRef} from "react";
+import { useEffect, useState, useRef,useCallback} from "react";
 import axios from "axios";
-// import getLogin from "../ApiCall/getLogin";
-// import { Tokens } from "../ApiCall/getLogin";
+import getLogin from "../ApiCall/getLogin";
+import { Tokens } from "../ApiCall/getLogin";
 import { Link } from "react-router-dom";
-// import { useSelector } from "react-redux/es/hooks/useSelector";
-// import { RootState } from "../Redux/store";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { RootState } from "../Store/store";
 import { USER_DETAIL_URL , USER_VERIFY_RESET_URL} from "../url";
 //1.회원정보보여주기  2.회원정보 수정하기  3.회원 탈퇴하기
 function UserInfomation  () {
@@ -21,12 +21,17 @@ function UserInfomation  () {
         nickname: string;
         phoneNumber: string;
     }
-
-    const storedData = sessionStorage.getItem("persist:root");
-    const parsedData = JSON.parse(storedData?.replace(/\\"/g, ''));
-    const MY_TOKEN = parsedData?.accessTokenValue;
-    console.log("이거 안뜨면 안디는디",MY_TOKEN)
+    const Token=useSelector((state: RootState)=>state.accessTokenValue)
+    console.log(Token)
+    const {accessTokenValue}=Token;
+    const MY_TOKEN=accessTokenValue
+    // const storedData = sessionStorage.getItem("persist:root");
+    // const parsedData = JSON.parse(storedData?.replace(/\\"/g, ''));
+    // const MY_TOKEN = parsedData?.accessTokenValue;
+    // console.log("이거 안뜨면 안디는디",MY_TOKEN)
     
+
+    //이거!
     // const getUserInfo = useCallback(async () => {
     //     try {
     //         const tokens: Tokens | null = await getLogin();
@@ -50,6 +55,7 @@ function UserInfomation  () {
     const [data, setData] = useState<UserData | null>(null);
     // const MY_TOKEN = getLogin();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+    //이거는 session할때 필요한 애ㅡ들
     useEffect(() => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
         axios.get<UserData>(USER_DETAIL_URL)
@@ -60,27 +66,10 @@ function UserInfomation  () {
           .catch((error) => {
             console.error(error);
           });},[])
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const MY_TOKEN: string | null = await getUserInfo();
-    //         console.log('여기4',MY_TOKEN)
-    //         // const MY_TOKEN: string | null = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5MTA0NjMzMiwiZW1haWwiOiJiZXJyeTAxMTJAbmF2ZXIuY29tIn0.m0KkFGwFSZvgPugjYUnyhC3d_40PqRwW8tTXimiMq90R-2SicQfEwXmyyB2FiSzsacNxPRJ9tcqh4vBi0GKCXg';
-    //         if (MY_TOKEN) {
-    //             console.log('여기에 들어왔나?',MY_TOKEN)
-    //             axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-    //             axios.get<UserData>('https://nengtul.shop/v1/user/detail')
-    //             .then((response) => {
-    //                 setData(response.data);
-    //                 setEditedData(response.data);
-    //             })
-    //             .catch((error) => {
-    //                 console.error(error);
-    //             });
-    //         }
-    //      }
-    //     fetchData()
-    // },[]);
+
    
+
+   //이거!
     // useEffect(() => {
     //     getUserInfo()
     //     .then((MY_TOKEN: string | null) => {
@@ -128,17 +117,16 @@ function UserInfomation  () {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file=e.target.files?.[0];
         console.log('file',file)
-        // editedData.profileImage에 파일 정보 저장
         if (file) {
             setProfileImage(file);
             console.log('file',file)
           } else {
             setProfileImage('');
           }
-        // console.log('file',editedData)
+
       }
      
-    // console.log('여기는 이미지', profileImage);
+ 
      
     //회원정보 수정
     const onUpdate=()=>{

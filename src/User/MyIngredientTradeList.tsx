@@ -45,9 +45,12 @@ function MyIngredeintTradeList(){
                         <PostDetail item={item} />
                         ) : (
                         <Post onClick={() => handlePostClick(item.id)}>
-                            <h2>{item.title}</h2>
-                            <p>{item.place}</p>
-                            <p>{item.content}</p>
+                            <div>
+                                <h2>{item.title}</h2>
+                                <p>{item.createdAt.slice(5, 10)}</p>
+                            </div>
+                            <p className='place'>{item.place}</p>
+                            {/* <p>{item.content}</p> */}
                         </Post>
                     )}
                 </div>
@@ -60,24 +63,36 @@ export default MyIngredeintTradeList
 
 const MyIngredientTrade=styled.div`
     width:100%;
-    height:50rem;
-    font-size:25rem;
+    height:80rem;
+    font-size:28rem;
     font-weight:700;
-    color:#38DB83;
+    color:white;
     display:flex;
     align-items: center;
-    padding-left:5rem;
+    padding-left:15rem;
+    background-color:#38DB83;
 `
 const Post = styled.div`
     width:100%;
     height:70rem;
-    background-color:pink;
     cursor:pointer;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #DDDDDD;
+    padding:15rem;
+    div{
+        display:flex;
+        p{
+            margin-left:10rem;
+            font-size:18rem;
+            color:gray;
+        }
+    }
     h2{
         font-size:20rem;
         display:inline-block;
     }
-    
+    .place{
+        font-size:18rem;
+        margin-top:5rem;
+    }
 
 `
