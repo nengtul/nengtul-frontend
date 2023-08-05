@@ -33,7 +33,7 @@ export interface Post {
   title: string,
   content: string,
   place: string,
-  shareImgList: string,
+  shareImg: string,
   price: number,
   lat: number,
   lon: number,
@@ -47,7 +47,7 @@ export default function MarkerMap() {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [selectedMarker, setSelectedMarker] = useState<Post | null>(null);
   const [location, setLocation] = useState([0, 0]);
-
+  console.log(selectedMarker)
   const getDefaultLocation = () => {
     const defaultLocation = [37.564718, 126.977108];
     setLocation(defaultLocation);
@@ -58,7 +58,6 @@ export default function MarkerMap() {
       (position) => {
         const currentLocation = [position.coords.latitude, position.coords.longitude];
         setLocation(currentLocation);
-        console.log(location,'현재위치')
       },
       (error) => {
         console.error("Error getting current location:", error);

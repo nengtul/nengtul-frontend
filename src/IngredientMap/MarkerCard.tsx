@@ -29,12 +29,18 @@ export default function MarkerCard({ selectedMarker, setSelectedMarker }: Marker
           </div>
           <div className="item-box">
             <div className="item-img">
-              <img src={selectedMarker.thumb} alt={selectedMarker.title} />
+              <img src={selectedMarker.shareImg} alt={selectedMarker.title} />
             </div>
             <div className="item-info">
               <h4>{selectedMarker.title}</h4>
               <p className="price">
-                <span>{selectedMarker.price}</span> 원
+                {selectedMarker.price === 0 ? (
+                  <span >무료 나눔 !</span>
+                 ) : (
+                  <>
+                    <span>{selectedMarker.price}</span> 원
+                  </>
+                )}
               </p>
               <button type="button">
                 <FontAwesomeIcon icon={faCommentDots} /> 메세지 보내기

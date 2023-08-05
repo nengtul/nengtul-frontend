@@ -52,7 +52,7 @@ export default function HeaderTabMenu() {
           </Link>
         </li>
         <li>
-          <Link to={"/"}>
+          <Link to={"/myIngredientTrade"}>
             <FontAwesomeIcon
               icon={faMapPin}
               style={{ height: "16rem", color: `${theme.colors.main}` }}
