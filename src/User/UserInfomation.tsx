@@ -23,13 +23,10 @@ function UserInfomation  () {
     }
 
     const storedData = sessionStorage.getItem("persist:root");
-
-    // 가져온 값을 JSON 파싱하여 객체로 변환합니다.
     const parsedData = JSON.parse(storedData?.replace(/\\"/g, ''));
-
-    // accessTokenValue를 추출하여 사용합니다.
     const MY_TOKEN = parsedData?.accessTokenValue;
     console.log("이거 안뜨면 안디는디",MY_TOKEN)
+    
     // const getUserInfo = useCallback(async () => {
     //     try {
     //         const tokens: Tokens | null = await getLogin();

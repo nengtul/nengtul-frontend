@@ -10,14 +10,18 @@ import {useState, useRef} from "react";
 import { SHAREBOARD_URL } from "../url";
 export default function WriteForm() {
   const LatLng=useSelector((state: RootState)=>state.latlngInfo)
-  console.log('뭐뜨냐',LatLng)
   const {moveLatitude,moveLongitude}=LatLng;
   //거래위치 props로 받아옴
   const [locationInfo, setLocationInfo] = useState<string>("");
   const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocationInfo(e.target.value);
   };
-  console.log('거래장소',locationInfo)
+
+  //체크하면 나눔으로 간주하고 자동으로 0원
+  const [isFree, setIsFree] = useState(false);
+  const handleIsFreeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsFree(e.target.checked);
+  };
 
   //이미지
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -52,11 +56,10 @@ export default function WriteForm() {
   //이미지+shareBoardDto 같이 보내기
   const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
     e.preventDefault();
-    console.log('클릭됨')
     const formData = new FormData(e.currentTarget);
     const title=formData.get('title') as string;
     const content=formData.get('content') as string;
-    const price=formData.get('price') as string;
+    const price = isFree ? 0 : Number(formData.get('price') as string);
     const latitude=moveLatitude;
     const longitude=moveLongitude;
     const place= locationInfo;
@@ -74,7 +77,7 @@ export default function WriteForm() {
         title: title,
         content: content,
         place: place,
-        price: Number(price),
+        price: price,
         lat: latitude,
         lon:longitude,
       }
@@ -128,7 +131,7 @@ export default function WriteForm() {
             <textarea name="content" placeholder="내용을 입력해주세요."></textarea>
           </div>
           <div className="price-chk">
-            <input type="checkbox" id="chk-box" />
+            <input type="checkbox" id="chk-box"  checked={isFree} onChange={handleIsFreeChange}/>
             <label htmlFor="chk-box"></label>
             <span>무료 나눔이라면 체크해주세요!</span>
           </div>
