@@ -1,7 +1,19 @@
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
-
+import axios from "axios";
+import { useEffect} from "react";
 export default function NoticeList() {
+
+  useEffect(() => {
+    axios.get("https://nengtul.shop/v1/notices/list")
+      .then((response) => {
+            console.log(response)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  },[])
+
   return (
     <>
       <NoticeLi>

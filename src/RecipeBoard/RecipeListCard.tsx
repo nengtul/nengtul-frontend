@@ -15,8 +15,9 @@ export default function RecipeListCard({ post }: RecipeListCardProps) {
 
   return (
     <>
-      <CardLi style={{ backgroundImage: `url(${post.thumb})` }}>
+      <CardLi>
         <Link to="/">
+          <img src={post.thumbnailUrl} alt={post.title} />
           <ThumbInfo>
             <p>{post.title}</p>
           </ThumbInfo>
@@ -38,7 +39,6 @@ const CardLi = styled.li`
   margin-top: 30px;
   border-radius: 12px;
   box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.32);
-  background-image: url("../asse");
   position: relative;
   overflow: hidden;
   a {
@@ -46,6 +46,10 @@ const CardLi = styled.li`
     height: 100%;
     display: block;
   }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 `;
 
 const ThumbInfo = styled.div`
@@ -54,7 +58,6 @@ const ThumbInfo = styled.div`
   bottom: 0;
   background-color: #000000a8;
   padding: 20px 10px;
-
   p {
     font-size: 20rem;
     color: #fff;

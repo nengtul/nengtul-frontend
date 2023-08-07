@@ -11,19 +11,15 @@ import { useInView } from "react-intersection-observer";
 import RecipeWriteBtn from "./RecipeWriteBtn";
 import ContensWrap from "../common/ContentsWrap";
 import TabMenu from "../common/TabMenu";
-import { useSelector } from "react-redux/es/hooks/useSelector";
-import { RootState } from "../Store/store";
+
 export interface Post {
-  likeCount:number;
-  nickName:string;
-  recipeId:string;
-  thumbnailUrl:string;
-  title:string;
-  viewCount:number;
+  id: number;
+  title: string;
+  thumb: string;
+  like: number;
+  writer: string;
 }
-interface ContentData {
-  content: Post[]; 
-}
+
 export default function RecipeListPage() {
   const [category, setCategory] = useState("전체");
   const [viewCount, setViewCount] = useState("인기순");
@@ -31,32 +27,18 @@ export default function RecipeListPage() {
   const [viewCountView, setViewCountView] = useState(false);
 
   const [posts, setPosts] = useState<Post[]>([]);
-  // const [posts, setPosts] = useState([]);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
   const page = useRef<number>(1);
   const [ref, inView] = useInView();
 
-
-  const Token=useSelector((state: RootState)=>state.accessTokenValue)
-  const {accessTokenValue}=Token;
-  const MY_TOKEN=accessTokenValue;
-
-
   const fetch = useCallback(async () => {
     try {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-      const { data } = await axios.get<ContentData>(
-      // const { data } = await axios.get(
-        `https://nengtul.shop/v1/recipe?_limit=5&_page=${page.current}`
-        // "https://nengtul.shop/v1/recipe"
+      const { data } = await axios.get<Post[]>(
+        `http://localhost:5000/posts?_limit=5&_page=${page.current}`
       );
-      console.log('여기')
-      console.log(data)
-
-      const contentData = data.content;
-      setPosts((prevPosts) => [...prevPosts, ...contentData]);
-      setHasNextPage(contentData .length === 5);
-      if (contentData .length) {
+      setPosts((prevPosts) => [...prevPosts, ...data]);
+      setHasNextPage(data.length === 5);
+      if (data.length) {
         page.current += 1;
       }
     } catch (err) {
@@ -152,7 +134,7 @@ export default function RecipeListPage() {
             )}
           </CategoryBtn>
           <CardWrap>
-            {posts?.map((post) => <RecipeListCard key={post.recipeId} post={post} />)}
+            {posts?.map((post) => <RecipeListCard key={post.id} post={post} />)}
             <div ref={ref} />
           </CardWrap>
         </ListWrap>
