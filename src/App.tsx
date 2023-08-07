@@ -22,7 +22,6 @@ import HeartLecipePage from "./MyInfo/HeartLecipePage";
 import NoticeViewPage from "./Notice/NoticeViewPage";
 import NoticeListPage from "./Notice/NoticeListPage";
 import ChangePassowordPage from "./User/ChangePasswordPage";
-import TradePlacePage from "./IngredientMap/TradePlacePage";
 import MyIngredientTradePage from "./User/MyIngredientTradePage"
 function App() {
   return (
@@ -52,7 +51,6 @@ function App() {
 
         <Route path="/notice" element={<NoticeListPage />} />
         <Route path="/noticeView" element={<NoticeViewPage />} />
-        <Route path="/tradePlace" element={<TradePlacePage/>} />
         <Route path="/myIngredientTrade" element={<MyIngredientTradePage/>} />
         
 

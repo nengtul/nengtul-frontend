@@ -2,15 +2,14 @@ import styled from 'styled-components';
 import {useEffect,useRef,useState} from 'react';
 import { useDispatch } from 'react-redux';
 import {setLatLng} from '../Redux/LatLngSlice';
-import { useNavigate} from "react-router-dom";
 interface TradeDynamicMapProps {
     latitude: number;
     longitude: number;
+    onClose: () => void;
 }
 
-const TradeDynamicMap=({latitude,longitude}:TradeDynamicMapProps)=>{
+const TradeDynamicMap=({latitude,longitude, onClose}:TradeDynamicMapProps)=>{
     const dispatch=useDispatch();
-    const navigate = useNavigate();
     const [moveLatitude, setMoveLatitude] = useState(latitude);
     const [moveLongitude, setMoveLongitude] = useState(longitude);
 
@@ -44,25 +43,22 @@ const TradeDynamicMap=({latitude,longitude}:TradeDynamicMapProps)=>{
             console.log(message)
         });
     },[])
-    // dispatch(setLatLng({moveLatitude,moveLongitude}))
     console.log(moveLatitude,moveLongitude)
    const goBack=()=>{
         dispatch(setLatLng({moveLatitude,moveLongitude}))
-        navigate("/ingredientWrite");
+        onClose();
    }
     return (
         <DynamicMapOne>
             <DynamicMapTwo ref={kakaoMapRef}/>
-            {/* <Link to='/ingredientWrite'> */}
                 <GoBack onClick={goBack}>장소설정하기</GoBack>
-            {/* </Link> */}
         </DynamicMapOne>
         
     )
 }
 
 const DynamicMapOne = styled.div`
-    height:670rem;
+    height:550rem;
     flex:1;
 `
 const DynamicMapTwo = styled.div`
