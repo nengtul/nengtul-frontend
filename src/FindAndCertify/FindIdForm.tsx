@@ -16,7 +16,6 @@ function FindIdForm(){
     }
     const handleNewUser=async(name:string,tel:string)=>{
         try{
-            // const url="http://43.200.162.72:8080/v1/user/findid/${name}/${phoneNumber}"
             const url=USER_FINDID_URL;
             const data ={
                 name: name,

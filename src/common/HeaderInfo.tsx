@@ -33,7 +33,7 @@ export default function HeaderInfo() {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         };
-        const response = await axios.get<UserData>("/api/v1/user/detail", {
+        const response = await axios.get<UserData>("/api/v1/users/detail", {
           headers: headers,
         });
         const userData = response.data;

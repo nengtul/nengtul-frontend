@@ -4,15 +4,26 @@ import { useState,useRef,useEffect} from "react";
 import {Item} from "./MyIngredientTradeList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import TradePlaceMap from "../IngredientMap/TradePlaceMap";
+import { useSelector } from "react-redux";
+import theme from "../common/theme";
+import { SHAREBOARD_URL } from "../url.ts";
+import { RootState } from "../Store/store";
 function PostDetail({ item }:{item:Item}) {
-    const storedData = sessionStorage.getItem("persist:root");
-    const parsedData = JSON.parse(storedData?.replace(/\\"/g, ''));
-    const MY_TOKEN = parsedData?.accessTokenValue;
+    const Token=useSelector((state: RootState)=>state.accessTokenValue)
+    console.log(Token)
+    const {accessTokenValue}=Token;
+    const MY_TOKEN=accessTokenValue
 
+    const [newImage, setNewImage] = useState<string>('')
+
+    //위치 수정할 받아오기
+    const LatLng=useSelector((state: RootState)=>state.latlngInfo)
+    const {moveLatitude,moveLongitude}=LatLng;
     //삭제
     const onDelete=()=>{
         axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-        axios.delete(`https://nengtul.shop/v1/shareboard/${item.id}`)
+        axios.delete(`${SHAREBOARD_URL}/${item.id}`)
         .then((response) => {
               console.log(response)
               console.log('삭제됨') //모달창으로 바꾸기
@@ -29,6 +40,8 @@ function PostDetail({ item }:{item:Item}) {
         content:string,
         place:string,
         price:number,
+        lat:number,
+        lon:number,
     }
     const [isEditing, setIsEditing] = useState(false); 
   
@@ -37,6 +50,8 @@ function PostDetail({ item }:{item:Item}) {
             content: '',
             place: '',
             price: 0,
+            lat:0,
+            lon:0,
     });
     useEffect(() => {
         if (isEditing) {
@@ -45,6 +60,8 @@ function PostDetail({ item }:{item:Item}) {
                 content: item.content,
                 place: item.place,
                 price: item.price,
+                lat:item.lat,
+                lon:item.lon
             });
         }
     }, [isEditing, item]);
@@ -70,9 +87,10 @@ function PostDetail({ item }:{item:Item}) {
         console.log('file',file)
         if (file) {
             setTradeImage(file);
-            console.log('file',file)
+            setNewImage(URL.createObjectURL(file))
         } else {
             setTradeImage('');
+            setNewImage('');
         }
       }
     
@@ -84,15 +102,14 @@ function PostDetail({ item }:{item:Item}) {
             if (!editedData) {
                 return;
             }
-            
-            const url=`https://nengtul.shop/v1/shareboard/${item.id}`
+            const url=`${SHAREBOARD_URL}/${item.id}`
             const shareBoardDto={
                 title:editedData.title,
                 content:editedData.content,
                 place:editedData.place,
                 price:editedData.price,
-                lat:item.lat,
-                lon:item.lon,
+                lat:moveLatitude,
+                lon:moveLongitude,
             }
             const formData = new FormData();
             console.log('image!!!',tradeImage)
@@ -123,79 +140,98 @@ function PostDetail({ item }:{item:Item}) {
                 console.log(err)
             }
     }  
+    const [showModal,setShowModal]=useState(false);
+
+    const handleModalOpen=()=>{
+      setShowModal(true);
+    }
+    const handleModalClose=()=>{
+      setShowModal(false);
+    }
     return (
       <PostDetailSection>
         {isEditing ? (
             <div>
-            <div className='btns'>
-            <button  className="btn delete-btn" onClick={onModify}>취소</button >
-            <button  className="btn modify-btn" onClick={onSave}>완료</button >
-            </div>
-            <p className="p"><span>제목</span> <br/> 
-                <input 
-                    value={editedData?.title}
-                    onChange={(e) =>
-                        setEditedData({
-                        ...editedData,
-                        title: e.target.value,
-                        })
-                    }
-                />
-            </p>
-            <p className="p"><span>내용</span> <br/>
-                <input 
-                    value={editedData?.content}
-                    onChange={(e) =>
-                        setEditedData({
-                        ...editedData,
-                        content: e.target.value,
-                        })
-                    }
-                />
-            </p>
-            <p className="p"><span>가격</span> <br/>
-                <input 
-                    value={editedData?.price}
-                    onChange={(e) =>
-                        setEditedData({
+                <div className='btns'>
+                    <button  className="btn delete-btn" onClick={onModify}>취소</button >
+                    <button  className="btn modify-btn" onClick={onSave}>완료</button >
+                </div>
+                <p className="p"><span>제목</span> <br/> 
+                    <input 
+                        value={editedData?.title}
+                        onChange={(e) =>
+                            setEditedData({
                             ...editedData,
-                            price: parseInt(e.target.value),
-                        })
-                    }
-                />
-            </p>
-            <p className="p"><span>거래위치</span> <br/>
-                <input 
-                    value={editedData?.place}
-                    onChange={(e) =>
-                        setEditedData({
+                            title: e.target.value,
+                            })
+                        }
+                    />
+                </p>
+                <p className="p"><span>내용</span> <br/>
+                    <input 
+                        value={editedData?.content}
+                        onChange={(e) =>
+                            setEditedData({
                             ...editedData,
-                            place: e.target.value,
-                        })
-                    }
-                />
-            </p >
-            <div className="imgs">
-            <img src={item.shareImg}/>
-            <ModifyProfileBtn onClick={handleButtonClick}>
-                <FontAwesomeIcon icon={faPlus} />
-            </ModifyProfileBtn>
-            <input type="file" style={{ display: 'none' }} ref={fileInputRef} onChange={handleImageChange} />
-            </div>
-            {/* <p className="date">{item.createdAt}</p> */}
+                            content: e.target.value,
+                            })
+                        }
+                    />
+                </p>
+                <p className="p"><span>가격</span> <br/>
+                    <input 
+                        value={editedData?.price}
+                        onChange={(e) =>
+                            setEditedData({
+                                ...editedData,
+                                price: parseInt(e.target.value),
+                            })
+                        }
+                    />
+                </p>
+                <p className="p"><span>거래위치</span> <br/>
+                    <input 
+                        value={editedData?.place}
+                        onChange={(e) =>
+                            setEditedData({
+                                ...editedData,
+                                place: e.target.value,
+                            })
+                        }
+                    />
+                </p >
+                <button type="button" onClick={handleModalOpen}>위치 수정</button>
+                {showModal&&(
+                    <ModalOverlay>
+                        <ModalContent>
+                        <TradePlaceMap onClose={handleModalClose}/>
+                        </ModalContent>
+                    </ModalOverlay>
+                )}
+                <div className="imgs">
+                    {newImage ? (
+                        <img src={newImage} alt="Newly Uploaded" />
+                        ) : (
+                        <img src={item.shareImg} alt="Existing" />
+                    )}
+                    <ModifyProfileBtn onClick={handleButtonClick}>
+                        <FontAwesomeIcon icon={faPlus} />
+                    </ModifyProfileBtn>
+                    <input type="file" style={{ display: 'none' }} ref={fileInputRef} onChange={handleImageChange} />
+                </div>
             </div>
         ):(
             <>
-            <div className='btns'>
-                <button className='delete-btn btn' onClick={onDelete}>삭제</button >
-                <button className='modify-btn btn' onClick={onModify}>수정</button >
-            </div>
-            <p className="p"><span>제목</span> <br/>{item.title}</p>
-            <p className="p"><span>내용</span> <br/>{item.content}</p>
-            <p className="p"><span>가격</span><br/> {item.price}원</p>
-            <p className="p"><span>거래위치</span> <br/>{item.place}</p>
-            <img src={item.shareImg}/>
-            <p className="date"> {item.createdAt}</p>
+                <div className='btns'>
+                    <button className='delete-btn btn' onClick={onDelete}>삭제</button >
+                    <button className='modify-btn btn' onClick={onModify}>수정</button >
+                </div>
+                <p className="p"><span>제목</span> <br/>{item.title}</p>
+                <p className="p"><span>내용</span> <br/>{item.content}</p>
+                <p className="p"><span>가격</span><br/> {item.price}원</p>
+                <p className="p"><span>거래위치</span> <br/>{item.place}</p>
+                <img src={item.shareImg}/>
+                <p className="date"> {item.createdAt}</p>
             </>
         )}
   
@@ -216,7 +252,7 @@ const PostDetailSection=styled.div`
         margin-bottom:7rem;
     }
     span{
-        color:#38DB83;
+        color:${theme.colors.main};
         font-size: 20rem;
         font-weight:800;
         margin-bottom:3rem;
@@ -253,13 +289,24 @@ const PostDetailSection=styled.div`
     }
     .imgs{
         display:flex;
-        align-items: flex-end
+        align-items: flex-end;
+        margin-top:10px;
     }
     .delete-btn{
         background-color:rgb(254, 98, 98);
     }
     .modify-btn{
         background-color:rgb(96, 149, 255);
+    }
+    button {
+        background-color: ${theme.colors.main};
+        color: #fff;
+        border-radius: 5px;
+        padding: 6px 14px;
+        font-size: 14rem;
+        font-weight: 800;
+        margin-top: 10px;
+        cursor: pointer;
     }
 `
 const ModifyProfileBtn=styled.button`
@@ -268,11 +315,30 @@ const ModifyProfileBtn=styled.button`
     height: 50px;
     border-radius: 2px;
     display: inline-block;
-    border: 1px solid #38DB83;
+    border: 1px solid ${theme.colors.main};
     font-size:20rem;
-    color:#38DB83;
+    color:${theme.colors.main};
     margin-left:5rem;
-
-    
 `
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
+const ModalContent = styled.div`
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 10000;
+  width:350rem;
+  
+`;
   export default PostDetail;

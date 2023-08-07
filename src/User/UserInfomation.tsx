@@ -1,12 +1,10 @@
 import styled from "styled-components";
-import { useEffect, useState, useRef,useCallback} from "react";
+import { useEffect, useState, useRef} from "react";
 import axios from "axios";
-import getLogin from "../ApiCall/getLogin";
-import { Tokens } from "../ApiCall/getLogin";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../Store/store";
-import { USER_DETAIL_URL , USER_VERIFY_RESET_URL} from "../url";
+import { USER_DETAIL_URL } from "../url";
 //1.회원정보보여주기  2.회원정보 수정하기  3.회원 탈퇴하기
 function UserInfomation  () {
     interface UserData {
@@ -31,25 +29,7 @@ function UserInfomation  () {
     // console.log("이거 안뜨면 안디는디",MY_TOKEN)
     
 
-    //이거!
-    // const getUserInfo = useCallback(async () => {
-    //     try {
-    //         const tokens: Tokens | null = await getLogin();
-    //         if (tokens){
-    //             const { accessToken} = tokens;
-    //             console.log('여기1',accessToken)
-    //             return accessToken
-        
-    //         } else{
-    //             console.log('여기2')
-    //             return null;
-    //         }
-    //     } catch (err) {
-    //         console.log('여기3')
-    //         console.error(err);
-    //         return null;
-    //     }
-    // }, []);
+
 
    
     const [data, setData] = useState<UserData | null>(null);
@@ -68,31 +48,6 @@ function UserInfomation  () {
           });},[])
 
    
-
-   //이거!
-    // useEffect(() => {
-    //     getUserInfo()
-    //     .then((MY_TOKEN: string | null) => {
-    //         if (MY_TOKEN) {
-    //             console.log('여기에 들어왔나?',MY_TOKEN)
-    //             axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-    //             axios.get<UserData>('https://nengtul.shop/v1/user/detail')
-    //                 .then((response) => {
-    //                     setData(response.data);
-    //                     setEditedData(response.data);
-    //                 })
-    //                 .catch((error) => {
-    //                     console.error(error);
-    //                 });
-    //         }else {
-    //             console.error("토큰을 가져올 수 없습니다.");
-    //           }
-
-    //     })
-    //     .catch((err) => {
-    //       console.error(err);
-    //     });
-    //   }, []);
 
 
     const [editing, setEditing] = useState(false);
@@ -182,7 +137,8 @@ function UserInfomation  () {
     //이메일 인증
     const onVerify=()=>{
         axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-        axios.post(`${USER_VERIFY_RESET_URL}/${data?.id}`)
+        // axios.post(`${USER_VERIFY_RESET_URL}/${data?.id}`)
+        axios.post(`https://negtul.shop/v1/users/${data?.id}/verify/reset `)
         .then((response) => {
               console.log(response)
               console.log('인증메일이 전송됨') //모달창으로 바꾸기

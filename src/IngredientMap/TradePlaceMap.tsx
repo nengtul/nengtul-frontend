@@ -3,7 +3,10 @@ import Map from "../Market/Map";
 import TradeDynamicMap from "./TradeDynamicMap";
 import { useState } from "react";
 import styled from "styled-components";
-function TradePlaceMap(){
+type TradePlaceMapProps = {
+  onClose: () => void; 
+};
+function TradePlaceMap( {onClose} : TradePlaceMapProps){
     const [latitude, setLatitude] = useState(37.5667);
     const [longitude, setLongitude] = useState(126.9783);
     if(navigator.geolocation){
@@ -18,7 +21,7 @@ function TradePlaceMap(){
     return(
         <MarketMapArea>
             <Map>
-            <TradeDynamicMap latitude={latitude} longitude={longitude} />
+            <TradeDynamicMap latitude={latitude} longitude={longitude} onClose={onClose} />
             </Map>
       </MarketMapArea>
     )
