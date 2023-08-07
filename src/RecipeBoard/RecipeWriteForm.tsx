@@ -9,7 +9,7 @@ import RecipeWriteSubmit from "./RecipeWriteSubmit";
 import RecipeWriteCategory from "./RecipeWriteCategory";
 import RecipeWriteIntro from "./RecipeWriteIntro";
 import axios from "axios";
-
+import { RECIPE_URL } from "../url";
 export default function RecipeWriteForm() {
   const [category, setCategory] = useState("");
   const [categoryName, setCategoryName] = useState("");
@@ -55,7 +55,7 @@ export default function RecipeWriteForm() {
       };
 
       axios
-        .post("/api/v1/recipe", formData, {
+        .post(RECIPE_URL , formData, {
           headers: headers,
         })
         .then((response) => {

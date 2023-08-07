@@ -1,4 +1,5 @@
 import axios from "axios";
+import { AUTH_REFRESH_URL } from "../url";
 export interface Tokens {
   accessToken: string;
   refreshToken: string;
@@ -24,7 +25,7 @@ export default async function getLogin(): Promise<Tokens | null> {
     };
 
     try {
-      const response = await axios.get("/api/v1/auth/refresh", {
+      const response = await axios.get(AUTH_REFRESH_URL, {
         withCredentials: true,
         headers: headers,
       });

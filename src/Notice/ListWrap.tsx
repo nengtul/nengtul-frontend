@@ -3,7 +3,7 @@ import theme from "../common/theme";
 import NoticeList from "./NoticeList";
 import { useEffect, useState} from "react";
 import axios from "axios";
-
+import { NOTICES_LIST_URL } from "../url";
 interface ContentData{
   content:Post[]
 }
@@ -21,7 +21,7 @@ export interface Post{
 export default function NoticeWrap() {
   const [contents,setContents]=useState<Post[]>([])
   useEffect(() => {
-    axios.get<ContentData>("https://nengtul.shop/v1/notices/list")
+    axios.get<ContentData>(NOTICES_LIST_URL)
       .then((response) => {
             const contentArr=response.data.content
             setContents(contentArr)
@@ -33,9 +33,7 @@ export default function NoticeWrap() {
     <Wrap>
       <h2>공지사항</h2>
       <ul>
-        {contents?.map((content)=><NoticeList key={content.noticeId} content={content}/>)}
-        {/* <NoticeList /> */}
-      
+        {contents?.map((content)=><NoticeList key={content.noticeId} content={content}/>)}      
       </ul>
     </Wrap>
   );

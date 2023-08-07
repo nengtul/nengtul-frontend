@@ -11,7 +11,6 @@ export default function NoticeList( {content} :NoticeContentProps) {
         <Link to={"/"}>
           <h4>{content.title}</h4>
           <span>{content.createdAt.slice(0, 10)}</span>
-          {/* <span>2023-07-31</span> */}
         </Link>
       </NoticeLi>
     </>
