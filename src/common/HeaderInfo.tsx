@@ -12,7 +12,7 @@ import LogoutBtn from "./LogoutBtn";
 import { useDispatch } from "react-redux";
 import { setTokens } from "../Store/reducers";
 import { Tokens } from "../ApiCall/getLogin";
-
+import { USER_DETAIL_URL } from "../url";
 interface UserData {
   name: string;
   point: string;
@@ -33,7 +33,7 @@ export default function HeaderInfo() {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         };
-        const response = await axios.get<UserData>("/api/v1/users/detail", {
+        const response = await axios.get<UserData>(USER_DETAIL_URL, {
           headers: headers,
         });
         const userData = response.data;

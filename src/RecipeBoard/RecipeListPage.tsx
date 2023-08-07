@@ -13,6 +13,7 @@ import ContensWrap from "../common/ContentsWrap";
 import TabMenu from "../common/TabMenu";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../Store/store";
+import { RECIPE_URL } from "../url";
 export interface Post {
   likeCount:number;
   nickName:string;
@@ -43,7 +44,7 @@ export default function RecipeListPage() {
     try {
       axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
       const { data } = await axios.get<ContentData>(
-        `https://nengtul.shop/v1/recipe?size=5&page=${page.current}` //일단 5개씩 받아오는거로 했습니다
+        `${ RECIPE_URL}?size=5&page=${page.current}` //일단 5개씩 받아오는거로 했습니다
       );
       const contentData = data.content;
       setPosts((prevPosts) => [...prevPosts, ...contentData]);
