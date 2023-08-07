@@ -50,7 +50,7 @@ function App() {
         <Route path="/MyRecipe" element={<MyRecipePage />} />
 
         <Route path="/notice" element={<NoticeListPage />} />
-        <Route path="/noticeView" element={<NoticeViewPage />} />
+        <Route path="/noticeView/:noticeId" element={<NoticeViewPage />} />
         <Route path="/myIngredientTrade" element={<MyIngredientTradePage/>} />
         
 

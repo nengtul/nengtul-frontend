@@ -8,7 +8,7 @@ export default function NoticeList( {content} :NoticeContentProps) {
   return (
     <>
       <NoticeLi>
-        <Link to={"/"}>
+        <Link to={`/noticeView/${content.noticeId}`}>
           <h4>{content.title}</h4>
           <span>{content.createdAt.slice(0, 10)}</span>
         </Link>
