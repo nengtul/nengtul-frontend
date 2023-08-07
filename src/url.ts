@@ -15,6 +15,7 @@ export const SHARE_MYLIST_URL="/api/v1/shareboards/mylist";
 
 //공지사항 부분
 export const NOTICES_LIST_URL="/api/v1/notices/list";
+export const NOTICES_URL="/api/v1/notices";
 
 
 //레시피 부분
