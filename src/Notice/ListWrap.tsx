@@ -1,20 +1,41 @@
 import { styled } from "styled-components";
 import theme from "../common/theme";
 import NoticeList from "./NoticeList";
+import { useEffect, useState} from "react";
+import axios from "axios";
 
+interface ContentData{
+  content:Post[]
+}
+export interface Post{
+  content:string;
+  createdAt:string;
+  modifiedAt:string;
+  nickname:string;
+  noticeId:number;
+  noticeImg:string;
+  title:string;
+  viewCount:number;
+
+}
 export default function NoticeWrap() {
+  const [contents,setContents]=useState<Post[]>([])
+  useEffect(() => {
+    axios.get<ContentData>("https://nengtul.shop/v1/notices/list")
+      .then((response) => {
+            const contentArr=response.data.content
+            setContents(contentArr)
+      })
+      .catch((error) => {
+        console.error(error);
+});},[])
   return (
     <Wrap>
       <h2>공지사항</h2>
       <ul>
-        <NoticeList />
-        <NoticeList />
-        <NoticeList />
-        <NoticeList />
-        <NoticeList />
-        <NoticeList />
-        <NoticeList />
-        <NoticeList />
+        {contents?.map((content)=><NoticeList key={content.noticeId} content={content}/>)}
+        {/* <NoticeList /> */}
+      
       </ul>
     </Wrap>
   );
