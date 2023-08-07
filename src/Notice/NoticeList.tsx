@@ -1,25 +1,17 @@
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
-import axios from "axios";
-import { useEffect} from "react";
-export default function NoticeList() {
-
-  useEffect(() => {
-    axios.get("https://nengtul.shop/v1/notices/list")
-      .then((response) => {
-            console.log(response)
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  },[])
-
+import { Post } from "./ListWrap";
+interface NoticeContentProps{
+  content:Post;
+}
+export default function NoticeList( {content} :NoticeContentProps) {
   return (
     <>
       <NoticeLi>
         <Link to={"/"}>
-          <h4>냉장고를 털어줘가 정식 오픈했습니다..</h4>
-          <span>2023-07-31</span>
+          <h4>{content.title}</h4>
+          <span>{content.createdAt.slice(0, 10)}</span>
+          {/* <span>2023-07-31</span> */}
         </Link>
       </NoticeLi>
     </>

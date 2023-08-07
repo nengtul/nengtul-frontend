@@ -45,7 +45,7 @@ function UserInfomation  () {
           })
           .catch((error) => {
             console.error(error);
-          });},[])
+    });},[])
 
    
 

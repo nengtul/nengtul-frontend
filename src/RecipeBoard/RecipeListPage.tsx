@@ -31,28 +31,20 @@ export default function RecipeListPage() {
   const [viewCountView, setViewCountView] = useState(false);
 
   const [posts, setPosts] = useState<Post[]>([]);
-  // const [posts, setPosts] = useState([]);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
-  const page = useRef<number>(1);
+  const page = useRef<number>(0);
   const [ref, inView] = useInView();
-
 
   const Token=useSelector((state: RootState)=>state.accessTokenValue)
   const {accessTokenValue}=Token;
   const MY_TOKEN=accessTokenValue;
 
-
   const fetch = useCallback(async () => {
     try {
       axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
       const { data } = await axios.get<ContentData>(
-      // const { data } = await axios.get(
-        `https://nengtul.shop/v1/recipe?_limit=5&_page=${page.current}`
-        // "https://nengtul.shop/v1/recipe"
+        `https://nengtul.shop/v1/recipe?size=5&page=${page.current}` //일단 5개씩 받아오는거로 했습니다
       );
-      console.log('여기')
-      console.log(data)
-
       const contentData = data.content;
       setPosts((prevPosts) => [...prevPosts, ...contentData]);
       setHasNextPage(contentData .length === 5);
