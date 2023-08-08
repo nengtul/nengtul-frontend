@@ -11,7 +11,6 @@ import { SHAREBOARD_URL } from "../url.ts";
 import { RootState } from "../Store/store";
 function PostDetail({ item }:{item:Item}) {
     const Token=useSelector((state: RootState)=>state.accessTokenValue)
-    console.log(Token)
     const {accessTokenValue}=Token;
     const MY_TOKEN=accessTokenValue
 

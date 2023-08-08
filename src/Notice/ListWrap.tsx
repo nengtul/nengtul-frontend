@@ -2,8 +2,11 @@ import { styled } from "styled-components";
 import theme from "../common/theme";
 import NoticeList from "./NoticeList";
 import { useEffect, useState} from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { NOTICES_LIST_URL } from "../url";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 interface ContentData{
   content:Post[]
 }
@@ -28,13 +31,21 @@ export default function NoticeWrap() {
       })
       .catch((error) => {
         console.error(error);
-});},[])
+      });
+  },[])
+  const navigate = useNavigate();
+  const goToWrite=()=>{
+    navigate('/noticeWrite')
+  }
   return (
     <Wrap>
       <h2>공지사항</h2>
       <ul>
         {contents?.map((content)=><NoticeList key={content.noticeId} content={content}/>)}      
       </ul>
+      <button type="button"  className="write-btn" onClick={goToWrite}>
+        <FontAwesomeIcon icon={faPen} />
+      </button>
     </Wrap>
   );
 }
@@ -54,5 +65,19 @@ const Wrap = styled.div`
     border: 1px solid #ddd;
     margin-top: 20px;
     border-radius: 8px;
+  }
+  .write-btn{
+    width:50rem;
+    height:50rem;
+    color:white;
+    background-color:${theme.colors.main};
+    display: inline-block;
+    cursor: pointer;
+    position: absolute;
+    left: 83%;
+    font-size:25rem;
+    bottom: 70px;
+    z-index: 9999;
+    border-radius:100%;
   }
 `;

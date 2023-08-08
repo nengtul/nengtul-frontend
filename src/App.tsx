@@ -23,6 +23,7 @@ import NoticeViewPage from "./Notice/NoticeViewPage";
 import NoticeListPage from "./Notice/NoticeListPage";
 import ChangePassowordPage from "./User/ChangePasswordPage";
 import MyIngredientTradePage from "./User/MyIngredientTradePage"
+import NoticeWritePage from "./Notice/NoticeWritePage";
 function App() {
   return (
     <BrowserRouter>
@@ -51,6 +52,7 @@ function App() {
 
         <Route path="/notice" element={<NoticeListPage />} />
         <Route path="/noticeView/:noticeId" element={<NoticeViewPage />} />
+        <Route path="/noticeWrite" element={<NoticeWritePage/>} />
         <Route path="/myIngredientTrade" element={<MyIngredientTradePage/>} />
         
 
