@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { setTokens } from "../Store/reducers";
 import Modal from "../common/Modal";
-import { USER_LOGIN_URL } from "../url";
+// import { USER_LOGIN_URL } from "../url";
 interface ServerResponse {
   AccessToken: string;
   refreshToken: string;
@@ -28,7 +28,7 @@ export default function LoginForm() {
 
   const handleLogin = async () => {
     try {
-      const url = USER_LOGIN_URL;
+      const url = "https://nengtul.shop/v1/users/login";
       const data = {
         email: email,
         password: password,
