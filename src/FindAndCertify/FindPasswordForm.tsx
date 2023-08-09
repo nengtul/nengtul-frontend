@@ -1,6 +1,7 @@
-import axios from "axios";
+
 import styled from "styled-components";
 import { USER_FINDPW_URL } from "../url";
+import  {simpleUpdateData} from "../axios";
 function FindPasswordForm(){
     const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
         e.preventDefault();
@@ -23,8 +24,15 @@ function FindPasswordForm(){
                 phoneNumber: tel,
                 email:email
             }
-            await axios.post(url,data);
-            alert("임시비밀번호가 메일로 전송되었습니다!")
+            // await axios.post(url,data);
+            await simpleUpdateData(url, data)
+            .then(()=> {
+                alert("임시비밀번호가 메일로 전송되었습니다!")
+            })
+            .catch(error => {
+                console.error(error);
+            });
+           
             
         }catch (err) {
             console.error("아이디 찾기 실패", err);

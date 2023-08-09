@@ -1,13 +1,13 @@
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LatLng, Map, Marker } from "kakao-maps";
-import axios from "axios";
 import MarkerCard from "./MarkerCard";
 import { styled } from "styled-components";
 import theme from "../common/theme";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot,faPen } from "@fortawesome/free-solid-svg-icons";
 import { SHAREBOARD_URL } from "../url";
+import  {getData} from "../axios";
 type EventListener = (event: kakao.maps.event.MouseEvent) => void;
 
 declare global {
@@ -101,8 +101,10 @@ export default function MarkerMap() {
         try {
           const lat = location[0];
           const lon = location[1];
-          const response = await axios.get<Post[]>(`${SHAREBOARD_URL}?lat=${lat}&lon=${lon}&range=10000`);
-          const postData: Post[] = response.data;
+          // const response = await axios.get<Post[]>(`${SHAREBOARD_URL}?lat=${lat}&lon=${lon}&range=10000`);
+          const response = await getData<Post[]>(`${SHAREBOARD_URL}?lat=${lat}&lon=${lon}&range=10000`,);
+          // const postData: Post[] = response.data;
+          const postData: Post[] = response;
           postData.forEach((data) => {
             const markerPosition = new window.kakao.maps.LatLng(data.lat, data.lon);
             const marker = new window.kakao.maps.Marker({ position: markerPosition });

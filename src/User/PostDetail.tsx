@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import axios from "axios";
 import { useState,useRef,useEffect} from "react";
 import {Item} from "./MyIngredientTradeList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,6 +8,7 @@ import { useSelector } from "react-redux";
 import theme from "../common/theme";
 import { SHAREBOARD_URL } from "../url.ts";
 import { RootState } from "../Store/store";
+import  {deleteData,updateData} from "../axios";
 function PostDetail({ item }:{item:Item}) {
     const Token=useSelector((state: RootState)=>state.accessTokenValue)
     const {accessTokenValue}=Token;
@@ -21,16 +21,25 @@ function PostDetail({ item }:{item:Item}) {
     const {moveLatitude,moveLongitude}=LatLng;
     //삭제
     const onDelete=()=>{
-        axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-        axios.delete(`${SHAREBOARD_URL}/${item.id}`)
-        .then((response) => {
-              console.log(response)
-              console.log('삭제됨') //모달창으로 바꾸기
-            //   window.location.reload();
-        })
-        .catch((error) => {
-          console.error(error);
-        })
+        // axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+        // axios.delete(`${SHAREBOARD_URL}/${item.id}`)
+        // .then((response) => {
+        //       console.log(response)
+        //       console.log('삭제됨') //모달창으로 바꾸기
+        //     //   window.location.reload();
+        // })
+        // .catch((error) => {
+        //   console.error(error);
+        // })
+        if(MY_TOKEN!==null){
+            deleteData(`${SHAREBOARD_URL}/${item.id}`,MY_TOKEN)
+            .then(()=>{
+                console.log('삭제되었습니다')
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+        }
     }
 
     //수정값을 저장하는 부분
@@ -97,11 +106,52 @@ function PostDetail({ item }:{item:Item}) {
 
     //회원정보 수정제출버튼
     const onSave=()=>{
+        // try{
+        //     if (!editedData) {
+        //         return;
+        //     }
+        //     const url=`${SHAREBOARD_URL}/${item.id}`
+        //     const shareBoardDto={
+        //         title:editedData.title,
+        //         content:editedData.content,
+        //         place:editedData.place,
+        //         price:editedData.price,
+        //         lat:moveLatitude,
+        //         lon:moveLongitude,
+        //     }
+        //     const formData = new FormData();
+        //     console.log('image!!!',tradeImage)
+        //     if (tradeImage instanceof Blob) {
+        //         formData.append("image", tradeImage);
+        //     }
+        //     console.log('userUpdateDto:', shareBoardDto);
+        //     console.log('image!!!',tradeImage)
+        //     const blob=new Blob([JSON.stringify(shareBoardDto)],{
+        //         type:'application/json'
+        //     });
+        //     formData.append("shareBoardDto", blob)
+        //     const config = {
+        //         headers: {
+        //           'Content-Type': 'multipart/form-data',
+        //         },
+        //     };
+
+        //     axios.post(url,formData,config)
+        //         .then((response) => {
+        //             console.log('response', response);
+        //             console.log('수정완료!'); // 모달창으로 바꾸기
+        //         })
+        //         .catch((error) => {
+        //             console.error(error);
+        //         });
+        //     }catch(err){
+        //         console.log(err)
+        //     }
         try{
             if (!editedData) {
                 return;
             }
-            const url=`${SHAREBOARD_URL}/${item.id}`
+         
             const shareBoardDto={
                 title:editedData.title,
                 content:editedData.content,
@@ -111,30 +161,26 @@ function PostDetail({ item }:{item:Item}) {
                 lon:moveLongitude,
             }
             const formData = new FormData();
-            console.log('image!!!',tradeImage)
+  
             if (tradeImage instanceof Blob) {
                 formData.append("image", tradeImage);
             }
-            console.log('userUpdateDto:', shareBoardDto);
-            console.log('image!!!',tradeImage)
+
             const blob=new Blob([JSON.stringify(shareBoardDto)],{
                 type:'application/json'
             });
             formData.append("shareBoardDto", blob)
-            const config = {
-                headers: {
-                  'Content-Type': 'multipart/form-data',
-                },
-            };
+       
 
-            axios.post(url,formData,config)
-                .then((response) => {
-                    console.log('response', response);
-                    console.log('수정완료!'); // 모달창으로 바꾸기
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+            if(MY_TOKEN!==null){
+                updateData(`${SHAREBOARD_URL}/${item.id}`,formData,MY_TOKEN)
+                    .then(()=>{
+                        console.log('수정완료!');
+                    })
+                    .catch(error=>{
+                        console.log(error)
+                    })
+                }
             }catch(err){
                 console.log(err)
             }

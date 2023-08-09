@@ -3,10 +3,10 @@ import theme from "../common/theme";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import {useState, useRef} from "react";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
 import { NOTICES_URL } from "../url";
+import  {updateData} from "../axios";
 function NoticeWriteWrap(){
     //토큰가져오기
     const Token=useSelector((state: RootState)=>state.accessTokenValue)
@@ -32,15 +32,52 @@ function NoticeWriteWrap(){
         const formData = new FormData(e.currentTarget);
         const title=formData.get('title') as string;
         const content=formData.get('content') as string;
+        // try{
+        //     axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+        //     const url= NOTICES_URL ;
+        //     const noticeReqDto={
+        //         title: title,
+        //         content: content,
+        //     }
+        //     console.log('images!!!',images)
+            
+        //     if (images.length > 0) {
+        //         images.forEach((image) => {
+        //         if (image instanceof Blob) {
+        //             formData.append("images", image);
+        //         }
+        //         });
+        //     }
+            
+        //     console.log('noticeReqDto:', noticeReqDto);
+        //     console.log('image!!!',images)
+        //     const blob=new Blob([JSON.stringify(noticeReqDto)],{
+        //         type:'application/json'
+        //     });
+        //     formData.append("noticeReqDto", blob)
+        //     const config = {
+        //             headers: {
+        //             'Content-Type': 'multipart/form-data',
+        //             },
+        //         };
+        //     axios.post(url,formData,config)
+        //     .then((response) => {
+        //         console.log('response', response);
+        //         console.log('수정완료!'); // 모달창으로 바꾸기
+        
+        //     })
+        //     .catch((error) => {
+        //         console.error(error);
+        //     });
+        // } catch(err){
+        //   console.log(err)
+        // }
         try{
-            axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-            const url= NOTICES_URL ;
             const noticeReqDto={
                 title: title,
                 content: content,
             }
-            console.log('images!!!',images)
-            
+
             if (images.length > 0) {
                 images.forEach((image) => {
                 if (image instanceof Blob) {
@@ -48,27 +85,22 @@ function NoticeWriteWrap(){
                 }
                 });
             }
-            
-            console.log('noticeReqDto:', noticeReqDto);
-            console.log('image!!!',images)
             const blob=new Blob([JSON.stringify(noticeReqDto)],{
                 type:'application/json'
             });
             formData.append("noticeReqDto", blob)
-            const config = {
-                    headers: {
-                    'Content-Type': 'multipart/form-data',
-                    },
-                };
-            axios.post(url,formData,config)
-            .then((response) => {
-                console.log('response', response);
-                console.log('수정완료!'); // 모달창으로 바꾸기
-        
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+    
+            if(MY_TOKEN!==null){
+                updateData(NOTICES_URL,formData,MY_TOKEN)
+                 .then((data)=>{
+                    console.log(data);
+                    console.log('등록완료!');
+                })
+                .catch(error=>{
+                    console.log(error)
+                })
+              }
+           
         } catch(err){
           console.log(err)
         }
