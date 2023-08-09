@@ -4,15 +4,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import defaultThumb from "../assets/common/defaultThumb.svg";
-import getLogin from "../ApiCall/getLogin";
+
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import LevelBadge from "./LevelBadge";
 import LogoutBtn from "./LogoutBtn";
 import { useDispatch } from "react-redux";
 import { setTokens } from "../Store/reducers";
-import { Tokens } from "../ApiCall/getLogin";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { RootState } from "../Store/store";
 import { USER_DETAIL_URL } from "../url";
+
 interface UserData {
   name: string;
   point: string;
@@ -21,16 +23,19 @@ interface UserData {
 const DEFAULT_USER_DATA: UserData = { name: "", point: "", profileImageUrl: "" };
 
 export default function HeaderInfo() {
+  const Token = useSelector((state: RootState) => state.accessTokenValue);
+  const { accessTokenValue, refreshTokenValue } = Token;
+  const MY_TOKEN = accessTokenValue;
+  const REFRESH_TOKEN = refreshTokenValue;
+
   const dispatch = useDispatch();
   const [data, setData] = useState(DEFAULT_USER_DATA);
 
   const getUserInfo = useCallback(async () => {
     try {
-      const tokens: Tokens | null = await getLogin();
-      if (tokens) {
-        const { accessToken, refreshToken } = tokens;
+      if (MY_TOKEN) {
         const headers = {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${MY_TOKEN}`,
           "Content-Type": "application/json",
         };
         const response = await axios.get<UserData>(USER_DETAIL_URL, {
@@ -40,8 +45,8 @@ export default function HeaderInfo() {
         setData(userData);
         dispatch(
           setTokens({
-            accessToken: accessToken,
-            refreshToken: refreshToken,
+            accessToken: MY_TOKEN,
+            refreshToken: REFRESH_TOKEN,
           })
         );
       } else {
@@ -61,10 +66,6 @@ export default function HeaderInfo() {
   const setLogOut = () => {
     setData(DEFAULT_USER_DATA);
   };
-
-  if (data === DEFAULT_USER_DATA) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <>
