@@ -37,7 +37,7 @@ export default function RecipeNumberInput({ step, handleTextChange, handleImgCha
   return (
     <>
       <NumberInput>
-        <p>Step.{step}</p>
+        <p>* Step.{step}</p>
         <textarea placeholder="내용을 입력해주세요." onChange={handleChange} required></textarea>
         <div className="upload-img">
           <input

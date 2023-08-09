@@ -14,7 +14,7 @@ export default function RecipeWriteIntro({ setIntro, setThumb }: RecipeWriteIntr
   return (
     <>
       <RecipeIntroWrap>
-        <p>레시피 설명</p>
+        <p>* 레시피 설명</p>
         <textarea
           placeholder="요리에 대한 설명을 입력해주세요."
           onChange={(e) => setIntro(e.target.value)}
