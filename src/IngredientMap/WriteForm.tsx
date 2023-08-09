@@ -3,12 +3,18 @@ import theme from "../common/theme";
 import TrandingLocation from "./TrandingLocation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import axios  from "axios";
 import { useSelector } from "react-redux";
-import { RootState } from "../Redux/tradeStore";
+import { RootState } from "../Store/store";
 import {useState, useRef} from "react";
 import { SHAREBOARD_URL } from "../url";
+import  {updateData} from "../axios";
+
 export default function WriteForm() {
+  //토큰가져오기
+  const Token=useSelector((state: RootState)=>state.accessTokenValue)
+  const {accessTokenValue}=Token;
+  const MY_TOKEN=accessTokenValue
+
   const LatLng=useSelector((state: RootState)=>state.latlngInfo)
   const {moveLatitude,moveLongitude}=LatLng;
   //거래위치 props로 받아옴
@@ -25,10 +31,8 @@ export default function WriteForm() {
 
   //이미지
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  // const  [tradeImage, setTradeImage]= useState<Blob |"">(""); //사진 한장
   const [tradeImage, setTradeImage] = useState<Blob | null>(null);
-  // const [tradeImage, setTradeImage] = useState<Blob[]>([]); //사진 여러장
-  //사진 한장일때 handleImageChange
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file=e.target.files?.[0];
     console.log('file',file)
@@ -42,17 +46,7 @@ export default function WriteForm() {
       
   }
   const imageURL = tradeImage ? URL.createObjectURL(tradeImage) : null;
-  //사진 여러장일때
-  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = e.target.files;
-  //   if (files) {
-  //     const imageArray: Blob[] = Array.from(files).map((file) => file);
-  //     setTradeImage(imageArray);
-  //   } else {
-  //     setTradeImage([]);
-  //   }
-  // };
-  // console.log('사진여러장 어떻게 들어가나 확인용',tradeImage)
+ 
   //이미지+shareBoardDto 같이 보내기
   const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
     e.preventDefault();
@@ -64,15 +58,48 @@ export default function WriteForm() {
     const longitude=moveLongitude;
     const place= locationInfo;
 
-    //토큰가져오기
-    const storedData = sessionStorage.getItem("persist:root");
-    const parsedData = JSON.parse(storedData?.replace(/\\"/g, ''));
-    const MY_TOKEN = parsedData?.accessTokenValue;
-    console.log('MY_TOKEN',MY_TOKEN)
     
+    
+    // try{
+    //   axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+    //   const url=SHAREBOARD_URL;
+    //   const shareBoardDto={
+    //     title: title,
+    //     content: content,
+    //     place: place,
+    //     price: price,
+    //     lat: latitude,
+    //     lon:longitude,
+    //   }
+    //   console.log('image!!!',tradeImage)
+
+    //   if (tradeImage instanceof Blob) {
+    //     formData.append("image", tradeImage);
+    //   }
+
+    //   console.log('shareBoardDto:', shareBoardDto);
+    //   const blob=new Blob([JSON.stringify(shareBoardDto)],{
+    //     type:'application/json'
+    //    });
+    //    formData.append("shareBoardDto", blob)
+    //    const config = {
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data',
+    //     },
+    //   };
+    //   axios.post(url,formData,config)
+    //   .then((response) => {
+    //     console.log('response', response);
+    //     console.log('등록완료!'); // 모달창으로 바꾸기
+  
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+    // } catch(err){
+    //   console.log(err)
+    // }
     try{
-      axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-      const url=SHAREBOARD_URL;
       const shareBoardDto={
         title: title,
         content: content,
@@ -81,42 +108,30 @@ export default function WriteForm() {
         lat: latitude,
         lon:longitude,
       }
-      console.log('image!!!',tradeImage)
-      //사진 한장일때
+  
       if (tradeImage instanceof Blob) {
         formData.append("image", tradeImage);
       }
-      //사진 여러장일때
-      // if (tradeImage.length > 0) {
-      //   tradeImage.forEach((image) => {
-      //     if (image instanceof Blob) {
-      //       formData.append("images", image);
-      //     }
-      //   });
-      // }
 
-      console.log('shareBoardDto:', shareBoardDto);
       const blob=new Blob([JSON.stringify(shareBoardDto)],{
         type:'application/json'
        });
        formData.append("shareBoardDto", blob)
-       const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      };
-      axios.post(url,formData,config)
-      .then((response) => {
-        console.log('response', response);
-        console.log('수정완료!'); // 모달창으로 바꾸기
-  
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+       
+      if(MY_TOKEN!==null){
+        updateData(SHAREBOARD_URL,formData,MY_TOKEN)
+         .then((data)=>{
+            console.log(data);
+
+        })
+        .catch(error=>{
+            console.log(error)
+        })
+      }
     } catch(err){
       console.log(err)
     }
+    
   }
   
   return (

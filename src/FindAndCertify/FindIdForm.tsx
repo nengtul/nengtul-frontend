@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import axios from "axios";
 import { USER_FINDID_URL } from "../url";
+import  {simpleUpdateData} from "../axios";
 function FindIdForm(){
     const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
         e.preventDefault();
@@ -14,6 +14,7 @@ function FindIdForm(){
         })
     
     }
+    
     const handleNewUser=async(name:string,tel:string)=>{
         try{
             const url=USER_FINDID_URL;
@@ -21,14 +22,30 @@ function FindIdForm(){
                 name: name,
                 phoneNumber: tel
             }
-            const response = await axios.post(url,data);
-            console.log('이거',response);
-            if(response.data){
-                const responseData = response.data  as { email?: string }
-                alert(responseData.email)
-            }else{
-                console.log('회원 정보가 없거나 이름/전화번호를 잘못 입력하셨습니다')
-            }
+            await simpleUpdateData(url, data)
+            .then(response => {
+                console.log('이거', response);
+                if (response !== undefined && response !== null) {
+                    if ('email' in response) {
+                        alert(response.email);
+                    } else {
+                        console.log('회원 정보에 이메일이 없습니다');
+                    }
+                } else {
+                    console.log('회원 정보가 없거나 이름/전화번호를 잘못 입력하셨습니다');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+            
+            // const response = await axios.post(url,data);
+            // if(response.data){
+            //     const responseData = response.data  as { email?: string }
+            //     alert(responseData.email)
+            // }else{
+            //     console.log('회원 정보가 없거나 이름/전화번호를 잘못 입력하셨습니다')
+            // }
         }catch (err) {
             console.error("아이디 찾기 실패", err);
           }

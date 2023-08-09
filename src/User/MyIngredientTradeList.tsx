@@ -1,8 +1,10 @@
-import axios from "axios";
 import { useEffect, useState} from "react";
 import styled from "styled-components";
 import PostDetail from "./PostDetail.tsx";
 import { SHARE_MYLIST_URL } from "../url.ts";
+import { RootState } from "../Store/store";
+import { useSelector } from "react-redux";
+import  {getData } from "../axios";
 export interface Item{
     id:number;
     title:string;
@@ -15,23 +17,32 @@ export interface Item{
     shareImg:string;
 }
 function MyIngredeintTradeList(){
+    const Token=useSelector((state: RootState)=>state.accessTokenValue)
+    const {accessTokenValue}=Token;
+    const MY_TOKEN=accessTokenValue;
     const [items, setItems] = useState<Item[]>([]);
     const [selectedItemId, setSelectedItemId] = useState<number | null>(null); 
     useEffect(() => {
-        const storedData = sessionStorage.getItem("persist:root");
-        const parsedData = JSON.parse(storedData?.replace(/\\"/g, ''));
-        const MY_TOKEN = parsedData?.accessTokenValue;
+        if(MY_TOKEN!==null){
+            getData<Item[]>(SHARE_MYLIST_URL,MY_TOKEN)
+            .then((data:Item[])=>{
+                setItems(data);
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+        }
         
-        axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-        axios.get(SHARE_MYLIST_URL)
-        .then((response)=>{
-            console.log(response)
-            setItems(response.data as Item[]);
-            console.log('받아오기성공')
-        })
-        .catch((error)=>{
-            console.error(error)
-        })
+        // axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+        // axios.get(SHARE_MYLIST_URL)
+        // .then((response)=>{
+        //     console.log(response)
+        //     setItems(response.data as Item[]);
+        //     console.log('받아오기성공')
+        // })
+        // .catch((error)=>{
+        //     console.error(error)
+        // })
     }, []);
     const handlePostClick = (itemId:number) => {
         setSelectedItemId(itemId);

@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { useParams } from 'react-router-dom';
 import { useEffect, useState,useRef} from "react";
-import axios from "axios";
 import { NOTICES_URL } from "../url";
 import { RootState } from "../Store/store";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import theme from "../common/theme";
+import  {getData ,deleteData,updateData} from "../axios";
 interface Post{
     content:string;
     createdAt:string;
@@ -44,23 +44,35 @@ function NoticeView(){
             setNewImageUrls([]);
         }
     };
-    console.log('사진여러장 어떻게 들어가나 확인용',newImageUrls)
+    // console.log('사진여러장 어떻게 들어가나 확인용',newImageUrls)
 
 
     //글 불러오기
     useEffect(() => {
-        axios.get<Post>(`${NOTICES_URL}/${noticeId}`)
-            .then((response) => {
-                const post = response.data;
-                console.log(post)
+        // axios.get<Post>(`${NOTICES_URL}/${noticeId}`)
+        //     .then((response) => {
+        //         const post = response.data;
+        //         console.log(post)
+        //         setPost(post);
+        //         const imageUrlString=post.noticeImg;
+        //         const urls = imageUrlString.split('\\'); 
+        //         setImageUrls(urls.slice(0, -1));
+        //     })
+        //     .catch((error) => {
+        //     console.error(error);
+        //     });
+        if(MY_TOKEN!==null){
+            getData<Post>(`${NOTICES_URL}/${noticeId}`,MY_TOKEN)
+            .then((post:Post)=>{
                 setPost(post);
                 const imageUrlString=post.noticeImg;
                 const urls = imageUrlString.split('\\'); 
                 setImageUrls(urls.slice(0, -1));
             })
-            .catch((error) => {
-            console.error(error);
-            });
+            .catch(error=>{
+                console.log(error)
+            })
+        }
     },[])
 
     const onModify=()=>{
@@ -69,16 +81,25 @@ function NoticeView(){
 
     //글 삭제하기 
     const onDelete=()=>{
-        axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-        axios.delete(`${NOTICES_URL}/${noticeId}`)
-        .then((response) => {
-              console.log(response)
-              console.log('삭제됨') //모달창으로 바꾸기
-            //   window.location.reload();
-        })
-        .catch((error) => {
-          console.error(error);
-        })
+        // axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+        // axios.delete(`${NOTICES_URL}/${noticeId}`)
+        // .then((response) => {
+        //       console.log(response)
+        //       console.log('삭제됨') //모달창으로 바꾸기
+        //     //   window.location.reload();
+        // })
+        // .catch((error) => {
+        //   console.error(error);
+        // })
+        if(MY_TOKEN!==null){
+            deleteData(`${NOTICES_URL}/${noticeId}`,MY_TOKEN)
+            .then(()=>{
+                console.log('삭제되었습니다')
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+        }
     }
 
 
@@ -98,13 +119,54 @@ function NoticeView(){
     }, [isEditing,post]);
 
     const onSave=()=>{
+        // try{
+        //     if (!editedData) {
+        //         return;
+        //     }
+        //     axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+        //     const url=`https://nengtul.shop/v1/notices/${noticeId}`
+        //     const noticeReqDto={
+        //         title:editedData.title,
+        //         content:editedData.content,
+        //     }
+        //     const formData = new FormData();
+
+        //     if (newImageUrls.length > 0) {
+        //         newImageUrls.forEach((image) => {
+        //         if (image instanceof Blob) {
+        //             formData.append("images", image);
+        //         }
+        //         });
+        //     }
+        //     console.log('noticeReqDto:', noticeReqDto);
+        //     console.log('images!!!',newImageUrls)
+        //     const blob=new Blob([JSON.stringify(noticeReqDto)],{
+        //         type:'application/json'
+        //     });
+        //     formData.append("noticeReqDto", blob)
+        //     const config = {
+        //         headers: {
+        //           'Content-Type': 'multipart/form-data',
+        //         },
+        //     };
+
+        //     axios.post(url,formData,config)
+        //         .then((response) => {
+        //             console.log('response', response);
+        //             console.log('수정완료!'); // 모달창으로 바꾸기
+        //         })
+        //         .catch((error) => {
+        //             console.error(error);
+        //         });
+        //     }catch(err){
+        //         console.log(err)
+        //     }
         try{
             if (!editedData) {
                 return;
             }
-            // const url=`${NOTICES_URL}/${noticeId}`
-            axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-            const url=`https://nengtul.shop/v1/notices/${noticeId}`
+           
+            
             const noticeReqDto={
                 title:editedData.title,
                 content:editedData.content,
@@ -118,26 +180,23 @@ function NoticeView(){
                 }
                 });
             }
-            console.log('noticeReqDto:', noticeReqDto);
-            console.log('images!!!',newImageUrls)
+       
             const blob=new Blob([JSON.stringify(noticeReqDto)],{
                 type:'application/json'
             });
             formData.append("noticeReqDto", blob)
-            const config = {
-                headers: {
-                  'Content-Type': 'multipart/form-data',
-                },
-            };
-
-            axios.post(url,formData,config)
-                .then((response) => {
-                    console.log('response', response);
-                    console.log('수정완료!'); // 모달창으로 바꾸기
+           
+            if(MY_TOKEN!==null){
+                updateData(`https://nengtul.shop/v1/notices/${noticeId}`,formData,MY_TOKEN)
+                 .then((data)=>{
+                    console.log(data);
+                    console.log('수정완료!');
                 })
-                .catch((error) => {
-                    console.error(error);
-                });
+                .catch(error=>{
+                    console.log(error)
+                })
+              }
+           
             }catch(err){
                 console.log(err)
             }

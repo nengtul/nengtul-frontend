@@ -3,10 +3,10 @@ import theme from "../common/theme";
 import NoticeList from "./NoticeList";
 import { useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { NOTICES_LIST_URL } from "../url";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
+import  {getData} from "../axios";
 interface ContentData{
   content:Post[]
 }
@@ -24,14 +24,23 @@ export interface Post{
 export default function NoticeWrap() {
   const [contents,setContents]=useState<Post[]>([])
   useEffect(() => {
-    axios.get<ContentData>(NOTICES_LIST_URL)
-      .then((response) => {
-            const contentArr=response.data.content
-            setContents(contentArr)
+    // axios.get<ContentData>(NOTICES_LIST_URL)
+    //   .then((response) => {
+    //         const contentArr=response.data.content
+    //         setContents(contentArr)
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+    getData<ContentData>(NOTICES_LIST_URL,)
+      .then((data:ContentData)=>{
+        const contentArr=data.content;
+        setContents(contentArr)
       })
-      .catch((error) => {
-        console.error(error);
-      });
+      .catch(error=>{
+          console.log(error)
+      })
+  
   },[])
   const navigate = useNavigate();
   const goToWrite=()=>{

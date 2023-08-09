@@ -5,47 +5,57 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../Store/store";
 import { USER_DETAIL_URL } from "../url";
+import  {getData ,deleteData, updateData} from "../axios";
 //1.회원정보보여주기  2.회원정보 수정하기  3.회원 탈퇴하기
+export interface UserData {
+    name: string;
+    nickname: string;
+    phoneNumber: string;
+    profileImageUrl:string;
+    emailVerifiedYn:boolean;
+    id:number;
+}
+interface UpdateUserData {
+    nickname: string;
+    phoneNumber: string;
+}
+
 function UserInfomation  () {
-    interface UserData {
-        name: string;
-        nickname: string;
-        phoneNumber: string;
-        profileImageUrl:string;
-        emailVerifiedYn:boolean;
-        id:number;
-    }
-    interface UpdateUserData {
-        nickname: string;
-        phoneNumber: string;
-    }
+
     const Token=useSelector((state: RootState)=>state.accessTokenValue)
     console.log(Token)
     const {accessTokenValue}=Token;
     const MY_TOKEN=accessTokenValue
-    // const storedData = sessionStorage.getItem("persist:root");
-    // const parsedData = JSON.parse(storedData?.replace(/\\"/g, ''));
-    // const MY_TOKEN = parsedData?.accessTokenValue;
-    // console.log("이거 안뜨면 안디는디",MY_TOKEN)
-    
 
-
-
-   
     const [data, setData] = useState<UserData | null>(null);
     // const MY_TOKEN = getLogin();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     //이거는 session할때 필요한 애ㅡ들
     useEffect(() => {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-        axios.get<UserData>(USER_DETAIL_URL)
-          .then((response) => {
-                setData(response.data);
-                setEditedData(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-    });},[])
+        //axios.ts사용전
+        // axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+        // axios.get<UserData>(USER_DETAIL_URL)
+        //   .then((response) => {
+        //         setData(response.data);
+        //         setEditedData(response.data);
+        //   })
+        //   .catch((error) => {
+        //     console.error(error);
+        // });
+        //axios.ts사용후
+        console.log('내 토큰',MY_TOKEN)
+        if(MY_TOKEN!==null){
+            getData<UserData>(USER_DETAIL_URL,MY_TOKEN)
+            .then((userData:UserData)=>{
+                console.log(userData)
+                setData(userData);
+                setEditedData(userData);
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+        }
+    },[])
 
    
 
@@ -60,7 +70,6 @@ function UserInfomation  () {
     const onModify=()=>{
         setEditing(!editing);
     }
-    // console.log('이거 확인해봐',data)
     const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         
@@ -85,45 +94,86 @@ function UserInfomation  () {
      
     //회원정보 수정
     const onUpdate=()=>{
+        // try{
+        //     const url=USER_DETAIL_URL;
+        //     const userUpdateDto = {
+        //         nickname: editedData.nickname,
+        //         phoneNumber: editedData.phoneNumber,
+        //       };
+
+        //     const formData = new FormData();
+        //     console.log(typeof(formData))
+        //     if (profileImage instanceof Blob) {
+        //         formData.append("image", profileImage);
+        //       }
+
+        //    const blob=new Blob([JSON.stringify(userUpdateDto)],{
+        //     type:'application/json'
+        //    });
+        //    formData.append("userUpdateDto", blob)
+        //    const config = {
+        //     headers: {
+        //       'Content-Type': 'multipart/form-data',
+        //     },
+        // };
+        //   axios.post(url,formData,config)
+        //   .then((response) => {
+        //     console.log('response', response);
+        //     console.log('수정완료!'); // 모달창으로 바꾸기
+        //     // window.location.reload();
+        //   })
+        //   .catch((error) => {
+        //     console.error(error);
+        //   });
+        // }catch (err) {
+        //     console.log(err)
+        // }
         try{
-            const url=USER_DETAIL_URL;
+            // const url=USER_DETAIL_URL;
             const userUpdateDto = {
                 nickname: editedData.nickname,
                 phoneNumber: editedData.phoneNumber,
               };
+
             const formData = new FormData();
-            console.log('image!!!',profileImage)
+        
             if (profileImage instanceof Blob) {
                 formData.append("image", profileImage);
               }
-            console.log('image!!!',profileImage)
-            console.log('userUpdateDto:', userUpdateDto);
-            
-            
-           const blob=new Blob([JSON.stringify(userUpdateDto)],{
-            type:'application/json'
-           });
-           formData.append("userUpdateDto", blob)
-           const config = {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          };
-          axios.post(url,formData,config)
-          .then((response) => {
-            console.log('response', response);
-            console.log('수정완료!'); // 모달창으로 바꾸기
-            window.location.reload();
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+
+            const blob=new Blob([JSON.stringify(userUpdateDto)],{
+                type:'application/json'
+            });
+
+            formData.append("userUpdateDto", blob)
+          
+            if(MY_TOKEN!==null){
+            updateData(USER_DETAIL_URL,formData,MY_TOKEN)
+             .then((data)=>{
+                console.log(data)
+                window.location.reload();
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+        }
+        //     axios.post(url,formData,config)
+        //   .then((response) => {
+        //     console.log('response', response);
+        //     console.log('수정완료!'); // 모달창으로 바꾸기
+        //     // window.location.reload();
+        //   })
+        //   .catch((error) => {
+        //     console.error(error);
+        //   });
         }catch (err) {
             console.log(err)
         }
     }
     //회원정보 삭제
     const onDelete=()=>{
+        //axios.ts사용전
+        axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
         axios.delete<UserData>(USER_DETAIL_URL)
         .then((response) => {
               console.log(response)
@@ -132,6 +182,16 @@ function UserInfomation  () {
         .catch((error) => {
           console.error(error);
         })
+        //axios.ts사용후
+        // if(MY_TOKEN!==null){
+        //     deleteData<UserData>(USER_DETAIL_URL,MY_TOKEN)
+        //     .then(()=>{
+        //         console.log('탈퇴되었습니다')
+        //     })
+        //     .catch(error=>{
+        //         console.log(error)
+        //     })
+        // }
     }
 
     //이메일 인증
