@@ -5,36 +5,50 @@ import { faClock, faCommentDots } from "@fortawesome/free-regular-svg-icons";
 import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 import LevelBadge from "../../common/LevelBadge";
 import theme from "../../common/theme";
+import defaultThumb from "../../assets/common/defaultThumb.svg";
 
-export default function RecipeViewInfo() {
+interface RecipeInfoProps {
+  title: string;
+  nickName: string;
+  serving: string;
+  cookingTime: string;
+  point: number;
+  userProfileUrl: string;
+}
+
+export default function RecipeViewInfo({
+  title,
+  nickName,
+  serving,
+  cookingTime,
+  point,
+  userProfileUrl,
+}: RecipeInfoProps) {
   return (
     <ViewWrap>
       <WriteInfo>
-        <h2>비빔국수의 핵심은 양념장!</h2>
+        <h2>{title}</h2>
         <div className="info-wrap">
           <div className="info">
-            <div className="thumb"></div>
+            <div
+              className="thumb"
+              style={{ backgroundImage: `url(${userProfileUrl || defaultThumb})` }}
+            />
             <div className="writer">
-              <LevelBadge>견습 요리사</LevelBadge>
-              <p>박진완 님</p>
+              <LevelBadge>{point}</LevelBadge>
+              <p>{nickName || "탈퇴한 사용자입니다."} 님</p>
               <span>
                 <FontAwesomeIcon icon={faClock} style={{ fontSize: "12px" }} />
-                20분 미만
+                {cookingTime}
               </span>
               <span>
-                <FontAwesomeIcon
-                  icon={faPeopleGroup}
-                  style={{ fontSize: "12px" }}
-                />
-                2인분
+                <FontAwesomeIcon icon={faPeopleGroup} style={{ fontSize: "12px" }} />
+                {serving}
               </span>
             </div>
           </div>
           <Link to={"/chat"}>
-            <FontAwesomeIcon
-              icon={faCommentDots}
-              style={{ fontSize: "20rem" }}
-            />
+            <FontAwesomeIcon icon={faCommentDots} style={{ fontSize: "20rem" }} />
           </Link>
         </div>
       </WriteInfo>
@@ -83,6 +97,7 @@ const WriteInfo = styled.div`
     width: 62px;
     height: 62px;
     border-radius: 50%;
+    background-size: cover;
     background-color: #333;
   }
   a {

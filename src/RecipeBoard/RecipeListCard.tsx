@@ -16,7 +16,7 @@ export default function RecipeListCard({ post }: RecipeListCardProps) {
   return (
     <>
       <CardLi>
-        <Link to="/">
+        <Link to={`/${post.recipeId}`}>
           <img src={post.thumbnailUrl} alt={post.title} />
           <ThumbInfo>
             <p>{post.title}</p>

@@ -8,8 +8,11 @@ import Button from "../common/Button";
 import RecipeWriteSubmit from "./RecipeWriteSubmit";
 import RecipeWriteCategory from "./RecipeWriteCategory";
 import RecipeWriteIntro from "./RecipeWriteIntro";
-import axios from "axios";
 import { RECIPE_URL } from "../url";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { RootState } from "../Store/store";
+import { updateData } from "../axios";
+
 export default function RecipeWriteForm() {
   const [category, setCategory] = useState("");
   const [categoryName, setCategoryName] = useState("");
@@ -17,6 +20,8 @@ export default function RecipeWriteForm() {
   const [ingredient, setIngredient] = useState<string[]>([]);
   const [searchText, setSearchText] = useState("");
   const [cookingStep, setCookingSteps] = useState<string[]>([]);
+  const [cookingTime, setCookingTime] = useState("");
+  const [serving, setServing] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [title, setTitle] = useState("");
   const [intro, setIntro] = useState("");
@@ -24,45 +29,42 @@ export default function RecipeWriteForm() {
   const [thumb, setThumb] = useState<File | null>(null);
   const [link, setLink] = useState("");
 
+  const Token = useSelector((state: RootState) => state.accessTokenValue);
+  const { accessTokenValue } = Token;
+  const MY_TOKEN = accessTokenValue;
+
   const handleSubmit = () => {
     const formData = new FormData();
 
-    formData.append("recipeAdd[title]", title);
-    formData.append("recipeAdd[intro]", intro);
-    formData.append("recipeAdd[ingredient]", ingredient.join(","));
-    formData.append("recipeAdd[cookingStep]", cookingStep.join("\\"));
-    formData.append("recipeAdd[category]", "SIDE_DISH");
-    formData.append("recipeAdd[videoUrl]", link);
+    const recipeAddDto = {
+      title: title,
+      intro: intro,
+      ingredient: ingredient.join(","),
+      cookingStep: cookingStep.join("\\\\"),
+      cookingTime: cookingTime,
+      serving: serving,
+      category: category,
+      videoUrl: link,
+    };
+    const json = JSON.stringify(recipeAddDto);
+    const blob = new Blob([json], { type: "application/json" });
+
+    formData.append("recipeAddDto", blob);
 
     if (thumb !== null) {
-      formData.append("thumbnail", thumb);
+      formData.append("thumbnail", thumb, thumb.name);
     }
 
-    images.forEach((imageFile, index) => {
-      formData.append(`images[${index}]`, imageFile);
+    images.forEach((imageFile) => {
+      formData.append(`images`, imageFile, imageFile.name);
     });
-
-    const persistedData = sessionStorage.getItem("persist:root");
-    if (persistedData) {
-      const parsedData = JSON.parse(persistedData) as {
-        accessTokenValue: string;
-      };
-
-      const accessTokenValue = parsedData.accessTokenValue.replace(/"/g, "");
-      const headers = {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${accessTokenValue}`,
-      };
-
-      axios
-        .post(RECIPE_URL , formData, {
-          headers: headers,
+    if (MY_TOKEN !== null) {
+      updateData(RECIPE_URL, formData, MY_TOKEN)
+        .then((res) => {
+          console.log(res);
         })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.error(error);
+        .catch((err) => {
+          console.error(err);
         });
     }
   };
@@ -126,17 +128,20 @@ export default function RecipeWriteForm() {
             categoryName={categoryName}
           />
 
-          <FormInput
-            type="text"
-            placeholder="제목을 입력해주세요."
-            required
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-          />
+          <div style={{ marginTop: "20px" }}>
+            <p>* 제목</p>
+            <FormInput
+              type="text"
+              placeholder="제목을 입력해주세요."
+              required
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+            />
+          </div>
 
           <div className="input-ingredient">
-            <p>재료 등록</p>
+            <p>* 재료 등록</p>
             <SearchInput
               searchText={searchText}
               setSearchText={setSearchText}
@@ -148,10 +153,35 @@ export default function RecipeWriteForm() {
             type="text"
             placeholder="유튜브 동영상이 있다면 링크를 적어주세요!"
             required
+            style={{ marginTop: "20px" }}
             onChange={(e) => {
               setLink(e.target.value);
             }}
           />
+          <div className="recipe-info">
+            <div>
+              <p>조리시간</p>
+              <FormInput
+                type="text"
+                placeholder="ex) 30분"
+                required
+                onChange={(e) => {
+                  setCookingTime(e.target.value);
+                }}
+              />
+            </div>
+            <div>
+              <p>레시피 양</p>
+              <FormInput
+                type="text"
+                placeholder="ex) 2인분"
+                required
+                onChange={(e) => {
+                  setServing(e.target.value);
+                }}
+              />
+            </div>
+          </div>
           <RecipeWriteIntro setIntro={setIntro} setThumb={setThumb} />
           {Array.from({ length: listNum }, (_, index) => (
             <RecipeNumberInput
@@ -177,18 +207,29 @@ const CategoryWrap = styled.div`
   width: 92%;
   margin: 0 auto;
   padding: 20px 0px;
-
+  p {
+    font-size: 16rem;
+    font-weight: 700;
+    color: ${theme.colors.main};
+    margin-bottom: 4px;
+  }
   .input-ingredient {
     margin-top: 20px;
-    p {
-      font-size: 16rem;
-      font-weight: 700;
-      color: ${theme.colors.main};
-      margin-bottom: 4px;
-    }
     & + div {
       margin-top: 10px;
       height: 140px;
+    }
+  }
+
+  .recipe-info {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    & > div {
+      width: 48%;
+    }
+    input {
+      margin-top: 0px;
     }
   }
 `;
@@ -197,7 +238,7 @@ const FormInput = styled.input`
   width: 100%;
   padding: 10px;
   font-size: 15rem;
-  margin-top: 20px;
+  margin-top: 0px;
   border: 2px solid ${theme.colors.main};
   border-radius: 5px;
   &:focus {

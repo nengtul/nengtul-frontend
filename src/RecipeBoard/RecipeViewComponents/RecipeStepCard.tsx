@@ -1,13 +1,18 @@
 import { styled } from "styled-components";
-import ImgBox from "./ImgBox";
 import theme from "../../common/theme";
 
-export default function RecipeStepCard() {
+interface RecipeStepProps {
+  cookingStep: string;
+  count: number;
+  imgArr: string[];
+}
+
+export default function RecipeStepCard({ cookingStep, count, imgArr }: RecipeStepProps) {
   return (
     <CardWrap>
-      <h4>STEP 01.</h4>
-      <ImgBox />
-      <p>주재료 둥근 호박 1개와 양파 1/2개를 준비합니다.</p>
+      <h4>STEP {count}</h4>
+      <ImgBox style={{ backgroundImage: `url(${imgArr[count - 1]})` }} />
+      <p>{cookingStep}</p>
     </CardWrap>
   );
 }
@@ -30,4 +35,14 @@ const CardWrap = styled.li`
     border: 2px solid ${theme.colors.main};
     border-radius: 10px;
   }
+`;
+
+const ImgBox = styled.div`
+  width: 100%;
+  height: 190px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background-color: #333;
+  background-size: cover;
+  background-position: center;
 `;

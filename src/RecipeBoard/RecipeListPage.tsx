@@ -11,19 +11,17 @@ import { useInView } from "react-intersection-observer";
 import RecipeWriteBtn from "./RecipeWriteBtn";
 import ContensWrap from "../common/ContentsWrap";
 import TabMenu from "../common/TabMenu";
-import { useSelector } from "react-redux/es/hooks/useSelector";
-import { RootState } from "../Store/store";
 import { RECIPE_URL } from "../url";
 export interface Post {
-  likeCount:number;
-  nickName:string;
-  recipeId:string;
-  thumbnailUrl:string;
-  title:string;
-  viewCount:number;
+  likeCount: number;
+  nickName: string;
+  recipeId: string;
+  thumbnailUrl: string;
+  title: string;
+  viewCount: number;
 }
 interface ContentData {
-  content: Post[]; 
+  content: Post[];
 }
 export default function RecipeListPage() {
   const [category, setCategory] = useState("전체");
@@ -36,20 +34,15 @@ export default function RecipeListPage() {
   const page = useRef<number>(0);
   const [ref, inView] = useInView();
 
-  const Token=useSelector((state: RootState)=>state.accessTokenValue)
-  const {accessTokenValue}=Token;
-  const MY_TOKEN=accessTokenValue;
-
   const fetch = useCallback(async () => {
     try {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
       const { data } = await axios.get<ContentData>(
-        `${ RECIPE_URL}?size=5&page=${page.current}` //일단 5개씩 받아오는거로 했습니다
+        `${RECIPE_URL}?size=5&page=${page.current}` //일단 5개씩 받아오는거로 했습니다
       );
       const contentData = data.content;
       setPosts((prevPosts) => [...prevPosts, ...contentData]);
-      setHasNextPage(contentData .length === 5);
-      if (contentData .length) {
+      setHasNextPage(contentData.length === 5);
+      if (contentData.length) {
         page.current += 1;
       }
     } catch (err) {

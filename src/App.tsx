@@ -22,7 +22,7 @@ import HeartLecipePage from "./MyInfo/HeartLecipePage";
 import NoticeViewPage from "./Notice/NoticeViewPage";
 import NoticeListPage from "./Notice/NoticeListPage";
 import ChangePassowordPage from "./User/ChangePasswordPage";
-import MyIngredientTradePage from "./User/MyIngredientTradePage"
+import MyIngredientTradePage from "./User/MyIngredientTradePage";
 import NoticeWritePage from "./Notice/NoticeWritePage";
 function App() {
   return (
@@ -36,14 +36,14 @@ function App() {
         <Route path="/ingredientWrite" element={<IngredientWrite />} />
         <Route path="/recipeList" element={<RecipeListPage />} />
         <Route path="/recipeWrite" element={<RecipeWritePage />} />
-        <Route path="/recipeView" element={<RecipeView />} />
+        <Route path="/:recipeId" element={<RecipeView />} />
         <Route path="/chattingList" element={<ChattingListPage />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/market" element={<MarketPage />} />
         <Route path="/findId" element={<FindId />} />
         <Route path="/findPassword" element={<FindPasswordPage />} />
         <Route path="/myPage" element={<MyPage />} />
-        <Route path="/changePassword" element={<ChangePassowordPage/>} />
+        <Route path="/changePassword" element={<ChangePassowordPage />} />
 
         <Route path="/ingredientMap" element={<IngredientMap />} />
 
@@ -52,10 +52,8 @@ function App() {
 
         <Route path="/notice" element={<NoticeListPage />} />
         <Route path="/noticeView/:noticeId" element={<NoticeViewPage />} />
-        <Route path="/noticeWrite" element={<NoticeWritePage/>} />
-        <Route path="/myIngredientTrade" element={<MyIngredientTradePage/>} />
-        
-
+        <Route path="/noticeWrite" element={<NoticeWritePage />} />
+        <Route path="/myIngredientTrade" element={<MyIngredientTradePage />} />
       </Routes>
     </BrowserRouter>
   );
