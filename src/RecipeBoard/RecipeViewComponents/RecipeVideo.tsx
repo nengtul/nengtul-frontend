@@ -1,15 +1,14 @@
 import styled from "styled-components";
 import ReactPlayer from "react-player";
 
-export default function RecipeVideo() {
+interface RecipeVideoProps {
+  video: string;
+}
+
+export default function RecipeVideo({ video }: RecipeVideoProps) {
   return (
     <Player>
-      <ReactPlayer
-        url="https://www.youtube.com/watch?v=j7s9VRsrm9o&t=3s"
-        controls
-        width={"100%"}
-        height={"100%"}
-      />
+      <ReactPlayer url={video} controls width={"100%"} height={"100%"} />
     </Player>
   );
 }

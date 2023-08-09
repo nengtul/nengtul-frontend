@@ -1,11 +1,17 @@
 import { styled } from "styled-components";
 import SearchList from "../../IngredientAndRecipe/SearchList";
 
-export default function RequirerIngredient() {
+interface ingredientInterface {
+  ingredient: string;
+}
+
+export default function RequirerIngredient({ ingredient }: ingredientInterface) {
+  const list = ingredient.split(",");
+
   return (
     <IngredientWrap>
       <h4>필요한 재료</h4>
-      <SearchList ingredient={["참치액", "참기름", "들기름"]}></SearchList>
+      <SearchList ingredient={list}></SearchList>
     </IngredientWrap>
   );
 }

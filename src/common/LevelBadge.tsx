@@ -5,7 +5,7 @@ interface LevelColors {
 }
 
 interface LevelBadgeProps {
-  children: string;
+  children: number;
 }
 const PointLevel = {
   막내요리사: 100,

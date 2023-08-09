@@ -19,3 +19,4 @@ export const NOTICES_URL = "https://nengtul.shop/v1/notices";
 
 //레시피 부분
 export const RECIPE_URL = "https://nengtul.shop/v1/recipe";
+export const RECIPE_DETAIL_URL = "https://nengtul.shop/v1/recipe/detail";

@@ -39,7 +39,18 @@ const SearchListWrap = styled.div`
   margin-top: 40px;
   padding: 10px;
   height: 245px;
-  overflow-y:scroll;
+  overflow-y:auto;
+	&::-webkit-scrollbar {
+    width: 2px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${theme.colors.main};
+    border-radius: 10px;
+    width: 2px;
+  }
   ul {
     display: flex;
     flex-flow: row wrap;
@@ -47,13 +58,14 @@ const SearchListWrap = styled.div`
   }
 
   li {
-    font-size: 14rem;
+    font-size: 13rem;
     color: ${theme.colors.main};
-    padding: 8px 22px;
+    padding: 8px 18px;
     border: 2px solid ${theme.colors.main};
     border-radius: 10px;
-    margin: 10px 4px;
+    margin: 4px 4px;
     font-weight: bold;
+		background-color:#fff;
     position: relative;
 
     svg {
