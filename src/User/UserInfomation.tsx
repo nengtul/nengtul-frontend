@@ -138,7 +138,7 @@ function UserInfomation  () {
     const onVerify=()=>{
         axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
         // axios.post(`${USER_VERIFY_RESET_URL}/${data?.id}`)
-        axios.post(`/api/v1/users/${data?.id}/verify/reset `)
+        axios.post(`https://nengtul.shop/v1/users/${data?.id}/verify/reset `)
         .then((response) => {
               console.log(response)
               console.log('인증메일이 전송됨') //모달창으로 바꾸기
