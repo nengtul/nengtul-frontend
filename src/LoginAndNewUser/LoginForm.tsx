@@ -5,7 +5,9 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { setTokens } from "../Store/reducers";
 import Modal from "../common/Modal";
-import { USER_LOGIN_URL } from "../url";
+import { USER_DETAIL_URL, USER_LOGIN_URL } from "../url";
+import { getData } from "../axios";
+import { UserData } from "../User/UserInfomation";
 // import { USER_LOGIN_URL } from "../url";
 interface ServerResponse {
   AccessToken: string;
@@ -22,39 +24,45 @@ export default function LoginForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleLogin().catch((err) => {
-      console.error(err);
-    });
+    handleLogin();
   };
 
-  const handleLogin = async () => {
-    try {
-      const url = USER_LOGIN_URL;
-      const data = {
-        email: email,
-        password: password,
-      };
-      const headers = {
-        "Content-Type": "application/json",
-        // application/json 기능 찾아보기
-      };
+  const handleLogin = () => {
+    const url = USER_LOGIN_URL;
+    const data = {
+      email: email,
+      password: password,
+    };
+    const headers = {
+      "Content-Type": "application/json",
+    };
 
-      const response = await axios.post<ServerResponse>(url, data, {
-        withCredentials: true, //withCredentials
+    axios
+      .post<ServerResponse>(url, data, {
+        withCredentials: true,
         headers: headers,
-      });
-      dispatch(
-        setTokens({
-          accessToken: response.data.AccessToken,
-          refreshToken: response.data.refreshToken,
-        })
-      );
+      })
+      .then((response) => {
+        getData<UserData>(USER_DETAIL_URL, response.data.AccessToken)
+          .then((userData: UserData) => {
+            sessionStorage.setItem("userId", userData.id.toString());
+          })
+          .catch((error) => {
+            console.log(error);
+          });
 
-      navigate("/");
-    } catch (err) {
-      console.error("로그인 요청 실패", err);
-      setModalOpen({ error: err as AxiosError }); // true가 아닌 객체로 상태 전달
-    }
+        dispatch(
+          setTokens({
+            accessToken: response.data.AccessToken,
+            refreshToken: response.data.refreshToken,
+          })
+        );
+        navigate("/");
+      })
+      .catch((err) => {
+        console.error("로그인 요청 실패", err);
+        setModalOpen({ error: err as AxiosError }); // true가 아닌 객체로 상태 전달
+      });
   };
 
   const handleCloseModal = () => {
