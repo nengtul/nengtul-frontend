@@ -1,7 +1,43 @@
 import { styled } from "styled-components";
 import theme from "../../common/theme";
+import { RECIPE_COMMENT_LIST_URL } from "../../url";
+import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { simpleUpdateData } from "../../axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Store/store";
 
-export default function CommentInput() {
+type CommentsInputFunction = () => void;
+
+interface CommentInputProps {
+  commentsInput: CommentsInputFunction;
+}
+export default function CommentInput({ commentsInput }: CommentInputProps) {
+  const { recipeId } = useParams();
+  const [comment, setComment] = useState("");
+  const url = `${RECIPE_COMMENT_LIST_URL}/${recipeId}/comments`;
+
+  const Token = useSelector((state: RootState) => state.accessTokenValue);
+  const { accessTokenValue } = Token;
+  const MY_TOKEN = accessTokenValue;
+
+  const handleSubmit = () => {
+    const data = {
+      comment: comment,
+    };
+    if (MY_TOKEN !== null) {
+      simpleUpdateData(url, data, MY_TOKEN)
+        .then((data) => {
+          console.log(data);
+          setComment("");
+          commentsInput();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+
   return (
     <Commet>
       <form>
@@ -9,8 +45,14 @@ export default function CommentInput() {
           name="comment"
           id="comment"
           placeholder="댓글을 입력해주세요."
+          value={comment}
+          onChange={(e) => {
+            setComment(e.target.value);
+          }}
         ></textarea>
-        <button type="submit">작성하기</button>
+        <button type="button" onClick={handleSubmit}>
+          작성하기
+        </button>
       </form>
     </Commet>
   );
