@@ -13,4 +13,5 @@ const Banner = styled.div`
   height: 220px;
   background-color: #333;
   background-size: cover;
+  background-position: center;
 `;

@@ -43,9 +43,6 @@ export default function LoginForm() {
         withCredentials: true, //withCredentials
         headers: headers,
       });
-      console.log(response.data.AccessToken);
-      console.log(response.data.refreshToken);
-      console.log(response);
       dispatch(
         setTokens({
           accessToken: response.data.AccessToken,

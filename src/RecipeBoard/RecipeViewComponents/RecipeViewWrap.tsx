@@ -6,7 +6,6 @@ import RecipeStepCard from "../RecipeViewComponents/RecipeStepCard";
 import { styled } from "styled-components";
 import theme from "../../common/theme";
 import RecipeComment from "../RecipeViewComponents/RecipeComment";
-import CommentInput from "../RecipeViewComponents/CommentInput";
 import ContensWrap from "../../common/ContentsWrap";
 import { useParams } from "react-router-dom";
 import { getData } from "../../axios";
@@ -16,7 +15,6 @@ import RecipeMainBanner from "./RecipeMainBanner";
 
 interface RecipeData {
   category: string;
-  recipeId: string;
   cookingStep: string;
   cookingTime: string;
   createAt: string;
@@ -41,7 +39,6 @@ export default function RecipeViewWrap() {
   const [imgArr, setImgArr] = useState([]);
   const [recipe, setRecipe] = useState<RecipeData>({
     category: "",
-    recipeId: "",
     cookingStep: "",
     cookingTime: "",
     createAt: "",
@@ -67,8 +64,9 @@ export default function RecipeViewWrap() {
     getData(url)
       .then((response) => {
         const responseData = response as RecipeData;
+        console.log(response);
         setRecipe(responseData);
-        setStep(response.cookingStep.split("\\\\"));
+        setStep(response.cookingStep.split("\\"));
         setImgArr(response.imageUrl.split("\\"));
       })
       .catch((err) => {
@@ -102,8 +100,7 @@ export default function RecipeViewWrap() {
             ))}
         </ul>
         <RecipeSaveBtn>레시피 저장</RecipeSaveBtn>
-        <RecipeComment />
-        <CommentInput />
+        <RecipeComment recipeId={recipe.id} />
       </ContensWrap>
       ;
     </>

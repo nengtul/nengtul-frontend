@@ -2,25 +2,78 @@ import { styled } from "styled-components";
 import LevelBadge from "../../common/LevelBadge";
 import theme from "../../common/theme";
 import { useState } from "react";
+import DownCommentList from "./DownCommentList";
+import { REPLY_COMMENT_URL } from "../../url";
+import { simpleUpdateData } from "../../axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Store/store";
+import defaultThumb from "../../assets/common/defaultThumb.svg";
 
-export default function CommentList() {
+interface Comment {
+  recipeId: string;
+  commentId: number;
+  userId: number;
+  userNickname: string;
+  comment: string;
+  createdAt: string;
+  modifiedAt: string;
+  replyCommentGetDtoList: [];
+  point: number;
+  profileImageUrl: string;
+}
+
+type CommentsInputFunction = () => void;
+
+interface CommentListProps {
+  item: Comment;
+  commentsInput: CommentsInputFunction;
+}
+
+export default function CommentList({ item, commentsInput }: CommentListProps) {
+  const [replayComment, setreplayComment] = useState("");
   const [comment, setComment] = useState(false);
+
+  const url = `${REPLY_COMMENT_URL}/${item.commentId}`;
+  const Token = useSelector((state: RootState) => state.accessTokenValue);
+  const { accessTokenValue } = Token;
+  const MY_TOKEN = accessTokenValue;
+
+  const handleSubmit = () => {
+    const data = {
+      replyComment: replayComment,
+    };
+    if (MY_TOKEN !== null) {
+      simpleUpdateData(url, data, MY_TOKEN)
+        .then((data) => {
+          console.log(data);
+          commentsInput();
+          setreplayComment("");
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+
+  const date = item.createdAt.split("T")[0];
 
   return (
     <CommentLi>
       <div className="info">
-        <div className="thumb"></div>
+        <div
+          className="thumb"
+          style={{ backgroundImage: `url(${item.profileImageUrl || defaultThumb})` }}
+        ></div>
         <div>
-          <LevelBadge>견습 요리사</LevelBadge>
-          <p className="writer">박진완 님</p>
+          <LevelBadge>{item.point}</LevelBadge>
+          <p className="writer">{item.userNickname} 님</p>
         </div>
       </div>
       <div className="comment">
-        <p>
-          너무 좋은 레시피 감사합니다~!!! 재료도 딱 맞고 이걸로 오늘 저녁은
-          해결이네요~^_^
-        </p>
+        <p>{item.comment}</p>
+        <span>{date}</span>
       </div>
+
       <div className="comment-tab">
         <button
           type="button"
@@ -28,16 +81,30 @@ export default function CommentList() {
             setComment(!comment);
           }}
         >
-          댓글달기
+          댓글 {item.replyCommentGetDtoList.length}
         </button>
       </div>
       {comment && (
-        <DownComment>
-          <form>
-            <textarea placeholder="댓글을 입력해주세요."></textarea>
-            <button type="submit">작성하기</button>
-          </form>
-        </DownComment>
+        <>
+          <ul style={{ marginTop: "10px" }}>
+            {item.replyCommentGetDtoList.length > 0 &&
+              item.replyCommentGetDtoList.map((item) => <DownCommentList item={item} />)}
+          </ul>
+          <DownComment>
+            <form>
+              <textarea
+                placeholder="댓글을 입력해주세요."
+                value={replayComment}
+                onChange={(e) => {
+                  setreplayComment(e.target.value);
+                }}
+              ></textarea>
+              <button type="button" onClick={handleSubmit}>
+                작성하기
+              </button>
+            </form>
+          </DownComment>
+        </>
       )}
     </CommentLi>
   );
@@ -58,12 +125,20 @@ const CommentLi = styled.li`
     height: 50px;
     border-radius: 50%;
     background-color: #333;
+    background-size: cover;
+    background-position: center;
   }
   .writer {
     font-size: 16rem;
     color: #636363;
     margin-left: 8px;
     margin-top: 4px;
+  }
+  span {
+    font-size: 12rem;
+    color: #6e6868;
+    margin-top: 20px;
+    display: block;
   }
   .comment {
     width: 92%;
@@ -81,7 +156,7 @@ const CommentLi = styled.li`
   }
   .comment-tab button {
     cursor: pointer;
-    background-color: ${theme.colors.main};
+    background-color: #646d68;
     color: #f6f6f6;
     padding: 4px 8px;
     border-radius: 5px;

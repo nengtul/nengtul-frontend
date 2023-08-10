@@ -42,7 +42,6 @@ const ImgBox = styled.div`
   height: 190px;
   margin-top: 10px;
   border-radius: 10px;
-  background-color: #333;
   background-size: cover;
   background-position: center;
 `;

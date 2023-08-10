@@ -46,7 +46,7 @@ const Badge = styled.div<{ $backgroundcolor: string }>`
   ${({ $backgroundcolor }) => css`
     background: ${$backgroundcolor};
   `};
-  font-size: 15rem;
+  font-size: 12rem;
   color: #fff;
   font-weight: 700;
   border-radius: 5px;
