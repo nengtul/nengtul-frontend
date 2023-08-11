@@ -3,11 +3,15 @@ import LevelBadge from "../../common/LevelBadge";
 import theme from "../../common/theme";
 import { useState } from "react";
 import DownCommentList from "./DownCommentList";
-import { REPLY_COMMENT_URL } from "../../url";
-import { simpleUpdateData } from "../../axios";
+import { REPLY_COMMENT_URL, UPDATE_COMMENT_URL } from "../../url";
+import { deleteData, putData, simpleUpdateData } from "../../axios";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store/store";
 import defaultThumb from "../../assets/common/defaultThumb.svg";
+import CommentBtn from "./CommentBtn";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import ComfirmModal from "../../Modal/ConfirmModal";
 
 interface Comment {
   recipeId: string;
@@ -32,11 +36,21 @@ interface CommentListProps {
 export default function CommentList({ item, commentsInput }: CommentListProps) {
   const [replayComment, setreplayComment] = useState("");
   const [comment, setComment] = useState(false);
+  const [update, setUpdate] = useState(false);
+  const [updateComment, setUpdateComment] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const url = `${REPLY_COMMENT_URL}/${item.commentId}`;
+  const updateUrl = `${UPDATE_COMMENT_URL}/${item.commentId}`;
   const Token = useSelector((state: RootState) => state.accessTokenValue);
   const { accessTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
+
+  const MY_ID = Number(sessionStorage.getItem("userId"));
+  const MY_ROLE = sessionStorage.getItem("roles");
+
+  console.log(item);
+  console.log(MY_ID, MY_ROLE, item.userId);
 
   const handleSubmit = () => {
     const data = {
@@ -55,58 +69,130 @@ export default function CommentList({ item, commentsInput }: CommentListProps) {
     }
   };
 
+  const updateSubmit = () => {
+    const data = {
+      comment: updateComment,
+    };
+    if (MY_TOKEN !== null) {
+      putData(updateUrl, data, MY_TOKEN)
+        .then((data) => {
+          console.log(data);
+          setUpdate(false);
+          commentsInput();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+
+  const handleDelete = () => {
+    deleteData(updateUrl, MY_TOKEN as string)
+      .then((data) => {
+        console.log(data);
+        commentsInput();
+        setModalOpen(false);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const handleUpdate = () => {
+    setUpdate(true);
+  };
+
+  const handleModal = () => {
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   const date = item.createdAt.split("T")[0];
 
   return (
-    <CommentLi>
-      <div className="info">
-        <div
-          className="thumb"
-          style={{ backgroundImage: `url(${item.profileImageUrl || defaultThumb})` }}
-        ></div>
-        <div>
-          <LevelBadge>{item.point}</LevelBadge>
-          <p className="writer">{item.userNickname} 님</p>
+    <>
+      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} />}
+      <CommentLi>
+        <div className="info">
+          <div>
+            <div
+              className="thumb"
+              style={{ backgroundImage: `url(${item.profileImageUrl || defaultThumb})` }}
+            ></div>
+            <div>
+              <LevelBadge>{item.point}</LevelBadge>
+              <p className="writer">{item.userNickname} 님</p>
+            </div>
+          </div>
+          {(MY_ROLE === "admin" || MY_ID == item.userId) && (
+            <CommentBtn handleUpdate={handleUpdate} handleModal={handleModal} />
+          )}
         </div>
-      </div>
-      <div className="comment">
-        <p>{item.comment}</p>
-        <span>{date}</span>
-      </div>
-
-      <div className="comment-tab">
-        <button
-          type="button"
-          onClick={() => {
-            setComment(!comment);
-          }}
-        >
-          댓글 {item.replyCommentGetDtoList.length}
-        </button>
-      </div>
-      {comment && (
-        <>
-          <ul style={{ marginTop: "10px" }}>
-            {item.replyCommentGetDtoList.length > 0 &&
-              item.replyCommentGetDtoList.map((item) => <DownCommentList item={item} />)}
-          </ul>
-          <DownComment>
-            <form>
+        <div className="comment">
+          <p>{item.comment}</p>
+          {update && (
+            <div className="update-comment">
               <textarea
-                placeholder="댓글을 입력해주세요."
-                value={replayComment}
+                placeholder={item.comment}
                 onChange={(e) => {
-                  setreplayComment(e.target.value);
+                  setUpdateComment(e.target.value);
                 }}
-              ></textarea>
-              <button type="button" onClick={handleSubmit}>
-                작성하기
-              </button>
-            </form>
-          </DownComment>
-        </>
-      )}
-    </CommentLi>
+              />
+              <div>
+                <button onClick={updateSubmit}>
+                  <FontAwesomeIcon icon={faCheck} />
+                </button>
+                <button
+                  onClick={() => {
+                    setUpdate(false);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faXmark} />
+                </button>
+              </div>
+            </div>
+          )}
+          <span>{date}</span>
+        </div>
+
+        <div className="comment-tab">
+          <button
+            type="button"
+            onClick={() => {
+              setComment(!comment);
+            }}
+          >
+            댓글 {item.replyCommentGetDtoList.length}
+          </button>
+        </div>
+        {comment && (
+          <>
+            <ul style={{ marginTop: "10px" }}>
+              {item.replyCommentGetDtoList.length > 0 &&
+                item.replyCommentGetDtoList.map((item) => (
+                  <DownCommentList item={item} commentsInput={commentsInput} />
+                ))}
+            </ul>
+            <DownComment>
+              <form>
+                <textarea
+                  placeholder="댓글을 입력해주세요."
+                  value={replayComment}
+                  onChange={(e) => {
+                    setreplayComment(e.target.value);
+                  }}
+                ></textarea>
+                <button type="button" onClick={handleSubmit}>
+                  작성하기
+                </button>
+              </form>
+            </DownComment>
+          </>
+        )}
+      </CommentLi>
+    </>
   );
 }
 
@@ -118,7 +204,12 @@ const CommentLi = styled.li`
     width: 92%;
     margin: 0 auto;
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    & > div {
+      display: flex;
+      align-items: center;
+    }
   }
   .thumb {
     width: 50px;
@@ -160,6 +251,27 @@ const CommentLi = styled.li`
     color: #f6f6f6;
     padding: 4px 8px;
     border-radius: 5px;
+  }
+
+  .update-comment textarea {
+    width: 100%;
+    margin-top: 10px;
+  }
+  .update-comment button {
+    background-color: ${theme.colors.main};
+    color: #fff;
+    cursor: pointer;
+    margin-top: 4px;
+    font-size: 15rem;
+    border-radius: 4px;
+    width: 25px;
+    height: 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    &:nth-of-type(2) {
+      margin-left: 2px;
+    }
   }
 `;
 

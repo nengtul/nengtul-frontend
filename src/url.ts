@@ -22,10 +22,14 @@ export const RECIPE_URL = "https://nengtul.shop/v1/recipe";
 export const RECIPE_DETAIL_URL = "https://nengtul.shop/v1/recipe/detail";
 export const RECIPE_COMMENT_LIST_URL = "https://nengtul.shop/v1/recipes";
 
-//대댓글 작성
+//댓글 부분
 export const REPLY_COMMENT_URL = "https://nengtul.shop/v1/comments";
+export const UPDATE_COMMENT_URL = "https://nengtul.shop/v1/recipes/comments";
+
 
 
 //좋아요 부분
 export const  LIKES_RECIPE_URL="https://nengtul.shop/v1/likes/recipe";
 export const LIKES_URL="https://nengtul.shop/v1/likes"
+
+
