@@ -17,10 +17,10 @@ import { USER_DETAIL_URL } from "../url";
 
 interface UserData {
   name: string;
-  point: string;
+  point: number;
   profileImageUrl: string;
 }
-const DEFAULT_USER_DATA: UserData = { name: "", point: "", profileImageUrl: "" };
+const DEFAULT_USER_DATA: UserData = { name: "", point: 0, profileImageUrl: "" };
 
 export default function HeaderInfo() {
   const Token = useSelector((state: RootState) => state.accessTokenValue);
@@ -65,6 +65,8 @@ export default function HeaderInfo() {
 
   const setLogOut = () => {
     setData(DEFAULT_USER_DATA);
+    sessionStorage.removeItem("userId");
+    sessionStorage.removeItem("roles");
   };
 
   return (

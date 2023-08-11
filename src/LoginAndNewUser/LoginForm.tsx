@@ -59,7 +59,7 @@ export default function LoginForm() {
             refreshToken: response.data.refreshToken,
           })
         );
-        navigate("/");
+        navigate(-1);
       })
       .catch((err) => {
         console.error("로그인 요청 실패", err);

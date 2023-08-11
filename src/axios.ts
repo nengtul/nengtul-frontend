@@ -67,3 +67,20 @@ export const simpleUpdateData = <T>(url: string, data: object, token?: string): 
       throw error;
     });
 };
+
+export const putData = <T>(url: string, data: object, token?: string): Promise<T> => {
+  if (token) {
+    setAuthorizationHeader(token);
+  }
+
+  return axios
+    .put<T>(url, data)
+    .then((response) => {
+      console.log("response", response);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
+};
