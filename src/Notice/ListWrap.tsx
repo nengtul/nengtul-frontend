@@ -9,7 +9,6 @@ import { faPen } from "@fortawesome/free-solid-svg-icons";
 import  {getData} from "../axios";
 import { RootState } from "../Store/store";
 import { useSelector } from "react-redux/es/hooks/useSelector";
-import axios from "axios";
 interface ContentData{
   content:Post[]
 }
@@ -30,14 +29,6 @@ export default function NoticeWrap() {
   const {accessTokenValue}=Token;
   const MY_TOKEN=accessTokenValue
   useEffect(() => {
-    // axios.get<ContentData>(NOTICES_LIST_URL)
-    //   .then((response) => {
-    //         const contentArr=response.data.content
-    //         setContents(contentArr)
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
     if (MY_TOKEN) {
     getData<ContentData>(NOTICES_LIST_URL,MY_TOKEN)
       .then((data:ContentData)=>{
@@ -53,15 +44,18 @@ export default function NoticeWrap() {
   const goToWrite=()=>{
     navigate('/noticeWrite')
   }
+  const roles=sessionStorage.getItem('roles');
   return (
     <Wrap>
       <h2>공지사항</h2>
       <ul>
         {contents?.map((content)=><NoticeList key={content.noticeId} content={content}/>)}      
       </ul>
-      <button type="button"  className="write-btn" onClick={goToWrite}>
-        <FontAwesomeIcon icon={faPen} />
-      </button>
+      {roles === 'ADMIN' && 
+        <button type="button"  className="write-btn" onClick={goToWrite}>
+          <FontAwesomeIcon icon={faPen} />
+        </button>
+      }
     </Wrap>
   );
 }

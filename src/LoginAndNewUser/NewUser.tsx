@@ -98,7 +98,7 @@ function NewUser (){
             <form onSubmit={handleSubmit}>
                 <InputPart>
                     <InputArea id="Id" >
-                        <Title>아이디</Title>
+                        <Title>닉네임</Title>
                         <InputWrapper>
                             <input type='text' name="nickname"></input>
                         </InputWrapper>
@@ -110,7 +110,7 @@ function NewUser (){
                         </InputWrapper>
                     </InputArea>
                     <InputArea id="Email">
-                        <Title>이메일</Title>
+                        <Title>아이디(이메일)</Title>
                         <InputWrapper>
                             <input type='email' name="email"></input>
                         </InputWrapper>
