@@ -4,9 +4,9 @@ import ContensWrap from "../common/ContentsWrap";
 import GreenBanner from "./GreenBanner";
 import TabMenu from "../common/TabMenu";
 import InfiniteScroll from "./InfiniteScroll";
-
+import { LIKES_URL} from "../url";
 export default function HeartLecipePage() {
-  const apiEndPoint = "http://localhost:5000/posts";
+  const apiEndPoint =LIKES_URL;
 
   return (
     <>

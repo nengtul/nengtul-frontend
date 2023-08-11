@@ -24,3 +24,8 @@ export const RECIPE_COMMENT_LIST_URL = "https://nengtul.shop/v1/recipes";
 
 //대댓글 작성
 export const REPLY_COMMENT_URL = "https://nengtul.shop/v1/comments";
+
+
+//좋아요 부분
+export const  LIKES_RECIPE_URL="https://nengtul.shop/v1/likes/recipe";
+export const LIKES_URL="https://nengtul.shop/v1/likes"

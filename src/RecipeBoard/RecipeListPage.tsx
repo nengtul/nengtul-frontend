@@ -6,12 +6,12 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import RecipeListCard from "./RecipeListCard";
-import axios from "axios";
 import { useInView } from "react-intersection-observer";
 import RecipeWriteBtn from "./RecipeWriteBtn";
 import ContensWrap from "../common/ContentsWrap";
 import TabMenu from "../common/TabMenu";
 import { RECIPE_URL } from "../url";
+import  {getData} from "../axios";
 export interface Post {
   likeCount: number;
   nickName: string;
@@ -36,15 +36,20 @@ export default function RecipeListPage() {
 
   const fetch = useCallback(async () => {
     try {
-      const { data } = await axios.get<ContentData>(
-        `${RECIPE_URL}?size=5&page=${page.current}` //일단 5개씩 받아오는거로 했습니다
-      );
-      const contentData = data.content;
-      setPosts((prevPosts) => [...prevPosts, ...contentData]);
-      setHasNextPage(contentData.length === 5);
-      if (contentData.length) {
-        page.current += 1;
-      }
+        await getData<ContentData>(`${RECIPE_URL}?size=5&page=${page.current}`,)
+        .then(data=>{
+          console.log(data)
+          const contentData = data.content;
+          setPosts((prevPosts) => [...prevPosts, ...contentData]);
+          setHasNextPage(contentData.length === 5);
+          if (contentData.length) {
+            page.current += 1;
+          }
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+      
     } catch (err) {
       console.error(err);
     }
