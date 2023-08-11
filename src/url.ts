@@ -32,4 +32,6 @@ export const UPDATE_COMMENT_URL = "https://nengtul.shop/v1/recipes/comments";
 export const  LIKES_RECIPE_URL="https://nengtul.shop/v1/likes/recipe";
 export const LIKES_URL="https://nengtul.shop/v1/likes"
 
-
+//레시피 저장 부분
+export const SAVED_RICIPE_RECIPE_URL="https://nengtul.shop/v1/saved-recipe/recipe"
+export const SAVED_RECIPE_URL="https://nengtul.shop/v1/saved-recipe"
