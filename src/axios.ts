@@ -51,7 +51,7 @@ export const updateData = <T>(url: string, formData: object, token?: string): Pr
       throw error;
     });
 };
-export const simpleUpdateData = <T>(url: string, data: object, token?: string): Promise<T> => {
+export const simpleUpdateData = <T>(url: string, data?: object, token?: string): Promise<T> => {
   if (token) {
     setAuthorizationHeader(token);
   }

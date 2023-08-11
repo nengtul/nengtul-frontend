@@ -3,33 +3,70 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { Post } from "./InfiniteScroll";
 import { Link } from "react-router-dom";
-
+import { faHeart as regHeart} from "@fortawesome/free-regular-svg-icons";
+import { faHeart as solidHeart}   from "@fortawesome/free-solid-svg-icons";
+import { useState } from 'react';
+import { useSelector } from "react-redux";
+import { RootState } from "../Store/store";
+import { LIKES_URL } from "../url";
+import  {deleteData} from "../axios";
 interface RecipeListCardProps {
   post: Post;
+  onDeletePost: (postId: number) => void;
 }
 
-export default function MyRecipeList({ post }: RecipeListCardProps) {
+export default function MyRecipeList({ post,onDeletePost }: RecipeListCardProps) {
+  const [isLiked, setIsLiked] = useState(true);
+  const Token=useSelector((state: RootState)=>state.accessTokenValue)
+  const {accessTokenValue}=Token;
+  const MY_TOKEN=accessTokenValue
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setIsLiked(prev => !prev);
+  };
+  if (!isLiked){
+    
+    if(MY_TOKEN!==null){
+      deleteData(`${LIKES_URL}/${post.id}`,MY_TOKEN)
+      .then(()=>{
+          console.log('삭제되었습니다')
+          onDeletePost(post.id)
+      })
+      .catch(error=>{
+          console.log(error)
+      })
+  }
+  }
   return (
     <List>
-      <Link to="/">
+      <Link to={`/${post.recipeId}`}>
         <div className="img">
-          <img src={post.thumb} alt="Recipe-img" />
+          <img src={post.thumbnailUrl} alt="Recipe-img" />
         </div>
         <div className="info">
           <Title>{post.title}</Title>
           <Heart>
             <FontAwesomeIcon icon={faHeart} style={{ height: "16rem", color: "red" }} />
-            <HeartRate>{post.like}</HeartRate>
+            {/* <HeartRate>{post.like}</HeartRate> */}
+            <HeartRate>130</HeartRate>
           </Heart>
-          <Writer>{post.writer}</Writer>
+          {/* <Writer>{post.writer}</Writer> */}
+          <Writer>관리자</Writer>
         </div>
+        <HeartBtn>
+            <button onClick={handleClick} >
+            <FontAwesomeIcon icon={isLiked ? solidHeart : regHeart} />
+            </button>
+        </HeartBtn>
       </Link>
     </List>
   );
 }
 const List = styled.li`
+
   padding: 15rem 10rem;
   cursor: pointer;
+  position:relative;
   border-bottom: 1px solid #dddddd;
   a {
     display: flex;
@@ -70,4 +107,30 @@ const HeartRate = styled.div`
 `;
 const Writer = styled.div`
   font-size: 14rem;
+`;
+
+const HeartBtn = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #c4c4c4;
+  position: absolute;
+  bottom: 10px;
+  // bottom:300px;
+  right: 5px;
+  z-index: 9;
+  overflow: hidden;
+
+  button {
+    width: 100%;
+    height: 100%;
+    background: none;
+    cursor: pointer;
+
+    svg {
+      color: red;
+      font-size: 25rem;
+    }
+  }
+
 `;

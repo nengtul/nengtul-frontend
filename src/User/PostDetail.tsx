@@ -21,16 +21,6 @@ function PostDetail({ item }:{item:Item}) {
     const {moveLatitude,moveLongitude}=LatLng;
     //삭제
     const onDelete=()=>{
-        // axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-        // axios.delete(`${SHAREBOARD_URL}/${item.id}`)
-        // .then((response) => {
-        //       console.log(response)
-        //       console.log('삭제됨') //모달창으로 바꾸기
-        //     //   window.location.reload();
-        // })
-        // .catch((error) => {
-        //   console.error(error);
-        // })
         if(MY_TOKEN!==null){
             deleteData(`${SHAREBOARD_URL}/${item.id}`,MY_TOKEN)
             .then(()=>{

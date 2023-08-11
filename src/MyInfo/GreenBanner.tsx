@@ -17,7 +17,7 @@ const Banner = styled.div`
   top: auto;
   left: auto;
   width: 390px;
-
+  z-index:10;
   p {
     color: #fff;
     font-size: 20rem;
