@@ -7,6 +7,8 @@ import { NOTICES_LIST_URL } from "../url";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import  {getData} from "../axios";
+import { RootState } from "../Store/store";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 interface ContentData{
   content:Post[]
 }
@@ -23,16 +25,12 @@ export interface Post{
 }
 export default function NoticeWrap() {
   const [contents,setContents]=useState<Post[]>([])
+  const Token=useSelector((state: RootState)=>state.accessTokenValue)
+  const {accessTokenValue}=Token;
+  const MY_TOKEN=accessTokenValue
   useEffect(() => {
-    // axios.get<ContentData>(NOTICES_LIST_URL)
-    //   .then((response) => {
-    //         const contentArr=response.data.content
-    //         setContents(contentArr)
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-    getData<ContentData>(NOTICES_LIST_URL,)
+    if (MY_TOKEN) {
+    getData<ContentData>(NOTICES_LIST_URL,MY_TOKEN)
       .then((data:ContentData)=>{
         const contentArr=data.content;
         setContents(contentArr)
@@ -40,21 +38,24 @@ export default function NoticeWrap() {
       .catch(error=>{
           console.log(error)
       })
-  
+    }
   },[])
   const navigate = useNavigate();
   const goToWrite=()=>{
     navigate('/noticeWrite')
   }
+  const roles=sessionStorage.getItem('roles');
   return (
     <Wrap>
       <h2>공지사항</h2>
       <ul>
         {contents?.map((content)=><NoticeList key={content.noticeId} content={content}/>)}      
       </ul>
-      <button type="button"  className="write-btn" onClick={goToWrite}>
-        <FontAwesomeIcon icon={faPen} />
-      </button>
+      {roles === 'ADMIN' && 
+        <button type="button"  className="write-btn" onClick={goToWrite}>
+          <FontAwesomeIcon icon={faPen} />
+        </button>
+      }
     </Wrap>
   );
 }

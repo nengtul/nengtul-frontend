@@ -2,11 +2,13 @@ import axios, { AxiosError } from "axios";
 import styled from "styled-components";
 import EggIcon from "../assets/icon/EggIcon_png.png";
 import HomePart from "./HomePart";
-import Modal from "../Modal/Modal";
 import MobileWrap from "../common/MobileWrap";
+import Modal from "../Modal/Modal";
 import { useState, useCallback, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { USER_JOIN_URL } from "../url";
+import { simpleUpdateData } from "../axios";
+
 function NewUser() {
   const [modalOpen, setModalOpen] = useState<{ error: AxiosError | null }>({ error: null });
 
@@ -28,7 +30,6 @@ function NewUser() {
       console.error(err);
     });
   };
-
   const handleNewUser = async (
     name: string,
     nickname: string,
@@ -45,12 +46,16 @@ function NewUser() {
         phoneNumber: tel,
         email: email,
       };
-      const response = await axios.post(url, data);
-      console.log(response);
-      navigate("/");
+      await simpleUpdateData(url, data)
+        .then((response) => {
+          console.log(response);
+          navigate("/");
+        })
+        .catch((err) => {
+          setModalOpen({ error: err as AxiosError });
+          console.log(err);
+        });
     } catch (err) {
-      console.log(err);
-      setModalOpen({ error: err as AxiosError }); // true가 아닌 객체로 상태 전달
       if (axios.isAxiosError(err)) {
         const axiosError: AxiosError = err;
         console.error("회원가입 요청 실패", axiosError);
@@ -112,7 +117,7 @@ function NewUser() {
         <form onSubmit={handleSubmit}>
           <InputPart>
             <InputArea id="Id">
-              <Title>아이디</Title>
+              <Title>닉네임</Title>
               <InputWrapper>
                 <input type="text" name="nickname"></input>
               </InputWrapper>
@@ -124,7 +129,7 @@ function NewUser() {
               </InputWrapper>
             </InputArea>
             <InputArea id="Email">
-              <Title>이메일</Title>
+              <Title>아이디(이메일)</Title>
               <InputWrapper>
                 <input type="email" name="email"></input>
               </InputWrapper>
