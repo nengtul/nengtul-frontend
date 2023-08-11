@@ -45,7 +45,9 @@ export default function LoginForm() {
       .then((response) => {
         getData<UserData>(USER_DETAIL_URL, response.data.AccessToken)
           .then((userData: UserData) => {
+            console.log(userData)
             sessionStorage.setItem("userId", userData.id.toString());
+            sessionStorage.setItem("roles", userData.roles);
           })
           .catch((error) => {
             console.log(error);

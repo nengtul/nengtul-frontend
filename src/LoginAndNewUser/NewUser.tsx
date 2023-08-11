@@ -6,6 +6,7 @@ import MobileWrap from '../common/MobileWrap'
 import {useState,useCallback,ChangeEvent} from 'react';
 import {useNavigate} from 'react-router-dom';
 import { USER_JOIN_URL } from "../url";
+import  {simpleUpdateData} from "../axios";
 function NewUser (){
     const navigate = useNavigate();
     const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
@@ -32,8 +33,13 @@ function NewUser (){
                 phoneNumber: tel,
                 email: email,
             }
-            const response = await axios.post(url, data);
-            console.log(response);
+            await simpleUpdateData(url,data)
+            .then(response=>{
+              console.log(response);
+            })
+            .catch(error=>{
+              console.log(error)
+            })
             navigate("/");
         }catch (err) {
           if (axios.isAxiosError(err)) {

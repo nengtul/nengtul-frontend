@@ -6,6 +6,7 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../Store/store";
 import { USER_DETAIL_URL } from "../url";
 import  {getData ,deleteData, updateData} from "../axios";
+import { useNavigate } from "react-router-dom";
 //1.회원정보보여주기  2.회원정보 수정하기  3.회원 탈퇴하기
 export interface UserData {
     name: string;
@@ -14,6 +15,7 @@ export interface UserData {
     profileImageUrl:string;
     emailVerifiedYn:boolean;
     id:number;
+    roles:string;
 }
 interface UpdateUserData {
     nickname: string;
@@ -21,7 +23,7 @@ interface UpdateUserData {
 }
 
 function UserInfomation  () {
-
+    const navigate = useNavigate();
     const Token=useSelector((state: RootState)=>state.accessTokenValue)
     console.log(Token)
     const {accessTokenValue}=Token;
@@ -173,25 +175,26 @@ function UserInfomation  () {
     //회원정보 삭제
     const onDelete=()=>{
         //axios.ts사용전
-        axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-        axios.delete<UserData>(USER_DETAIL_URL)
-        .then((response) => {
-              console.log(response)
-                console.log('탈퇴되었습니다')//모달창으로 바꾸기
-        })
-        .catch((error) => {
-          console.error(error);
-        })
+        // axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
+        // axios.delete<UserData>(USER_DETAIL_URL)
+        // .then((response) => {
+        //       console.log(response)
+        //         console.log('탈퇴되었습니다')//모달창으로 바꾸기
+        // })
+        // .catch((error) => {
+        //   console.error(error);
+        // })
         //axios.ts사용후
-        // if(MY_TOKEN!==null){
-        //     deleteData<UserData>(USER_DETAIL_URL,MY_TOKEN)
-        //     .then(()=>{
-        //         console.log('탈퇴되었습니다')
-        //     })
-        //     .catch(error=>{
-        //         console.log(error)
-        //     })
-        // }
+        if(MY_TOKEN!==null){
+            deleteData<UserData>(USER_DETAIL_URL,MY_TOKEN)
+            .then(()=>{
+                console.log('탈퇴되었습니다') //이거 모달창으로 뜨게
+                navigate("/");
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+        }
     }
 
     //이메일 인증
