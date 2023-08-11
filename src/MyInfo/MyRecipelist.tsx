@@ -47,11 +47,9 @@ export default function MyRecipeList({ post,onDeletePost }: RecipeListCardProps)
           <Title>{post.title}</Title>
           <Heart>
             <FontAwesomeIcon icon={faHeart} style={{ height: "16rem", color: "red" }} />
-            {/* <HeartRate>{post.like}</HeartRate> */}
-            <HeartRate>130</HeartRate>
+            <HeartRate>{post.likeCount}</HeartRate>
           </Heart>
-          {/* <Writer>{post.writer}</Writer> */}
-          <Writer>관리자</Writer>
+          <Writer>{post.recipeUserNickName}</Writer>
         </div>
         <HeartBtn>
             <button onClick={handleClick} >

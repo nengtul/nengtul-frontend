@@ -11,6 +11,8 @@ export interface Post {
   recipeId:string;
   thumbnailUrl:string;
   title:string;
+  recipeUserNickName:string;
+  likeCount:number;
 }
 interface ContentData {
   content: Post[];
@@ -46,15 +48,6 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
           console.log(err)
         })
       }
-      // axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-      // const { data } = await axios.get<ContentData>(`${apiEndPoint}?size=5&page=${page.current}`);
-      // console.log('이거봐봐',data.content)
-      // const contentData = data.content;
-      // setPosts((prevPosts) => [...prevPosts, ...contentData]);
-      // setHasNextPage(contentData.length === 5);
-      // if (contentData.length) {
-      //   page.current += 1;
-      // }
     } catch (err) {
       console.error(err);
     }

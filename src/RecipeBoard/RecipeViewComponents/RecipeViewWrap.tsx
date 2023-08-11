@@ -12,7 +12,11 @@ import { getData } from "../../axios";
 import { RECIPE_DETAIL_URL } from "../../url";
 import { useEffect, useState } from "react";
 import RecipeMainBanner from "./RecipeMainBanner";
-
+import { useSelector } from "react-redux";
+import { RootState } from "../../Store/store";
+import  {simpleUpdateData} from "../../axios";
+import { SAVED_RICIPE_RECIPE_URL } from "../../url";
+import { AxiosError } from 'axios';
 interface RecipeData {
   category: string;
   cookingStep: string;
@@ -57,8 +61,12 @@ export default function RecipeViewWrap() {
     point: 0,
     userProfileUrl: "",
   });
+  const [isSaved, setIsSaved] = useState(false);
   const { recipeId } = useParams();
   const url = `${RECIPE_DETAIL_URL}/${recipeId}`;
+  const Token=useSelector((state: RootState)=>state.accessTokenValue)
+  const {accessTokenValue}=Token;
+  const MY_TOKEN=accessTokenValue;
 
   useEffect(() => {
     getData(url)
@@ -74,6 +82,29 @@ export default function RecipeViewWrap() {
       });
   }, [recipe.cookingStep]);
 
+  const onSave=(event: React.MouseEvent<HTMLButtonElement>)=>{
+    event.preventDefault();
+    if(!isSaved){
+      setIsSaved(true)
+      if(MY_TOKEN){
+        simpleUpdateData(`${SAVED_RICIPE_RECIPE_URL}/${recipeId}`,{},MY_TOKEN)
+        .then(response=>{
+          console.log('성공')
+          console.log(response)
+        })
+        .catch((error:AxiosError)=>{
+          if (error) {
+            if (error?.response?.status === 404) {
+              console.log("이미 저장한 레시피입니다"); //모달창
+            }  
+          }
+        })
+      }
+    }
+    else{
+      console.log('이미 저장한 레시피입니다') //모달창
+    }
+  }
   return (
     <>
       <ContensWrap>
@@ -99,7 +130,7 @@ export default function RecipeViewWrap() {
               <RecipeStepCard key={index} count={index + 1} cookingStep={step} imgArr={imgArr} />
             ))}
         </ul>
-        <RecipeSaveBtn>레시피 저장</RecipeSaveBtn>
+        <RecipeSaveBtn onClick={onSave}>레시피 저장</RecipeSaveBtn>
         <RecipeComment recipeId={recipe.id} />
       </ContensWrap>
       ;
