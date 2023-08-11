@@ -4,7 +4,7 @@ import axios, { AxiosError } from "axios";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { setTokens } from "../Store/reducers";
-import Modal from "../common/Modal";
+import Modal from "../Modal/Modal";
 import { USER_DETAIL_URL, USER_LOGIN_URL } from "../url";
 import { getData } from "../axios";
 import { UserData } from "../User/UserInfomation";

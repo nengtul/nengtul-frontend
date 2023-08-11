@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import theme from "./theme";
+import theme from "../common/theme";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamation } from "@fortawesome/free-solid-svg-icons";
 import { AxiosError } from "axios";
@@ -16,6 +16,9 @@ export default function Modal({ error, onClose, title }: ModalProps) {
   if (error) {
     if (error?.response?.status === 404) {
       errorMessage = "일치하는 회원 정보가 없습니다.";
+    }
+    if (error?.response?.status === 400) {
+      errorMessage = (error.response.data as { message?: string })?.message || errorMessage;
     }
   }
 
