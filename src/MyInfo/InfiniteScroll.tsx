@@ -83,7 +83,7 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
   return (
     <>
       <CardWrap>
-        {posts?.map((post) => <MyRecipeList key={post.id} post={post} onDeletePost={handleDeletePost} />)}
+        {posts?.map((post) => <MyRecipeList key={post.recipeId} post={post} onDeletePost={handleDeletePost} apiEndPoint={apiEndPoint} />)}
         <div ref={ref} />
       </CardWrap>
     </>

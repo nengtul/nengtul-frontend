@@ -35,3 +35,7 @@ export const LIKES_URL="https://nengtul.shop/v1/likes"
 //레시피 저장 부분
 export const SAVED_RICIPE_RECIPE_URL="https://nengtul.shop/v1/saved-recipe/recipe"
 export const SAVED_RECIPE_URL="https://nengtul.shop/v1/saved-recipe"
+
+
+//내가 작성한 레시피 부분
+export const RECIPE_USER_URL="https://nengtul.shop/v1/recipe/user"
