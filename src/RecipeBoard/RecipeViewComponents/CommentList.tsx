@@ -8,7 +8,7 @@ import { deleteData, putData, simpleUpdateData } from "../../axios";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store/store";
 import defaultThumb from "../../assets/common/defaultThumb.svg";
-import CommentBtn from "./CommentBtn";
+import UpdateDeleteBtn from "./UpdateDeleteBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import ComfirmModal from "../../Modal/ConfirmModal";
@@ -127,7 +127,7 @@ export default function CommentList({ item, commentsInput }: CommentListProps) {
             </div>
           </div>
           {(MY_ROLE === "admin" || MY_ID == item.userId) && (
-            <CommentBtn handleUpdate={handleUpdate} handleModal={handleModal} />
+            <UpdateDeleteBtn handleUpdate={handleUpdate} handleModal={handleModal} />
           )}
         </div>
         <div className="comment">

@@ -26,10 +26,9 @@ export const RECIPE_COMMENT_LIST_URL = "https://nengtul.shop/v1/recipes";
 export const REPLY_COMMENT_URL = "https://nengtul.shop/v1/comments";
 export const UPDATE_COMMENT_URL = "https://nengtul.shop/v1/recipes/comments";
 
-
-
 //좋아요 부분
-export const  LIKES_RECIPE_URL="https://nengtul.shop/v1/likes/recipe";
-export const LIKES_URL="https://nengtul.shop/v1/likes"
+export const LIKES_RECIPE_URL = "https://nengtul.shop/v1/likes/recipe";
+export const LIKES_URL = "https://nengtul.shop/v1/likes";
 
-
+//refresh
+export const REFRESH_URL = "https://nengtul.shop/v1/auth/refresh";

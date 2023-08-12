@@ -1,8 +1,24 @@
 import axios from "axios";
+// import { REFRESH_URL } from "./url";
 
 const setAuthorizationHeader = (token: string) => {
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 };
+
+// const refreshToken = (token: string, refreshToken: string): Promise<string> => {
+//   const refreshUrl = REFRESH_URL;
+//   const headers = {
+//     Authorization: `Bearer ${token}`,
+//     RefreshToken: `Bearer ${refreshToken}`,
+//   };
+
+//   return axios
+//     .get<{ access_token: string }>(refreshUrl, { headers })
+//     .then((response) => response.data.access_token)
+//     .catch((error) => {
+//       throw error;
+//     });
+// };
 
 export const getData = <T>(url: string, token?: string): Promise<T> => {
   if (token) {
