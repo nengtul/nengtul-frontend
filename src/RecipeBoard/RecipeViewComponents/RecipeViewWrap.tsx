@@ -87,17 +87,31 @@ export default function RecipeViewWrap() {
   const likeUrl = `${LIKES_RECIPE_URL}/${recipe.id}`;
 
   useEffect(() => {
-    getData(url)
-      .then((response) => {
-        const responseData = response as RecipeData;
-        setRecipe(responseData);
-        setStep(responseData.cookingStep.split("\\"));
-        setImgArr(responseData.imageUrl.split("\\"));
-        setLikes(recipe.likes);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    if (MY_TOKEN) {
+      getData(url, MY_TOKEN)
+        .then((response) => {
+          const responseData = response as RecipeData;
+          setRecipe(responseData);
+          setStep(responseData.cookingStep.split("\\"));
+          setImgArr(responseData.imageUrl.split("\\"));
+          setLikes(recipe.likes);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      getData(url)
+        .then((response) => {
+          const responseData = response as RecipeData;
+          setRecipe(responseData);
+          setStep(responseData.cookingStep.split("\\"));
+          setImgArr(responseData.imageUrl.split("\\"));
+          setLikes(recipe.likes);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   }, [recipe.cookingStep]);
 
   const handleDelete = () => {
