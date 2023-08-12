@@ -1,38 +1,70 @@
 import styled from "styled-components";
-import theme from "../common/theme";
-import SearchInput from "../IngredientAndRecipe/SearchInput";
-import SearchList from "../IngredientAndRecipe/SearchList";
+import theme from "../../common/theme";
+import SearchInput from "../../IngredientAndRecipe/SearchInput";
+import SearchList from "../../IngredientAndRecipe/SearchList";
 import { useEffect, useState } from "react";
 import RecipeNumberInput from "./RecipeNumberInpuit";
-import Button from "../common/Button";
-import RecipeWriteSubmit from "./RecipeWriteSubmit";
+import Button from "../../common/Button";
+import RecipeWriteSubmit from "../RecipeWriteSubmit";
 import RecipeWriteCategory from "./RecipeWriteCategory";
 import RecipeWriteIntro from "./RecipeWriteIntro";
-import { RECIPE_URL } from "../url";
+import { RECIPE_URL } from "../../url";
 import { useSelector } from "react-redux/es/hooks/useSelector";
-import { RootState } from "../Store/store";
-import { updateData } from "../axios";
+import { RootState } from "../../Store/store";
+import { putData } from "../../axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function RecipeWriteForm() {
-  const [category, setCategory] = useState("");
-  const [categoryName, setCategoryName] = useState("");
+interface RecipeData {
+  category: string;
+  cookingStep: string;
+  cookingTime: string;
+  createAt: string;
+  id: string;
+  imageUrl: string;
+  ingredient: string;
+  intro: string;
+  modifiedAt: string;
+  nickName: string;
+  serving: string;
+  thumbnailUrl: string;
+  title: string;
+  userId: number;
+  videoUrl: string;
+  viewCount: number;
+  point: number;
+  userProfileUrl: string;
+}
+interface Recipe {
+  recipeData: RecipeData;
+}
+
+export default function RecipeUpdateForm() {
+  const location = useLocation();
+  const { recipeData } = location.state as Recipe;
+  const navigate = useNavigate();
+  const step = recipeData.cookingStep.split("\\");
+
+  const [category, setCategory] = useState(recipeData.category);
+  const [categoryName, setCategoryName] = useState(recipeData.category);
   const [categoryView, setCategoryView] = useState(false);
-  const [ingredient, setIngredient] = useState<string[]>([]);
+  const [ingredient, setIngredient] = useState<string[]>(recipeData.ingredient.split(","));
   const [searchText, setSearchText] = useState("");
-  const [cookingStep, setCookingSteps] = useState<string[]>([]);
-  const [cookingTime, setCookingTime] = useState("");
-  const [serving, setServing] = useState("");
+  const [cookingStep, setCookingSteps] = useState<string[]>(recipeData.cookingStep.split("\\"));
+  const [cookingTime, setCookingTime] = useState(recipeData.cookingTime);
+  const [serving, setServing] = useState(recipeData.serving);
   const [images, setImages] = useState<File[]>([]);
-  const [title, setTitle] = useState("");
-  const [intro, setIntro] = useState("");
-  const [listNum, setListNum] = useState(1);
+  const [title, setTitle] = useState(recipeData.title);
+  const [intro, setIntro] = useState(recipeData.intro);
+  const [listNum, setListNum] = useState(step.length);
   const [thumb, setThumb] = useState<File | null>(null);
-  const [link, setLink] = useState("");
+  const [link, setLink] = useState(recipeData.videoUrl);
+  const [changeImage, setChangeImage] = useState<string[]>([]);
 
   const Token = useSelector((state: RootState) => state.accessTokenValue);
   const { accessTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
 
+  const url = `${RECIPE_URL}/${recipeData.id}`;
   const handleSubmit = () => {
     const formData = new FormData();
 
@@ -43,35 +75,40 @@ export default function RecipeWriteForm() {
       cookingStep: cookingStep.join("\\"),
       cookingTime: cookingTime,
       serving: serving,
-      category: category,
+      category: "SIDE_DISH",
       videoUrl: link,
+      imagesUrl: changeImage.filter((item) => item !== undefined).join("\\"),
     };
     const json = JSON.stringify(recipeAddDto);
     const blob = new Blob([json], { type: "application/json" });
 
-    formData.append("recipeAddDto", blob);
+    formData.append("recipeUpdateDto", blob);
 
     if (thumb !== null) {
       formData.append("thumbnail", thumb, thumb.name);
     }
 
+    console.log(images);
+
     images.forEach((imageFile) => {
-      formData.append(`images`, imageFile, imageFile.name);
+      if (imageFile instanceof File) {
+        // 이미지 파일 여부를 확인합니다.
+        console.log(imageFile);
+        formData.append(`images`, imageFile, imageFile.name);
+      }
     });
+
     if (MY_TOKEN !== null) {
-      updateData(RECIPE_URL, formData, MY_TOKEN)
+      putData(url, formData, MY_TOKEN)
         .then((res) => {
           console.log(res);
+          navigate(`/${recipeData.id}`);
         })
         .catch((err) => {
           console.error(err);
         });
     }
   };
-
-  useEffect(() => {
-    console.log(category);
-  }, [category]);
 
   const selectOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
     const value = e.currentTarget.value;
@@ -116,6 +153,11 @@ export default function RecipeWriteForm() {
     if (listNum === 1) return;
     setListNum(listNum - 1);
   };
+
+  useEffect(() => {
+    console.log(changeImage);
+  }, [changeImage]);
+
   return (
     <>
       <CategoryWrap>
@@ -134,6 +176,7 @@ export default function RecipeWriteForm() {
               type="text"
               placeholder="제목을 입력해주세요."
               required
+              value={title}
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
@@ -153,6 +196,7 @@ export default function RecipeWriteForm() {
             type="text"
             placeholder="유튜브 동영상이 있다면 링크를 적어주세요!"
             required
+            value={link}
             style={{ marginTop: "20px" }}
             onChange={(e) => {
               setLink(e.target.value);
@@ -164,6 +208,7 @@ export default function RecipeWriteForm() {
               <FormInput
                 type="text"
                 placeholder="ex) 30분"
+                value={cookingTime}
                 required
                 onChange={(e) => {
                   setCookingTime(e.target.value);
@@ -175,6 +220,7 @@ export default function RecipeWriteForm() {
               <FormInput
                 type="text"
                 placeholder="ex) 2인분"
+                value={serving}
                 required
                 onChange={(e) => {
                   setServing(e.target.value);
@@ -182,13 +228,21 @@ export default function RecipeWriteForm() {
               />
             </div>
           </div>
-          <RecipeWriteIntro setIntro={setIntro} setThumb={setThumb} />
+          <RecipeWriteIntro
+            setIntro={setIntro}
+            setThumb={setThumb}
+            intro={intro}
+            thumbnailUrl={recipeData.thumbnailUrl}
+          />
           {Array.from({ length: listNum }, (_, index) => (
             <RecipeNumberInput
               key={index}
               step={index + 1}
               handleImgChange={handleImgChange}
               handleTextChange={handleTextChange}
+              cookingStep={cookingStep}
+              stepImg={recipeData.imageUrl.split("\\")}
+              setChangeImage={setChangeImage}
             />
           ))}
           <CountButtonWrap>

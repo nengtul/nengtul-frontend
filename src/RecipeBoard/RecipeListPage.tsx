@@ -11,7 +11,7 @@ import RecipeWriteBtn from "./RecipeWriteBtn";
 import ContensWrap from "../common/ContentsWrap";
 import TabMenu from "../common/TabMenu";
 import { RECIPE_URL } from "../url";
-import  {getData} from "../axios";
+import { getData } from "../axios";
 export interface Post {
   likeCount: number;
   nickName: string;
@@ -24,7 +24,8 @@ interface ContentData {
   content: Post[];
 }
 export default function RecipeListPage() {
-  const [category, setCategory] = useState("전체");
+  const [category, setCategory] = useState("");
+  const [categoryName, setCategoryName] = useState("전체");
   const [viewCount, setViewCount] = useState("인기순");
   const [categoryView, setCategoryView] = useState(false);
   const [viewCountView, setViewCountView] = useState(false);
@@ -36,9 +37,9 @@ export default function RecipeListPage() {
 
   const fetch = useCallback(async () => {
     try {
-        await getData<ContentData>(`${RECIPE_URL}?size=5&page=${page.current}`,)
-        .then(data=>{
-          console.log(data)
+      await getData<ContentData>(`${RECIPE_URL}?size=5&page=${page.current}`)
+        .then((data) => {
+          console.log(data);
           const contentData = data.content;
           setPosts((prevPosts) => [...prevPosts, ...contentData]);
           setHasNextPage(contentData.length === 5);
@@ -46,10 +47,9 @@ export default function RecipeListPage() {
             page.current += 1;
           }
         })
-        .catch(err=>{
-          console.log(err)
-        })
-      
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (err) {
       console.error(err);
     }
@@ -70,6 +70,7 @@ export default function RecipeListPage() {
   const selectOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
     const value = e.currentTarget.value;
     setCategory(value);
+    setCategoryName(e.currentTarget.innerText);
     setCategoryView(!categoryView);
   };
 
@@ -90,29 +91,89 @@ export default function RecipeListPage() {
                 setCategoryView(!categoryView);
               }}
             >
-              {category}
+              {categoryName}
               <FontAwesomeIcon icon={faAngleDown} />
             </button>
             {categoryView && (
               <ul>
                 <li>
-                  <button onClick={selectOpt} value="전체">
-                    전체
+                  <button type="button" onClick={selectOpt} value="SIDE_DISH">
+                    밑반찬
                   </button>
                 </li>
                 <li>
-                  <button onClick={selectOpt} value="한식">
-                    한식
+                  <button type="button" onClick={selectOpt} value="MAIN_SIDE_DISH">
+                    메인반찬
                   </button>
                 </li>
                 <li>
-                  <button onClick={selectOpt} value="중식">
-                    중식
+                  <button type="button" onClick={selectOpt} value="KOREAN_SOUP">
+                    국/탕
                   </button>
                 </li>
                 <li>
-                  <button onClick={selectOpt} value="일식">
-                    일식
+                  <button type="button" onClick={selectOpt} value="STEW">
+                    찌개
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={selectOpt} value="DESSERT">
+                    디저트
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={selectOpt} value="NOODLES_DUMPLINGS">
+                    면/만두
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={selectOpt} value="RICE_PORRIDGE_RICE_CAKE">
+                    밥/죽/떡
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={selectOpt} value="FUSION">
+                    퓨전
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={selectOpt} value="KIMCHI_SALTED_FISH_SAUCES">
+                    김치/젓갈
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={selectOpt} value="SEASONING_SAUCE_JAM">
+                    양념/소스
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={selectOpt} value="SALAD">
+                    샐러드
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={selectOpt} value="SOUP">
+                    스프
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={selectOpt} value="BREAD">
+                    빵
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={selectOpt} value="SNACKS">
+                    과자
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={selectOpt} value="TEA_DRINK">
+                    차/음료
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={selectOpt} value="ETC">
+                    기타
                   </button>
                 </li>
               </ul>
@@ -128,13 +189,13 @@ export default function RecipeListPage() {
               <FontAwesomeIcon icon={faAngleDown} />
             </button>
             {viewCountView && (
-              <ul>
-                <li>
+              <ul style={{ width: "200%" }}>
+                <li style={{ width: "50%" }}>
                   <button onClick={selectViewOpt} value="인기순">
                     인기순
                   </button>
                 </li>
-                <li>
+                <li style={{ width: "50%" }}>
                   <button onClick={selectViewOpt} value="최신순">
                     최신순
                   </button>
