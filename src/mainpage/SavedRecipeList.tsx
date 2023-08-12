@@ -5,8 +5,8 @@ import { Post } from "./MyRecipe";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
 import { SAVED_RECIPE_URL } from "../url";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import RecipeDeleteBtn from "../common/RecipeDeleteBtn";
+
 interface RecipeListCardProps {
   post: Post;
   onDeletePost: (postId: number) => void;
@@ -32,9 +32,10 @@ export default function SavedRecipeList({ post, onDeletePost }: RecipeListCardPr
   return (
     <>
       <RecipeLi>
-        <button className="delete-image-btn" onClick={onDelete}>
+        {/* <button className="delete-image-btn" onClick={onDelete}>
           <FontAwesomeIcon icon={faTrash} />
-        </button>
+        </button> */}
+        <RecipeDeleteBtn onDelete={onDelete} />
         <RecipeLink to={`/${post.recipeId}`}>
           <img src={post.thumbnailUrl} alt="food-img" />
           <RecipeInfo>
@@ -52,17 +53,6 @@ const RecipeLi = styled.li`
   border-bottom: 1px solid #dad7d7;
   height: 104px;
   position: relative;
-  .delete-image-btn {
-    padding: 6px 20px;
-    background-color: rgb(255 158 158);
-    color: white;
-    position: absolute;
-    bottom: 6px;
-    right: 4px;
-    cursor: pointer;
-    font-size: 12rem;
-    border-radius: 5px;
-  }
 `;
 
 const RecipeInfo = styled.div`

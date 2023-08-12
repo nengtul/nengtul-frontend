@@ -1,51 +1,50 @@
 import { styled } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Post } from "./InfiniteScroll";
 import { Link } from "react-router-dom";
-import { useState } from 'react';
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
-import { LIKES_URL , RECIPE_URL} from "../url";
-import  {deleteData} from "../axios";
+import { LIKES_URL, RECIPE_URL } from "../url";
+import { deleteData } from "../axios";
+import RecipeDeleteBtn from "../common/RecipeDeleteBtn";
 interface RecipeListCardProps {
   post: Post;
   onDeletePost: (postId: number | string) => void;
   apiEndPoint: string;
 }
 
-export default function MyRecipeList({ post,onDeletePost,apiEndPoint }: RecipeListCardProps) {
+export default function MyRecipeList({ post, onDeletePost, apiEndPoint }: RecipeListCardProps) {
   const [isLiked, setIsLiked] = useState(true);
-  const Token=useSelector((state: RootState)=>state.accessTokenValue)
-  const {accessTokenValue}=Token;
-  const MY_TOKEN=accessTokenValue
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    setIsLiked(prev => !prev);
+  const Token = useSelector((state: RootState) => state.accessTokenValue);
+  const { accessTokenValue } = Token;
+  const MY_TOKEN = accessTokenValue;
+  const handleClick = () => {
+    setIsLiked((prev) => !prev);
   };
-  if (!isLiked){
-    
-    if(MY_TOKEN!==null){
-      if(apiEndPoint===LIKES_URL){
-        deleteData(`${LIKES_URL}/${post.id}`,MY_TOKEN)
-        .then(()=>{
-            console.log('삭제되었습니다')
-            onDeletePost(post.id)
-        })
-        .catch(error=>{
-            console.log(error)
-        })
-      }else{
-        deleteData(`${RECIPE_URL}/${post.recipeId}`,MY_TOKEN)
-        .then(()=>{
-            console.log('삭제되었습니다')
-            onDeletePost(post.recipeId)
-        })
-        .catch(error=>{
-            console.log(error)
-        })
+  if (!isLiked) {
+    if (MY_TOKEN !== null) {
+      if (apiEndPoint === LIKES_URL) {
+        deleteData(`${LIKES_URL}/${post.id}`, MY_TOKEN)
+          .then(() => {
+            console.log("삭제되었습니다");
+            onDeletePost(post.id);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        deleteData(`${RECIPE_URL}/${post.recipeId}`, MY_TOKEN)
+          .then(() => {
+            console.log("삭제되었습니다");
+            onDeletePost(post.recipeId);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
-  }
+    }
   }
   return (
     <List>
@@ -61,56 +60,57 @@ export default function MyRecipeList({ post,onDeletePost,apiEndPoint }: RecipeLi
           </Heart>
           <Writer>{post.recipeUserNickName}</Writer>
         </div>
-        <button 
-          className="delete-image-btn"
-          onClick={handleClick}>
-            X
-        </button>
+        {/* <button className="delete-image-btn" onClick={handleClick}>
+          X
+        </button> */}
+        <RecipeDeleteBtn onDelete={handleClick} />
       </Link>
     </List>
   );
 }
 const List = styled.li`
-
-  padding: 15rem 10rem;
+  padding: 4rem;
   cursor: pointer;
-  position:relative;
+  position: relative;
   border-bottom: 1px solid #dddddd;
   a {
     display: flex;
   }
   .img {
-    width: 35%;
+    width: 110px;
+    height: 110px;
     flex-shrink: 0;
     img {
       width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
   .info {
-    padding: 15rem 0 15rem 10rem;
+    padding: 10rem;
   }
-  .delete-image-btn{
-    width:40rem;
-    height:40rem;
-    background-color:rgb(254, 98, 98);
-    color:white;
-    border-radius:100%;
-    font-size:20rem;
-    position:absolute;
-    top:3px;
-    right:2rem;
-    cursor:pointer
-}
+  .delete-image-btn {
+    width: 40rem;
+    height: 40rem;
+    background-color: rgb(254, 98, 98);
+    color: white;
+    border-radius: 100%;
+    font-size: 20rem;
+    position: absolute;
+    top: 3px;
+    right: 2rem;
+    cursor: pointer;
+  }
 `;
 
 const Title = styled.h4`
-  font-size: 18rem;
+  font-size: 15rem;
   font-weight: 700;
   margin-bottom: 12rem;
   display: block;
   display: -webkit-box;
-  line-height: 1.2;
-  max-height: 2.4;
+  line-height: 1.3;
+  max-height: 2.6;
   overflow: hidden;
   text-overflow: elipse;
   -webkit-box-orient: vertical;
@@ -126,6 +126,6 @@ const HeartRate = styled.div`
   margin-left: 2%;
 `;
 const Writer = styled.div`
-  font-size: 14rem;
+  font-size: 13rem;
+  font-weight: 700;
 `;
-
