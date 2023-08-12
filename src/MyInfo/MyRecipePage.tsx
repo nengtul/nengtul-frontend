@@ -4,9 +4,10 @@ import ContensWrap from "../common/ContentsWrap";
 import GreenBanner from "./GreenBanner";
 import TabMenu from "../common/TabMenu";
 import InfiniteScroll from "./InfiniteScroll";
+import { RECIPE_USER_URL } from "../url";
 
 export default function MyRecipePage() {
-  const apiEndPoint = "https://nengtul.shop/v1/recipe/user";
+  const apiEndPoint = RECIPE_USER_URL;
 
   return (
     <>

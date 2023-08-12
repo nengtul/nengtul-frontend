@@ -6,14 +6,15 @@ import { Link } from "react-router-dom";
 import { useState } from 'react';
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
-import { LIKES_URL } from "../url";
+import { LIKES_URL , RECIPE_USER_URL} from "../url";
 import  {deleteData} from "../axios";
 interface RecipeListCardProps {
   post: Post;
   onDeletePost: (postId: number) => void;
+  apiEndPoint: string;
 }
 
-export default function MyRecipeList({ post,onDeletePost }: RecipeListCardProps) {
+export default function MyRecipeList({ post,onDeletePost,apiEndPoint }: RecipeListCardProps) {
   const [isLiked, setIsLiked] = useState(true);
   const Token=useSelector((state: RootState)=>state.accessTokenValue)
   const {accessTokenValue}=Token;
@@ -25,14 +26,25 @@ export default function MyRecipeList({ post,onDeletePost }: RecipeListCardProps)
   if (!isLiked){
     
     if(MY_TOKEN!==null){
-      deleteData(`${LIKES_URL}/${post.id}`,MY_TOKEN)
-      .then(()=>{
-          console.log('삭제되었습니다')
-          onDeletePost(post.id)
-      })
-      .catch(error=>{
-          console.log(error)
-      })
+      if(apiEndPoint===LIKES_URL){
+        deleteData(`${LIKES_URL}/${post.id}`,MY_TOKEN)
+        .then(()=>{
+            console.log('삭제되었습니다')
+            onDeletePost(post.id)
+        })
+        .catch(error=>{
+            console.log(error)
+        })
+      }else{
+        deleteData(`${RECIPE_USER_URL}/${post.recipeId}`,MY_TOKEN)
+        .then(()=>{
+            console.log('삭제되었습니다')
+            onDeletePost(post.id)
+        })
+        .catch(error=>{
+            console.log(error)
+        })
+      }
   }
   }
   return (
