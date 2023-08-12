@@ -48,6 +48,9 @@ export default function RecipeViewWrap() {
   const { accessTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
 
+  const ROLES = sessionStorage.getItem("roles");
+  const USER_ID = Number(sessionStorage.getItem("userId"));
+
   const [step, setStep] = useState<string[]>([]);
   const [imgArr, setImgArr] = useState<string[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -154,7 +157,9 @@ export default function RecipeViewWrap() {
         ) : (
           <RecipeMainBanner thumb={recipe.thumbnailUrl} />
         )}
-        <UpdateDeleteBtn handleUpdate={handleUpdate} handleModal={handleModal} />
+        {(ROLES === "admin" || USER_ID === recipe.userId) && (
+          <UpdateDeleteBtn handleUpdate={handleUpdate} handleModal={handleModal} />
+        )}
         <RecipeViewInfo
           title={recipe.title}
           nickName={recipe.nickName}
