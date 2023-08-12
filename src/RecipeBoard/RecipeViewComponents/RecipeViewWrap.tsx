@@ -9,7 +9,7 @@ import RecipeComment from "../RecipeViewComponents/RecipeComment";
 import ContensWrap from "../../common/ContentsWrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { deleteData, getData } from "../../axios";
-import { RECIPE_DETAIL_URL, RECIPE_URL } from "../../url";
+import { LIKES_RECIPE_URL, RECIPE_DETAIL_URL, RECIPE_URL } from "../../url";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store/store";
@@ -40,6 +40,7 @@ interface RecipeData {
   viewCount: number;
   point: number;
   userProfileUrl: string;
+  likes: boolean;
 }
 
 export default function RecipeViewWrap() {
@@ -48,11 +49,15 @@ export default function RecipeViewWrap() {
   const { accessTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
 
+  const ROLES = sessionStorage.getItem("roles");
+  const USER_ID = Number(sessionStorage.getItem("userId"));
+
   const [step, setStep] = useState<string[]>([]);
   const [imgArr, setImgArr] = useState<string[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [okModalText, setOkModalText] = useState("");
   const [okModalOpen, setokModalOpen] = useState(false);
+  const [likes, setLikes] = useState(false);
 
   const [recipe, setRecipe] = useState<RecipeData>({
     category: "",
@@ -73,23 +78,40 @@ export default function RecipeViewWrap() {
     viewCount: 0,
     point: 0,
     userProfileUrl: "",
+    likes: false,
   });
   const [isSaved, setIsSaved] = useState(false);
   const { recipeId } = useParams();
   const url = `${RECIPE_DETAIL_URL}/${recipeId}`;
   const deleteUrl = `${RECIPE_URL}/${recipe.id}`;
+  const likeUrl = `${LIKES_RECIPE_URL}/${recipe.id}`;
 
   useEffect(() => {
-    getData(url)
-      .then((response) => {
-        const responseData = response as RecipeData;
-        setRecipe(responseData);
-        setStep(responseData.cookingStep.split("\\"));
-        setImgArr(responseData.imageUrl.split("\\"));
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    if (MY_TOKEN) {
+      getData(url, MY_TOKEN)
+        .then((response) => {
+          const responseData = response as RecipeData;
+          setRecipe(responseData);
+          setStep(responseData.cookingStep.split("\\"));
+          setImgArr(responseData.imageUrl.split("\\"));
+          setLikes(recipe.likes);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      getData(url)
+        .then((response) => {
+          const responseData = response as RecipeData;
+          setRecipe(responseData);
+          setStep(responseData.cookingStep.split("\\"));
+          setImgArr(responseData.imageUrl.split("\\"));
+          setLikes(recipe.likes);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   }, [recipe.cookingStep]);
 
   const handleDelete = () => {
@@ -113,6 +135,19 @@ export default function RecipeViewWrap() {
   const handleUpdate = () => {
     console.log(recipe);
     navigate(`/update/${recipe.id}`, { state: { recipeData: recipe } });
+  };
+
+  const hanldeLikes = () => {
+    if (MY_TOKEN) {
+      simpleUpdateData(likeUrl, {}, MY_TOKEN)
+        .then((response) => {
+          console.log("좋아요", response);
+          setLikes(true);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   };
 
   const onSave = () => {
@@ -154,7 +189,9 @@ export default function RecipeViewWrap() {
         ) : (
           <RecipeMainBanner thumb={recipe.thumbnailUrl} />
         )}
-        <UpdateDeleteBtn handleUpdate={handleUpdate} handleModal={handleModal} />
+        {(ROLES === "admin" || USER_ID === recipe.userId) && (
+          <UpdateDeleteBtn handleUpdate={handleUpdate} handleModal={handleModal} />
+        )}
         <RecipeViewInfo
           title={recipe.title}
           nickName={recipe.nickName}
@@ -162,6 +199,8 @@ export default function RecipeViewWrap() {
           cookingTime={recipe.cookingTime}
           point={recipe.point}
           userProfileUrl={recipe.userProfileUrl}
+          handleLikes={hanldeLikes}
+          likes={likes}
         />
         <RequirerIngredient ingredient={recipe.ingredient} />
         <RecipeIntro thumbnailUrl={recipe.thumbnailUrl} intro={recipe.intro} />

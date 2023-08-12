@@ -4,16 +4,16 @@ import ContensWrap from "../common/ContentsWrap";
 import GreenBanner from "./GreenBanner";
 import TabMenu from "../common/TabMenu";
 import InfiniteScroll from "./InfiniteScroll";
-import { LIKES_URL} from "../url";
+import { LIKES_URL } from "../url";
 export default function HeartLecipePage() {
-  const apiEndPoint =LIKES_URL;
+  const apiEndPoint = LIKES_URL;
 
   return (
     <>
       <MobileWrap>
         <Header />
         <ContensWrap>
-          <GreenBanner message={'찜한'} />
+          <GreenBanner message={"좋아하는"} />
           <InfiniteScroll apiEndPoint={apiEndPoint} />
         </ContensWrap>
         <TabMenu />

@@ -61,9 +61,24 @@ export default function RecipeUpdateForm() {
   const [changeImage, setChangeImage] = useState<string[]>([]);
 
   useEffect(() => {
-    if (recipeData.category === "밑반찬") {
-      setCategory("SIDE_DISH");
-    }
+    if (recipeData.category === "밑반찬") setCategory("SIDE_DISH");
+    else if (recipeData.category === "메인 반찬") setCategory("MAIN_SIDE_DISH");
+    else if (recipeData.category === "국/탕") setCategory("KOREAN_SOUP");
+    else if (recipeData.category === "찌개") setCategory("STEW");
+    else if (recipeData.category === "디저트") setCategory("DESSERT");
+    else if (recipeData.category === "면/만두") setCategory("NOODLES_DUMPLINGS");
+    else if (recipeData.category === "밥/죽/떡") setCategory("RICE_PORRIDGE_RICE_CAKE");
+    else if (recipeData.category === "퓨전") setCategory("FUSION");
+    else if (recipeData.category === "김치/젓갈/장류") setCategory("KIMCHI_SALTED_FISH_SAUCES");
+    else if (recipeData.category === "양념/소스/잼") setCategory("SEASONING_SAUCE_JAM");
+    else if (recipeData.category === "샐러드") setCategory("SALAD");
+    else if (recipeData.category === "스프") setCategory("SOUP");
+    else if (recipeData.category === "빵") setCategory("BREAD");
+    else if (recipeData.category === "과자") setCategory("SNACKS");
+    else if (recipeData.category === "차/음료/술") setCategory("TEA_DRINK");
+    else if (recipeData.category === "양식") setCategory("WESTERN_FOOD");
+    else if (recipeData.category === "기타") setCategory("ETC");
+    else if (recipeData.category === "없음") setCategory("NONE");
   }, []);
 
   useEffect(() => {

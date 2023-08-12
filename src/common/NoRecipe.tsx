@@ -5,12 +5,16 @@ import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { styled } from "styled-components";
 import theme from "../common/theme";
 
-export default function NoRecipe() {
+interface TitleProps {
+  title: string;
+}
+
+export default function NoRecipe({ title }: TitleProps) {
   return (
     <>
       <NoneRecipe>
         <img src={Egg} alt="logo" />
-        <p>아직 저장한 레시피가 없습니다!</p>
+        <p>아직 {title} 레시피가 없습니다!</p>
         <Link to={"/recipeList"}>
           레시피 보러가기
           <FontAwesomeIcon icon={faAngleRight} />

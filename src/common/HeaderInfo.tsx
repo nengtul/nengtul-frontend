@@ -4,71 +4,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import defaultThumb from "../assets/common/defaultThumb.svg";
-
-import { useEffect, useState, useCallback } from "react";
-import axios from "axios";
 import LevelBadge from "./LevelBadge";
 import LogoutBtn from "./LogoutBtn";
-import { useDispatch } from "react-redux";
-import { setTokens } from "../Store/reducers";
-import { useSelector } from "react-redux/es/hooks/useSelector";
-import { RootState } from "../Store/store";
-import { USER_DETAIL_URL } from "../url";
 
-interface UserData {
+interface UserDataProps {
   name: string;
   point: number;
   profileImageUrl: string;
 }
-const DEFAULT_USER_DATA: UserData = { name: "", point: 0, profileImageUrl: "" };
 
-export default function HeaderInfo() {
-  const Token = useSelector((state: RootState) => state.accessTokenValue);
-  const { accessTokenValue, refreshTokenValue } = Token;
-  const MY_TOKEN = accessTokenValue;
-  const REFRESH_TOKEN = refreshTokenValue;
+interface UserData {
+  data: UserDataProps;
+  setLogOut: () => void;
+}
 
-  const dispatch = useDispatch();
-  const [data, setData] = useState(DEFAULT_USER_DATA);
-
-  const getUserInfo = useCallback(async () => {
-    try {
-      if (MY_TOKEN) {
-        const headers = {
-          Authorization: `Bearer ${MY_TOKEN}`,
-          "Content-Type": "application/json",
-        };
-        const response = await axios.get<UserData>(USER_DETAIL_URL, {
-          headers: headers,
-        });
-        const userData = response.data;
-        setData(userData);
-        dispatch(
-          setTokens({
-            accessToken: MY_TOKEN,
-            refreshToken: REFRESH_TOKEN,
-          })
-        );
-      } else {
-        setData(DEFAULT_USER_DATA);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
-
-  useEffect(() => {
-    getUserInfo().catch((err) => {
-      console.error(err);
-    });
-  }, []);
-
-  const setLogOut = () => {
-    setData(DEFAULT_USER_DATA);
-    sessionStorage.removeItem("userId");
-    sessionStorage.removeItem("roles");
-  };
-
+export default function HeaderInfo({ data, setLogOut }: UserData) {
   return (
     <>
       <HeaderLoginInfo>

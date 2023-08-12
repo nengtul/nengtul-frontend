@@ -1,9 +1,9 @@
 import { styled } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock, faCommentDots } from "@fortawesome/free-regular-svg-icons";
+import { faClock, faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as faHeart2 } from "@fortawesome/free-solid-svg-icons";
 import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 import LevelBadge from "../../common/LevelBadge";
-import theme from "../../common/theme";
 import defaultThumb from "../../assets/common/defaultThumb.svg";
 
 interface RecipeInfoProps {
@@ -13,6 +13,8 @@ interface RecipeInfoProps {
   cookingTime: string;
   point: number;
   userProfileUrl: string;
+  likes: boolean;
+  handleLikes: () => void;
 }
 
 export default function RecipeViewInfo({
@@ -22,6 +24,8 @@ export default function RecipeViewInfo({
   cookingTime,
   point,
   userProfileUrl,
+  likes,
+  handleLikes,
 }: RecipeInfoProps) {
   return (
     <ViewWrap>
@@ -46,8 +50,12 @@ export default function RecipeViewInfo({
               </span>
             </div>
           </div>
-          <button>
-            <FontAwesomeIcon icon={faCommentDots} style={{ fontSize: "20rem" }} />
+          <button onClick={handleLikes}>
+            {likes ? (
+              <FontAwesomeIcon icon={faHeart2} style={{ fontSize: "20rem", color: "red" }} />
+            ) : (
+              <FontAwesomeIcon icon={faHeart} style={{ fontSize: "20rem", color: "red" }} />
+            )}
           </button>
         </div>
       </WriteInfo>
@@ -103,10 +111,11 @@ const WriteInfo = styled.div`
     width: 52px;
     height: 52px;
     border-radius: 10px;
-    background-color: ${theme.colors.main};
+    background-color: #57da9391;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: #fff;
+    cursor: pointer;
   }
 `;

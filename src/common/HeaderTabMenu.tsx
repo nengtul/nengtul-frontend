@@ -7,11 +7,81 @@ import { faBowlRice, faBullhorn, faMapPin } from "@fortawesome/free-solid-svg-ic
 import HeaderLatest from "./HeaderLatest";
 import styled, { keyframes } from "styled-components";
 import HeaderInfo from "./HeaderInfo";
+import { useDispatch } from "react-redux";
+import { setTokens } from "../Store/reducers";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { RootState } from "../Store/store";
+import { USER_DETAIL_URL } from "../url";
+import { useEffect, useState, useCallback } from "react";
+import axios from "axios";
+
+interface UserData {
+  name: string;
+  point: number;
+  profileImageUrl: string;
+  likeRecipe: number;
+  myRecipe: number;
+  shareList: number;
+}
+const DEFAULT_USER_DATA: UserData = {
+  name: "",
+  point: 0,
+  profileImageUrl: "",
+  likeRecipe: 0,
+  myRecipe: 0,
+  shareList: 0,
+};
 
 export default function HeaderTabMenu() {
+  const Token = useSelector((state: RootState) => state.accessTokenValue);
+  const { accessTokenValue, refreshTokenValue } = Token;
+  const MY_TOKEN = accessTokenValue;
+  const REFRESH_TOKEN = refreshTokenValue;
+
+  const dispatch = useDispatch();
+  const [data, setData] = useState(DEFAULT_USER_DATA);
+
+  const getUserInfo = useCallback(async () => {
+    try {
+      if (MY_TOKEN) {
+        const headers = {
+          Authorization: `Bearer ${MY_TOKEN}`,
+          "Content-Type": "application/json",
+        };
+        const response = await axios.get<UserData>(USER_DETAIL_URL, {
+          headers: headers,
+        });
+        const userData = response.data;
+        setData(userData);
+        dispatch(
+          setTokens({
+            accessToken: MY_TOKEN,
+            refreshToken: REFRESH_TOKEN,
+          })
+        );
+      } else {
+        setData(DEFAULT_USER_DATA);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  useEffect(() => {
+    getUserInfo().catch((err) => {
+      console.error(err);
+    });
+  }, []);
+
+  const setLogOut = () => {
+    setData(DEFAULT_USER_DATA);
+    sessionStorage.removeItem("userId");
+    sessionStorage.removeItem("roles");
+  };
+
   return (
     <TabMenuWrapper>
-      <HeaderInfo />
+      <HeaderInfo data={data} setLogOut={setLogOut} />
       <TabUl>
         <li>
           <Link to={"/myPage"}>
@@ -37,8 +107,8 @@ export default function HeaderTabMenu() {
               icon={faHeart}
               style={{ height: "16rem", color: `${theme.colors.main}` }}
             />
-            찜한 레시피
-            <span>(6)</span>
+            좋아요 레시피
+            <span>({data.likeRecipe})</span>
           </Link>
         </li>
         <li>
@@ -48,7 +118,7 @@ export default function HeaderTabMenu() {
               style={{ height: "16rem", color: `${theme.colors.main}` }}
             />
             내가 등록한 레시피
-            <span>(3)</span>
+            <span>({data.myRecipe})</span>
           </Link>
         </li>
         <li>
@@ -58,7 +128,7 @@ export default function HeaderTabMenu() {
               style={{ height: "16rem", color: `${theme.colors.main}` }}
             />
             나눔중인 재료
-            <span>(7)</span>
+            <span>({data.shareList})</span>
           </Link>
         </li>
       </TabUl>

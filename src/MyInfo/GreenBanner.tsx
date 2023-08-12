@@ -21,11 +21,11 @@ const Banner = styled.div`
   top: auto;
   left: auto;
   width: 390px;
-  z-index:10;
+  z-index: 10;
   p {
     color: #fff;
     font-size: 20rem;
-    font-weight: 800;
+    font-weight: 700;
     text-align: center;
   }
 `;

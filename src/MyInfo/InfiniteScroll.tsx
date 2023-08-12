@@ -4,15 +4,16 @@ import { styled } from "styled-components";
 import MyRecipeList from "./MyRecipelist";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
-import  {getData} from "../axios";
+import { getData } from "../axios";
+import NoRecipe from "../common/NoRecipe";
 export interface Post {
-  createdAt:string;
-  id:number;
-  recipeId:string;
-  thumbnailUrl:string;
-  title:string;
-  recipeUserNickName:string;
-  likeCount:number;
+  createdAt: string;
+  id: number;
+  recipeId: string;
+  thumbnailUrl: string;
+  title: string;
+  recipeUserNickName: string;
+  likeCount: number;
 }
 interface ContentData {
   content: Post[];
@@ -27,50 +28,39 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
   const page = useRef<number>(0);
   const [ref, inView] = useInView();
 
-  const Token=useSelector((state: RootState)=>state.accessTokenValue)
-  const {accessTokenValue}=Token;
-  const MY_TOKEN=accessTokenValue
+  const Token = useSelector((state: RootState) => state.accessTokenValue);
+  const { accessTokenValue } = Token;
+  const MY_TOKEN = accessTokenValue;
 
   const fetch = useCallback(async () => {
     try {
-      if(MY_TOKEN){
-        await getData<ContentData>(`${apiEndPoint}?size=5&page=${page.current}`,MY_TOKEN)
-        .then(data=>{
-          console.log(data)
-          const contentData = data.content;
-          setPosts((prevPosts) => [...prevPosts, ...contentData]);
-          setHasNextPage(contentData.length === 5);
-          if (contentData.length) {
-            page.current += 1;
-          } 
-        })
-        .catch(err=>{
-          console.log(err)
-        })
+      if (MY_TOKEN) {
+        await getData<ContentData>(`${apiEndPoint}?size=5&page=${page.current}`, MY_TOKEN)
+          .then((data) => {
+            console.log(data);
+            const contentData = data.content;
+            setPosts((prevPosts) => [...prevPosts, ...contentData]);
+            setHasNextPage(contentData.length === 5);
+            if (contentData.length) {
+              page.current += 1;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
-      // axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-      // const { data } = await axios.get<ContentData>(`${apiEndPoint}?size=5&page=${page.current}`);
-      // console.log('이거봐봐',data.content)
-      // const contentData = data.content;
-      // setPosts((prevPosts) => [...prevPosts, ...contentData]);
-      // setHasNextPage(contentData.length === 5);
-      // if (contentData.length) {
-      //   page.current += 1;
-      // }
     } catch (err) {
       console.error(err);
     }
   }, []);
 
-  //이거추가됨
   const handleDeletePost = (postId: number | string) => {
-    if(typeof postId === 'number'){
+    if (typeof postId === "number") {
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
-    }else if (typeof postId === 'string') {
-      setPosts((prevPosts) => prevPosts.filter((post) => post.recipeId !== postId))
+    } else if (typeof postId === "string") {
+      setPosts((prevPosts) => prevPosts.filter((post) => post.recipeId !== postId));
     }
-      };
-  //---
+  };
 
   useEffect(() => {
     console.log(inView, hasNextPage);
@@ -87,7 +77,18 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
   return (
     <>
       <CardWrap>
-        {posts?.map((post) => <MyRecipeList key={post.recipeId} post={post} onDeletePost={handleDeletePost} apiEndPoint={apiEndPoint} />)}
+        {posts.length > 0 ? (
+          posts?.map((post) => (
+            <MyRecipeList
+              key={post.recipeId}
+              post={post}
+              onDeletePost={handleDeletePost}
+              apiEndPoint={apiEndPoint}
+            />
+          ))
+        ) : (
+          <NoRecipe title={"좋아하는"} />
+        )}
         <div ref={ref} />
       </CardWrap>
     </>
