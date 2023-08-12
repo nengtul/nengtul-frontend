@@ -12,6 +12,8 @@ import ContensWrap from "../common/ContentsWrap";
 import TabMenu from "../common/TabMenu";
 import { RECIPE_URL } from "../url";
 import { getData } from "../axios";
+import { RootState } from "../Store/store";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 export interface Post {
   likeCount: number;
   nickName: string;
@@ -24,8 +26,11 @@ interface ContentData {
   content: Post[];
 }
 export default function RecipeListPage() {
-  const [category, setCategory] = useState("");
-  const [categoryName, setCategoryName] = useState("전체");
+  const Token=useSelector((state: RootState)=>state.accessTokenValue)
+  const {accessTokenValue}=Token;
+  const MY_TOKEN=accessTokenValue;
+  const [category, setCategory] = useState(""); //영어
+  const [categoryName, setCategoryName] = useState("전체"); //한글
   const [viewCount, setViewCount] = useState("인기순");
   const [categoryView, setCategoryView] = useState(false);
   const [viewCountView, setViewCountView] = useState(false);
@@ -35,50 +40,179 @@ export default function RecipeListPage() {
   const page = useRef<number>(0);
   const [ref, inView] = useInView();
 
-  const fetch = useCallback(async () => {
+//원본=============================
+  // const fetch = useCallback(async () => {
+  //   try {
+  //     await getData<ContentData>(`${RECIPE_URL}?size=5&page=${page.current}`)
+  //       .then((data) => {
+  //         // console.log(data);
+  //         const contentData = data.content;
+  //         setPosts((prevPosts) => [...prevPosts, ...contentData]);
+  //         setHasNextPage(contentData.length === 5);
+  //         if (contentData.length) {
+  //           page.current += 1;
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }, []);
+  
+  // const sortFetch=(category:string)=>{
+  //   setPosts([])
+  //   page.current=0
+  //   console.log('카테고리떠야함',category)
+  //   if (MY_TOKEN) {
+  //     console.log('여기는ㄱ ㅏ나')
+  //     getData<ContentData>(`https://nengtul.shop/v1/recipe/category/${category}?size=5&page=${page.current}`,MY_TOKEN)
+  //       .then((data)=>{
+  //         console.log(data)
+  //         const contentData = data.content;
+  //         setPosts((prevPosts) => [...prevPosts, ...contentData]);
+  //         setHasNextPage(contentData.length === 5);
+  //         if (contentData.length) {
+  //           page.current += 1;
+  //         }
+  //       })
+  //       .catch(error=>{
+  //           console.log(error)
+  //       })
+  //     }
+  // }
+
+  // useEffect(() => {
+  //   const fetchData = () => {
+  //     if (inView && hasNextPage) {
+  //       fetch().catch((error) => {
+  //         console.error(error);
+  //       });
+  //     }
+  //   };
+  //   fetchData();
+  // }, [fetch, hasNextPage, inView]);
+ 
+
+  // const selectOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   const value = e.currentTarget.value;
+  //   console.log('value',value)
+  //   setCategory(value);
+  //   setCategoryName(e.currentTarget.innerText);
+  //   setCategoryView(!categoryView);
+  // };
+  
+ 
+  // useEffect(() => {
+  //   // if (category === "") {
+  //   //   fetchDefaultData();
+  //   // } else {
+  //   //   fetchCategoryData(category);
+  //   // }
+  //   sortFetch(category);
+  // }, [category]);
+
+  // const selectViewOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   const value = e.currentTarget.value;
+  //   setViewCount(value);
+  //   setViewCountView(!viewCountView);
+  // };
+//이까지 원본=============================
+  
+//시도 1 . 따로따로 나누기 ===================================
+  // const fetchDefaultData = useCallback(async () => {
+  //   try {
+  //     const data = await getData<ContentData>(`${RECIPE_URL}?size=5&page=${page.current}`);
+  //     const contentData = data.content;
+  //     setPosts((prevPosts) => [...prevPosts, ...contentData]);
+  //     setHasNextPage(contentData.length === 5);
+  //     if (contentData.length) {
+  //       page.current += 1;
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }, []);
+  // const fetchCategoryData = useCallback(async (category: string) => {
+  //   setPosts([]);
+  //   page.current = 0;
+  //   console.log('카테고리떠야함', category);
+  //   if (MY_TOKEN) {
+  //     console.log('여기는ㄱ ㅏ나');
+  //     try {
+  //       const data = await getData<ContentData>(`https://nengtul.shop/v1/recipe/category/${category}?size=5&page=${page.current}`, MY_TOKEN);
+  //       const contentData = data.content;
+  //       console.log(data)
+  //       setPosts(contentData);
+  //       setHasNextPage(contentData.length === 5);
+  //       if (contentData.length) {
+  //         page.current += 1;
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // }, []);
+//여기까지 시도 1 . 따로따로 나누기 ===================================
+  
+//시도 2. fetch 하나 쓰고 category값 넘기기
+const fetch = useCallback(
+  async (category:string) => {
+    console.log(category,'이거확인')
     try {
-      await getData<ContentData>(`${RECIPE_URL}?size=5&page=${page.current}`)
-        .then((data) => {
-          console.log(data);
+      if(MY_TOKEN){
+        if(category===''){
+          const data = await getData<ContentData>(`${RECIPE_URL}?size=5&page=${page.current}`,MY_TOKEN)
           const contentData = data.content;
           setPosts((prevPosts) => [...prevPosts, ...contentData]);
           setHasNextPage(contentData.length === 5);
           if (contentData.length) {
             page.current += 1;
           }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+
+        }else{
+          const data = await getData<ContentData>(`https://nengtul.shop/v1/recipe/category/${category}?size=5&page=${page.current}`,MY_TOKEN);
+          const contentData = data.content;
+          setPosts((prevPosts) => [...prevPosts, ...contentData]);
+          setHasNextPage(contentData.length === 5);
+          if (contentData.length) {
+            page.current += 1;
+          }
+        }
+      }
     } catch (err) {
       console.error(err);
     }
-  }, []);
+  },
+  []
+);
 
-  useEffect(() => {
-    console.log(inView, hasNextPage);
-    const fetchData = () => {
-      if (inView && hasNextPage) {
-        fetch().catch((error) => {
-          console.error(error);
-        });
-      }
-    };
-    fetchData();
-  }, [fetch, hasNextPage, inView]);
-
-  const selectOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const value = e.currentTarget.value;
-    setCategory(value);
-    setCategoryName(e.currentTarget.innerText);
-    setCategoryView(!categoryView);
+useEffect(() => {
+  const fetchData = () => {
+    if (inView && hasNextPage) {
+      fetch(category).catch((error) => {
+        console.error(error);
+      });
+    }
   };
+  fetchData();
+}, [fetch, hasNextPage, inView, category]);
 
-  const selectViewOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const value = e.currentTarget.value;
-    setViewCount(value);
-    setViewCountView(!viewCountView);
-  };
+const selectOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const value = e.currentTarget.value;
+  console.log("value", value);
+  setCategory(value);
+  setCategoryName(e.currentTarget.innerText);
+  setCategoryView(!categoryView);
+};
+
+
+const selectViewOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const value = e.currentTarget.value;
+  setViewCount(value);
+  setViewCountView(!viewCountView);
+};
 
   return (
     <MobileWrap>

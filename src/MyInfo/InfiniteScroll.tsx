@@ -63,9 +63,13 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
   }, []);
 
   //이거추가됨
-  const handleDeletePost = (postId: number) => {
-    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
-  };
+  const handleDeletePost = (postId: number | string) => {
+    if(typeof postId === 'number'){
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+    }else if (typeof postId === 'string') {
+      setPosts((prevPosts) => prevPosts.filter((post) => post.recipeId !== postId))
+    }
+      };
   //---
 
   useEffect(() => {
