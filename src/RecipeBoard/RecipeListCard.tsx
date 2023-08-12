@@ -22,6 +22,20 @@ export default function RecipeListCard({ post }: RecipeListCardProps) {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if(!isLiked){
       setIsLiked(true)
+      if(MY_TOKEN){
+        simpleUpdateData(`${LIKES_RECIPE_URL}/${post.recipeId}`,{},MY_TOKEN)
+        .then(response=>{
+          console.log('성공')
+          console.log(response)
+        })
+        .catch((error:AxiosError)=>{
+          if (error) {
+            if (error?.response?.status === 404) {
+              console.log("이미 좋아요 누른 레시피 입니다"); //모달창
+            }  
+          }
+        })
+      }
     }
     else{
       console.log('이미 좋아요 누른 레시피입니다') //모달창
@@ -29,24 +43,6 @@ export default function RecipeListCard({ post }: RecipeListCardProps) {
     event.preventDefault();
   };
   console.log('post',post)
-  if(isLiked){
-    if(MY_TOKEN){
-
-    
-    simpleUpdateData(`${LIKES_RECIPE_URL}/${post.recipeId}`,{},MY_TOKEN)
-    .then(response=>{
-      console.log('성공')
-      console.log(response)
-    })
-    .catch((error:AxiosError)=>{
-      if (error) {
-        if (error?.response?.status === 404) {
-          console.log("이미 좋아요 누른 레시피 입니다"); //모달창
-        }  
-      }
-    })
-  }
-  }
 
   return (
     <>

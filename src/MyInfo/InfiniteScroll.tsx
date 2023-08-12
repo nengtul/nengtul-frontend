@@ -11,6 +11,8 @@ export interface Post {
   recipeId:string;
   thumbnailUrl:string;
   title:string;
+  recipeUserNickName:string;
+  likeCount:number;
 }
 interface ContentData {
   content: Post[];

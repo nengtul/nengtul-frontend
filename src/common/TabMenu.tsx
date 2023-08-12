@@ -39,7 +39,7 @@ export default function TabMenu() {
           </Link>
         </li>
         <li>
-          <Link to={"/"}>
+          <Link to={"/myPage"}>
             {/* <img src={MyIcon} alt="search-btn" /> */}
             <FontAwesomeIcon icon={faCircleUser} />
           </Link>

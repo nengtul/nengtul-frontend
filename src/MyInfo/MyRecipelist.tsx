@@ -3,8 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { Post } from "./InfiniteScroll";
 import { Link } from "react-router-dom";
-import { faHeart as regHeart} from "@fortawesome/free-regular-svg-icons";
-import { faHeart as solidHeart}   from "@fortawesome/free-solid-svg-icons";
 import { useState } from 'react';
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
@@ -47,17 +45,15 @@ export default function MyRecipeList({ post,onDeletePost }: RecipeListCardProps)
           <Title>{post.title}</Title>
           <Heart>
             <FontAwesomeIcon icon={faHeart} style={{ height: "16rem", color: "red" }} />
-            {/* <HeartRate>{post.like}</HeartRate> */}
-            <HeartRate>130</HeartRate>
+            <HeartRate>{post.likeCount}</HeartRate>
           </Heart>
-          {/* <Writer>{post.writer}</Writer> */}
-          <Writer>관리자</Writer>
+          <Writer>{post.recipeUserNickName}</Writer>
         </div>
-        <HeartBtn>
-            <button onClick={handleClick} >
-            <FontAwesomeIcon icon={isLiked ? solidHeart : regHeart} />
-            </button>
-        </HeartBtn>
+        <button 
+          className="delete-image-btn"
+          onClick={handleClick}>
+            X
+        </button>
       </Link>
     </List>
   );
@@ -81,6 +77,18 @@ const List = styled.li`
   .info {
     padding: 15rem 0 15rem 10rem;
   }
+  .delete-image-btn{
+    width:40rem;
+    height:40rem;
+    background-color:rgb(254, 98, 98);
+    color:white;
+    border-radius:100%;
+    font-size:20rem;
+    position:absolute;
+    top:3px;
+    right:2rem;
+    cursor:pointer
+}
 `;
 
 const Title = styled.h4`

@@ -42,7 +42,7 @@ export default function HeaderTabMenu() {
           </Link>
         </li>
         <li>
-          <Link to={"/"}>
+          <Link to={"/myRecipe"}>
             <FontAwesomeIcon
               icon={faBowlRice}
               style={{ height: "16rem", color: `${theme.colors.main}` }}
