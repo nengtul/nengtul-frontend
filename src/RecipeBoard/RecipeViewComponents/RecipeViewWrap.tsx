@@ -112,8 +112,7 @@ export default function RecipeViewWrap() {
     navigate(`/update/${recipe.id}`, { state: { recipeData: recipe } });
   };
 
-  const onSave = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+  const onSave = () => {
     if (!isSaved) {
       setIsSaved(true);
       if (MY_TOKEN) {
