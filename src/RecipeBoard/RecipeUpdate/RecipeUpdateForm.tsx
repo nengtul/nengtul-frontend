@@ -86,17 +86,17 @@ export default function RecipeUpdateForm() {
 
     if (thumb !== null) {
       formData.append("thumbnail", thumb, thumb.name);
+    } else {
+      formData.append("thumbnail", "");
     }
 
-    console.log(images);
-
-    images.forEach((imageFile) => {
-      if (imageFile instanceof File) {
-        // 이미지 파일 여부를 확인합니다.
-        console.log(imageFile);
-        formData.append(`images`, imageFile, imageFile.name);
+    for (let i = 0; i < step.length; i++) {
+      if (images[i] instanceof File) {
+        formData.append(`images`, images[i], images[i].name);
+      } else {
+        formData.append(`images`, "");
       }
-    });
+    }
 
     if (MY_TOKEN !== null) {
       putData(url, formData, MY_TOKEN)

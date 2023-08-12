@@ -1,5 +1,4 @@
 import { styled } from "styled-components";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faCommentDots } from "@fortawesome/free-regular-svg-icons";
 import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
@@ -47,9 +46,9 @@ export default function RecipeViewInfo({
               </span>
             </div>
           </div>
-          <Link to={"/chat"}>
+          <button>
             <FontAwesomeIcon icon={faCommentDots} style={{ fontSize: "20rem" }} />
-          </Link>
+          </button>
         </div>
       </WriteInfo>
     </ViewWrap>
@@ -100,7 +99,7 @@ const WriteInfo = styled.div`
     background-size: cover;
     background-color: #333;
   }
-  a {
+  button {
     width: 52px;
     height: 52px;
     border-radius: 10px;
