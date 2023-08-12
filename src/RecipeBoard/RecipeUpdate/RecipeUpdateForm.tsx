@@ -60,6 +60,16 @@ export default function RecipeUpdateForm() {
   const [link, setLink] = useState(recipeData.videoUrl);
   const [changeImage, setChangeImage] = useState<string[]>([]);
 
+  useEffect(() => {
+    if (recipeData.category === "밑반찬") {
+      setCategory("SIDE_DISH");
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(category);
+  }, [category]);
+
   const Token = useSelector((state: RootState) => state.accessTokenValue);
   const { accessTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
@@ -75,7 +85,7 @@ export default function RecipeUpdateForm() {
       cookingStep: cookingStep.join("\\"),
       cookingTime: cookingTime,
       serving: serving,
-      category: "SIDE_DISH",
+      category: category,
       videoUrl: link,
       imagesUrl: changeImage.filter((item) => item !== undefined).join("\\"),
     };
@@ -84,17 +94,19 @@ export default function RecipeUpdateForm() {
 
     formData.append("recipeUpdateDto", blob);
 
+    const emptyFile = new File([], "");
+
     if (thumb !== null) {
       formData.append("thumbnail", thumb, thumb.name);
     } else {
-      formData.append("thumbnail", "");
+      formData.append("thumbnail", emptyFile);
     }
 
     for (let i = 0; i < step.length; i++) {
       if (images[i] instanceof File) {
         formData.append(`images`, images[i], images[i].name);
       } else {
-        formData.append(`images`, "");
+        formData.append(`images`, emptyFile);
       }
     }
 
