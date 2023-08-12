@@ -13,7 +13,7 @@ export default function HeartLecipePage() {
       <MobileWrap>
         <Header />
         <ContensWrap>
-          <GreenBanner />
+          <GreenBanner message={'찜한'} />
           <InfiniteScroll apiEndPoint={apiEndPoint} />
         </ContensWrap>
         <TabMenu />

@@ -48,7 +48,7 @@ function App() {
         <Route path="/ingredientMap" element={<IngredientMap />} />
 
         <Route path="/heartLecipe" element={<HeartLecipePage />} />
-        <Route path="/MyRecipe" element={<MyRecipePage />} />
+        <Route path="/myRecipe" element={<MyRecipePage />} />
 
         <Route path="/notice" element={<NoticeListPage />} />
         <Route path="/noticeView/:noticeId" element={<NoticeViewPage />} />

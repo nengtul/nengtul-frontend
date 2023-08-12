@@ -14,7 +14,7 @@ export default function SavedRecipeList({ post,onDeletePost }: RecipeListCardPro
   const Token=useSelector((state: RootState)=>state.accessTokenValue)
   const {accessTokenValue}=Token;
   const MY_TOKEN=accessTokenValue;
-  console.log(post)
+  console.log('post',post)
   const onDelete=()=>{
     if(MY_TOKEN!==null){
       deleteData(`${SAVED_RECIPE_URL}/${post.id}`,MY_TOKEN)
@@ -39,8 +39,7 @@ export default function SavedRecipeList({ post,onDeletePost }: RecipeListCardPro
           <img src={post.thumbnailUrl} alt="food-img" />
           <RecipeInfo>
             <RecipeTit>{post.title}</RecipeTit>
-            {/* <RecipeWriter>{post.recipeUserNickName}</RecipeWriter> */}
-            <RecipeWriter>박진완</RecipeWriter>
+            <RecipeWriter>{post.recipeUserNickname}</RecipeWriter>
           </RecipeInfo>
         </RecipeLink>
       </RecipeLi>
@@ -88,12 +87,7 @@ const RecipeTit = styled.p`
   font-weight: 800;
 `;
 
-const RecipeHeart = styled.p`
-  display: flex;
-  font-size: 14rem;
-  font-weight: 700;
-  margin: 8px 0px 10px;
-`;
+
 
 const RecipeWriter = styled.span`
   font-size: 14rem;
