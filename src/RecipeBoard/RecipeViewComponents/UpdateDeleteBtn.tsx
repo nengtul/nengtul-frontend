@@ -5,7 +5,7 @@ interface CommentProps {
   handleModal: () => void;
 }
 
-export default function CommentBtn({ handleUpdate, handleModal }: CommentProps) {
+export default function UpdateDeleteBtn({ handleUpdate, handleModal }: CommentProps) {
   return (
     <BtnWrap>
       <button onClick={handleUpdate}>수정</button>

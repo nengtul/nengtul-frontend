@@ -7,16 +7,19 @@ import { styled } from "styled-components";
 import theme from "../../common/theme";
 import RecipeComment from "../RecipeViewComponents/RecipeComment";
 import ContensWrap from "../../common/ContentsWrap";
-import { useParams } from "react-router-dom";
-import { getData } from "../../axios";
-import { RECIPE_DETAIL_URL } from "../../url";
+import { useParams, useNavigate } from "react-router-dom";
+import { deleteData, getData } from "../../axios";
+import { RECIPE_DETAIL_URL, RECIPE_URL } from "../../url";
 import { useEffect, useState } from "react";
-import RecipeMainBanner from "./RecipeMainBanner";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store/store";
-import  {simpleUpdateData} from "../../axios";
+import RecipeMainBanner from "./RecipeMainBanner";
+import UpdateDeleteBtn from "./UpdateDeleteBtn";
+import ComfirmModal from "../../Modal/ConfirmModal";
+import { simpleUpdateData } from "../../axios";
 import { SAVED_RICIPE_RECIPE_URL } from "../../url";
-import { AxiosError } from 'axios';
+import { AxiosError } from "axios";
+
 interface RecipeData {
   category: string;
   cookingStep: string;
@@ -39,8 +42,15 @@ interface RecipeData {
 }
 
 export default function RecipeViewWrap() {
-  const [step, setStep] = useState([]);
-  const [imgArr, setImgArr] = useState([]);
+  const navigate = useNavigate();
+  const Token = useSelector((state: RootState) => state.accessTokenValue);
+  const { accessTokenValue } = Token;
+  const MY_TOKEN = accessTokenValue;
+
+  const [step, setStep] = useState<string[]>([]);
+  const [imgArr, setImgArr] = useState<string[]>([]);
+  const [modalOpen, setModalOpen] = useState(false);
+
   const [recipe, setRecipe] = useState<RecipeData>({
     category: "",
     cookingStep: "",
@@ -64,49 +74,70 @@ export default function RecipeViewWrap() {
   const [isSaved, setIsSaved] = useState(false);
   const { recipeId } = useParams();
   const url = `${RECIPE_DETAIL_URL}/${recipeId}`;
-  const Token=useSelector((state: RootState)=>state.accessTokenValue)
-  const {accessTokenValue}=Token;
-  const MY_TOKEN=accessTokenValue;
+  const deleteUrl = `${RECIPE_URL}/${recipe.id}`;
 
   useEffect(() => {
     getData(url)
       .then((response) => {
         const responseData = response as RecipeData;
-        console.log(response);
         setRecipe(responseData);
-        setStep(response.cookingStep.split("\\"));
-        setImgArr(response.imageUrl.split("\\"));
+        setStep(responseData.cookingStep.split("\\"));
+        setImgArr(responseData.imageUrl.split("\\"));
       })
       .catch((err) => {
         console.error(err);
       });
   }, [recipe.cookingStep]);
 
-  const onSave=(event: React.MouseEvent<HTMLButtonElement>)=>{
+  const handleDelete = () => {
+    deleteData(deleteUrl, MY_TOKEN as string)
+      .then((data) => {
+        console.log(data);
+        setModalOpen(false);
+        navigate(-1);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  const handleModal = () => {
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const handleUpdate = () => {
+    console.log(recipe);
+    navigate(`/update/${recipe.id}`, { state: { recipeData: recipe } });
+  };
+
+  const onSave = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    if(!isSaved){
-      setIsSaved(true)
-      if(MY_TOKEN){
-        simpleUpdateData(`${SAVED_RICIPE_RECIPE_URL}/${recipeId}`,{},MY_TOKEN)
-        .then(response=>{
-          console.log('성공')
-          console.log(response)
-        })
-        .catch((error:AxiosError)=>{
-          if (error) {
-            if (error?.response?.status === 404) {
-              console.log("이미 저장한 레시피입니다"); //모달창
-            }  
-          }
-        })
+    if (!isSaved) {
+      setIsSaved(true);
+      if (MY_TOKEN) {
+        simpleUpdateData(`${SAVED_RICIPE_RECIPE_URL}/${recipeId}`, {}, MY_TOKEN)
+          .then((response) => {
+            console.log("성공");
+            console.log(response);
+          })
+          .catch((error: AxiosError) => {
+            if (error) {
+              if (error?.response?.status === 404) {
+                console.log("이미 저장한 레시피입니다"); //모달창
+              }
+            }
+          });
       }
+    } else {
+      console.log("이미 저장한 레시피입니다"); //모달창
     }
-    else{
-      console.log('이미 저장한 레시피입니다') //모달창
-    }
-  }
+  };
+
   return (
     <>
+      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} />}
       <ContensWrap>
         {/* <RecipeVideo /> */}
         {recipe.videoUrl ? (
@@ -114,6 +145,7 @@ export default function RecipeViewWrap() {
         ) : (
           <RecipeMainBanner thumb={recipe.thumbnailUrl} />
         )}
+        <UpdateDeleteBtn handleUpdate={handleUpdate} handleModal={handleModal} />
         <RecipeViewInfo
           title={recipe.title}
           nickName={recipe.nickName}
@@ -130,8 +162,9 @@ export default function RecipeViewWrap() {
               <RecipeStepCard key={index} count={index + 1} cookingStep={step} imgArr={imgArr} />
             ))}
         </ul>
+
         <RecipeSaveBtn onClick={onSave}>레시피 저장</RecipeSaveBtn>
-        <RecipeComment recipeId={recipe.id} />
+        <RecipeComment />
       </ContensWrap>
       ;
     </>

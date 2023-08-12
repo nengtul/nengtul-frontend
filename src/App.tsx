@@ -24,6 +24,7 @@ import NoticeListPage from "./Notice/NoticeListPage";
 import ChangePassowordPage from "./User/ChangePasswordPage";
 import MyIngredientTradePage from "./User/MyIngredientTradePage";
 import NoticeWritePage from "./Notice/NoticeWritePage";
+import RecipeUpdatePage from "./RecipeBoard/RecipeUpdate/RecipeUpdatePage";
 function App() {
   return (
     <BrowserRouter>
@@ -37,6 +38,7 @@ function App() {
         <Route path="/recipeList" element={<RecipeListPage />} />
         <Route path="/recipeWrite" element={<RecipeWritePage />} />
         <Route path="/:recipeId" element={<RecipeView />} />
+        <Route path="/update/:recipeId" element={<RecipeUpdatePage />} />
         <Route path="/chattingList" element={<ChattingListPage />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/market" element={<MarketPage />} />

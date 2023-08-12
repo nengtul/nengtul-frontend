@@ -1,24 +1,21 @@
 import { styled } from "styled-components";
-import theme from "../common/theme";
+import theme from "../../common/theme";
 import { useRef, useState } from "react";
-
-interface RecipeDataProps {
-  intro: string;
-  thumbnailUrl: string;
-}
 
 interface RecipeWriteIntroProps {
   setIntro: React.Dispatch<React.SetStateAction<string>>;
   setThumb: React.Dispatch<React.SetStateAction<File | null>>;
-  recipeData?: RecipeDataProps;
+  intro: string;
+  thumbnailUrl: string;
 }
 
 export default function RecipeWriteIntro({
   setIntro,
   setThumb,
-  recipeData,
+  thumbnailUrl,
+  intro,
 }: RecipeWriteIntroProps) {
-  const [img, setImg] = useState(recipeData?.thumbnailUrl || "");
+  const [img, setImg] = useState(thumbnailUrl || "");
   const imgRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -27,7 +24,7 @@ export default function RecipeWriteIntro({
         <p>* 레시피 설명</p>
         <textarea
           placeholder="요리에 대한 설명을 입력해주세요."
-          value={recipeData?.intro}
+          value={intro}
           onChange={(e) => setIntro(e.target.value)}
         ></textarea>
         <div className="thumbnail-img">

@@ -41,4 +41,5 @@ const ImgBox = styled.div`
   border-radius: 10px;
   background-color: #333;
   background-size: cover;
+  background-position: center;
 `;

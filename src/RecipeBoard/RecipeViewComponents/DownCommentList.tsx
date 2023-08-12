@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import CommentBtn from "./CommentBtn";
+import UpdateDeleteBtn from "./UpdateDeleteBtn";
 import { deleteData, putData } from "../../axios";
 import { REPLY_COMMENT_URL } from "../../url";
 import { useSelector } from "react-redux";
@@ -89,7 +89,7 @@ export default function DownCommentList({ item, commentsInput }: CommentListProp
             {item.userNickname} / {date}
           </p>
           {(MY_ROLE === "admin" || MY_ID == item.userId) && (
-            <CommentBtn handleUpdate={handleUpdate} handleModal={handleModal} />
+            <UpdateDeleteBtn handleUpdate={handleUpdate} handleModal={handleModal} />
           )}
         </div>
         <p>{item.replyComment}</p>
