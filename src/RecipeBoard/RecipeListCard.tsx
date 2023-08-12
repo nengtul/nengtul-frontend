@@ -42,7 +42,7 @@ export default function RecipeListCard({ post }: RecipeListCardProps) {
     }
     event.preventDefault();
   };
-  console.log('post',post)
+  // console.log('post',post)
 
   return (
     <>

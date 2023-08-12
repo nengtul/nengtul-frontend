@@ -6,11 +6,11 @@ import { Link } from "react-router-dom";
 import { useState } from 'react';
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
-import { LIKES_URL , RECIPE_USER_URL} from "../url";
+import { LIKES_URL , RECIPE_URL} from "../url";
 import  {deleteData} from "../axios";
 interface RecipeListCardProps {
   post: Post;
-  onDeletePost: (postId: number) => void;
+  onDeletePost: (postId: number | string) => void;
   apiEndPoint: string;
 }
 
@@ -36,10 +36,10 @@ export default function MyRecipeList({ post,onDeletePost,apiEndPoint }: RecipeLi
             console.log(error)
         })
       }else{
-        deleteData(`${RECIPE_USER_URL}/${post.recipeId}`,MY_TOKEN)
+        deleteData(`${RECIPE_URL}/${post.recipeId}`,MY_TOKEN)
         .then(()=>{
             console.log('삭제되었습니다')
-            onDeletePost(post.id)
+            onDeletePost(post.recipeId)
         })
         .catch(error=>{
             console.log(error)
@@ -129,28 +129,3 @@ const Writer = styled.div`
   font-size: 14rem;
 `;
 
-const HeartBtn = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: #c4c4c4;
-  position: absolute;
-  bottom: 10px;
-  // bottom:300px;
-  right: 5px;
-  z-index: 9;
-  overflow: hidden;
-
-  button {
-    width: 100%;
-    height: 100%;
-    background: none;
-    cursor: pointer;
-
-    svg {
-      color: red;
-      font-size: 25rem;
-    }
-  }
-
-`;

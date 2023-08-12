@@ -7,7 +7,9 @@ import InfiniteScroll from "./InfiniteScroll";
 import { RECIPE_USER_URL } from "../url";
 
 export default function MyRecipePage() {
-  const apiEndPoint = RECIPE_USER_URL;
+  const userID=sessionStorage.getItem('userId')
+
+  const apiEndPoint = `${RECIPE_USER_URL}/${userID}`;
 
   return (
     <>
