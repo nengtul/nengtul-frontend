@@ -6,14 +6,14 @@ import TabMenu from "../common/TabMenu";
 import InfiniteScroll from "./InfiniteScroll";
 
 export default function MyRecipePage() {
-  const apiEndPoint = "http://localhost:5000/posts";
+  const apiEndPoint = "https://nengtul.shop/v1/recipe/user";
 
   return (
     <>
       <MobileWrap>
         <Header />
         <ContensWrap>
-          <GreenBanner />
+          <GreenBanner message={'작성한'}/>
           <InfiniteScroll apiEndPoint={apiEndPoint} />
         </ContensWrap>
         <TabMenu />
