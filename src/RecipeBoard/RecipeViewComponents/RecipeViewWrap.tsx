@@ -19,6 +19,7 @@ import ComfirmModal from "../../Modal/ConfirmModal";
 import { simpleUpdateData } from "../../axios";
 import { SAVED_RICIPE_RECIPE_URL } from "../../url";
 import { AxiosError } from "axios";
+import OkModal from "../../Modal/OkModal";
 
 interface RecipeData {
   category: string;
@@ -50,6 +51,8 @@ export default function RecipeViewWrap() {
   const [step, setStep] = useState<string[]>([]);
   const [imgArr, setImgArr] = useState<string[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [okModalText, setOkModalText] = useState("");
+  const [okModalOpen, setokModalOpen] = useState(false);
 
   const [recipe, setRecipe] = useState<RecipeData>({
     category: "",
@@ -120,23 +123,30 @@ export default function RecipeViewWrap() {
           .then((response) => {
             console.log("성공");
             console.log(response);
+            setOkModalText("레시피를 저장했습니다.");
+            setokModalOpen(true);
           })
           .catch((error: AxiosError) => {
             if (error) {
               if (error?.response?.status === 404) {
-                console.log("이미 저장한 레시피입니다"); //모달창
+                setOkModalText("이미 저장한 레시피입니다.");
+                setokModalOpen(true);
               }
             }
           });
       }
     } else {
-      console.log("이미 저장한 레시피입니다"); //모달창
+      setOkModalText("이미 저장한 레시피입니다.");
+      setokModalOpen(true);
     }
   };
 
   return (
     <>
       {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} />}
+      {okModalOpen && (
+        <OkModal setokModalOpen={setokModalOpen} title={"레시피 저장"} okModalText={okModalText} />
+      )}
       <ContensWrap>
         {/* <RecipeVideo /> */}
         {recipe.videoUrl ? (
