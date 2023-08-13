@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 interface DeleteProps {
-  onDelete: () => void;
+  handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export default function RecipeDeleteBtn({ onDelete }: DeleteProps) {
+export default function RecipeDeleteBtn({ handleClick }: DeleteProps) {
   return (
-    <Button onClick={onDelete}>
+    <Button onClick={handleClick}>
       <FontAwesomeIcon icon={faTrash} />
     </Button>
   );

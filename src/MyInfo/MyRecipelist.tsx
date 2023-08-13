@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Post } from "./InfiniteScroll";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
 import { LIKES_URL, RECIPE_URL } from "../url";
@@ -16,14 +15,11 @@ interface RecipeListCardProps {
 }
 
 export default function MyRecipeList({ post, onDeletePost, apiEndPoint }: RecipeListCardProps) {
-  const [isLiked, setIsLiked] = useState(true);
   const Token = useSelector((state: RootState) => state.accessTokenValue);
   const { accessTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
-  const handleClick = () => {
-    setIsLiked((prev) => !prev);
-  };
-  if (!isLiked) {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (MY_TOKEN !== null) {
       if (apiEndPoint === LIKES_URL) {
         deleteData(`${LIKES_URL}/${post.id}`, MY_TOKEN)
@@ -45,7 +41,8 @@ export default function MyRecipeList({ post, onDeletePost, apiEndPoint }: Recipe
           });
       }
     }
-  }
+  };
+
   return (
     <List>
       <Link to={`/${post.recipeId}`}>
@@ -60,10 +57,7 @@ export default function MyRecipeList({ post, onDeletePost, apiEndPoint }: Recipe
           </Heart>
           <Writer>{post.recipeUserNickName}</Writer>
         </div>
-        {/* <button className="delete-image-btn" onClick={handleClick}>
-          X
-        </button> */}
-        <RecipeDeleteBtn onDelete={handleClick} />
+        <RecipeDeleteBtn handleClick={handleClick} />
       </Link>
     </List>
   );
