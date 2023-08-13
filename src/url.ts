@@ -21,6 +21,7 @@ export const NOTICES_URL = "https://nengtul.shop/v1/notices";
 export const RECIPE_URL = "https://nengtul.shop/v1/recipe";
 export const RECIPE_DETAIL_URL = "https://nengtul.shop/v1/recipe/detail";
 export const RECIPE_COMMENT_LIST_URL = "https://nengtul.shop/v1/recipes";
+export const RECIPE_CATEGORY_URL="https://nengtul.shop/v1/recipe/category";
 
 //댓글 부분
 export const REPLY_COMMENT_URL = "https://nengtul.shop/v1/comments";
@@ -39,3 +40,8 @@ export const SAVED_RECIPE_URL = "https://nengtul.shop/v1/saved-recipe";
 
 //내가 작성한 레시피 부분
 export const RECIPE_USER_URL = "https://nengtul.shop/v1/recipe/user";
+
+
+//즐겨찾기 부분
+export const FAV_PUB_URL="https://nengtul.shop/v1/favorite/publisher";
+export const FAV_URL="https://nengtul.shop/v1/favorite"

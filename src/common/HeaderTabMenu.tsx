@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart,faBookmark } from "@fortawesome/free-regular-svg-icons";
 import theme from "./theme";
 import { faBowlRice, faBullhorn, faMapPin } from "@fortawesome/free-solid-svg-icons";
 import HeaderLatest from "./HeaderLatest";
@@ -119,6 +119,16 @@ export default function HeaderTabMenu() {
             />
             내가 등록한 레시피
             <span>({data.myRecipe})</span>
+          </Link>
+        </li>
+        <li>
+          <Link to={"/favoritePublisher"}>
+            <FontAwesomeIcon
+              icon={faBookmark}
+              style={{ height: "16rem", color: `${theme.colors.main}` }}
+            />
+            즐겨찾기
+            <span>({data.shareList})</span>
           </Link>
         </li>
         <li>

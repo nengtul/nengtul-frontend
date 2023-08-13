@@ -8,7 +8,7 @@ interface GreenBannerProps {
 export default function GreenBanner({ message }: GreenBannerProps) {
   return (
     <Banner>
-      <p>회원님이 {message} 레시피입니다.</p>
+      <p>{message}</p>
     </Banner>
   );
 }

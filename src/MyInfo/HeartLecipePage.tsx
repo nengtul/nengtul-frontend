@@ -13,7 +13,7 @@ export default function HeartLecipePage() {
       <MobileWrap>
         <Header />
         <ContensWrap>
-          <GreenBanner message={"좋아하는"} />
+          <GreenBanner message={'회원님이 좋아요 누른 레시피입니다.'} />
           <InfiniteScroll apiEndPoint={apiEndPoint} />
         </ContensWrap>
         <TabMenu />

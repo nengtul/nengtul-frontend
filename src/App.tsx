@@ -25,6 +25,8 @@ import ChangePassowordPage from "./User/ChangePasswordPage";
 import MyIngredientTradePage from "./User/MyIngredientTradePage";
 import NoticeWritePage from "./Notice/NoticeWritePage";
 import RecipeUpdatePage from "./RecipeBoard/RecipeUpdate/RecipeUpdatePage";
+import FavoritePublisherPage from "./MyInfo/FavoritePublisherPage"
+import UserRecipePage from "./MyInfo/UserRecipePage"
 function App() {
   return (
     <BrowserRouter>
@@ -51,9 +53,10 @@ function App() {
 
         <Route path="/heartLecipe" element={<HeartLecipePage />} />
         <Route path="/myRecipe" element={<MyRecipePage />} />
-
+        <Route path='/favoritePublisher' element={<FavoritePublisherPage/>}/>
         <Route path="/notice" element={<NoticeListPage />} />
         <Route path="/noticeView/:noticeId" element={<NoticeViewPage />} />
+        <Route path="favoritePublisher/recipe/user/:userId" element={<UserRecipePage />} />
         <Route path="/noticeWrite" element={<NoticeWritePage />} />
         <Route path="/myIngredientTrade" element={<MyIngredientTradePage />} />
       </Routes>

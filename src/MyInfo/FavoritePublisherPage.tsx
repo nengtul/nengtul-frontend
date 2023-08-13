@@ -3,21 +3,18 @@ import MobileWrap from "../common/MobileWrap";
 import ContensWrap from "../common/ContentsWrap";
 import GreenBanner from "./GreenBanner";
 import TabMenu from "../common/TabMenu";
-import InfiniteScroll from "./InfiniteScroll";
-import { RECIPE_USER_URL } from "../url";
-
-export default function MyRecipePage() {
-  const userID=sessionStorage.getItem('userId')
-
-  const apiEndPoint = `${RECIPE_USER_URL}/${userID}`;
+import InfiniteScroll2 from "./InfiniteScroll2";
+import { FAV_URL } from "../url";
+export default function FavoritePublisherPage() {
+  const apiEndPoint =FAV_URL;
 
   return (
     <>
       <MobileWrap>
         <Header />
         <ContensWrap>
-          <GreenBanner message={'회원님이 작성한 레시피입니다.'}/>
-          <InfiniteScroll apiEndPoint={apiEndPoint} />
+          <GreenBanner message={"회원님이 즐겨찾기 해둔 유저입니다"} />
+          <InfiniteScroll2 apiEndPoint={apiEndPoint} />
         </ContensWrap>
         <TabMenu />
       </MobileWrap>
