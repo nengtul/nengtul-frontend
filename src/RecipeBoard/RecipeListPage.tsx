@@ -37,182 +37,120 @@ export default function RecipeListPage() {
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
-  const page = useRef<number>(0);
+  const categoryPage = useRef<number>(0);
   const [ref, inView] = useInView();
-
-//원본=============================
-  // const fetch = useCallback(async () => {
-  //   try {
-  //     await getData<ContentData>(`${RECIPE_URL}?size=5&page=${page.current}`)
-  //       .then((data) => {
-  //         // console.log(data);
-  //         const contentData = data.content;
-  //         setPosts((prevPosts) => [...prevPosts, ...contentData]);
-  //         setHasNextPage(contentData.length === 5);
-  //         if (contentData.length) {
-  //           page.current += 1;
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }, []);
-  
-  // const sortFetch=(category:string)=>{
-  //   setPosts([])
-  //   page.current=0
-  //   console.log('카테고리떠야함',category)
-  //   if (MY_TOKEN) {
-  //     console.log('여기는ㄱ ㅏ나')
-  //     getData<ContentData>(`https://nengtul.shop/v1/recipe/category/${category}?size=5&page=${page.current}`,MY_TOKEN)
-  //       .then((data)=>{
-  //         console.log(data)
-  //         const contentData = data.content;
-  //         setPosts((prevPosts) => [...prevPosts, ...contentData]);
-  //         setHasNextPage(contentData.length === 5);
-  //         if (contentData.length) {
-  //           page.current += 1;
-  //         }
-  //       })
-  //       .catch(error=>{
-  //           console.log(error)
-  //       })
-  //     }
-  // }
-
-  // useEffect(() => {
-  //   const fetchData = () => {
-  //     if (inView && hasNextPage) {
-  //       fetch().catch((error) => {
-  //         console.error(error);
-  //       });
-  //     }
-  //   };
-  //   fetchData();
-  // }, [fetch, hasNextPage, inView]);
- 
-
-  // const selectOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   const value = e.currentTarget.value;
-  //   console.log('value',value)
-  //   setCategory(value);
-  //   setCategoryName(e.currentTarget.innerText);
-  //   setCategoryView(!categoryView);
-  // };
-  
- 
-  // useEffect(() => {
-  //   // if (category === "") {
-  //   //   fetchDefaultData();
-  //   // } else {
-  //   //   fetchCategoryData(category);
-  //   // }
-  //   sortFetch(category);
-  // }, [category]);
-
-  // const selectViewOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   const value = e.currentTarget.value;
-  //   setViewCount(value);
-  //   setViewCountView(!viewCountView);
-  // };
-//이까지 원본=============================
-  
-//시도 1 . 따로따로 나누기 ===================================
-  // const fetchDefaultData = useCallback(async () => {
-  //   try {
-  //     const data = await getData<ContentData>(`${RECIPE_URL}?size=5&page=${page.current}`);
-  //     const contentData = data.content;
-  //     setPosts((prevPosts) => [...prevPosts, ...contentData]);
-  //     setHasNextPage(contentData.length === 5);
-  //     if (contentData.length) {
-  //       page.current += 1;
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }, []);
-  // const fetchCategoryData = useCallback(async (category: string) => {
-  //   setPosts([]);
-  //   page.current = 0;
-  //   console.log('카테고리떠야함', category);
-  //   if (MY_TOKEN) {
-  //     console.log('여기는ㄱ ㅏ나');
-  //     try {
-  //       const data = await getData<ContentData>(`https://nengtul.shop/v1/recipe/category/${category}?size=5&page=${page.current}`, MY_TOKEN);
-  //       const contentData = data.content;
-  //       console.log(data)
-  //       setPosts(contentData);
-  //       setHasNextPage(contentData.length === 5);
-  //       if (contentData.length) {
-  //         page.current += 1;
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // }, []);
-//여기까지 시도 1 . 따로따로 나누기 ===================================
-  
-//시도 2. fetch 하나 쓰고 category값 넘기기
-const fetch = useCallback(
-  async (category:string) => {
-    console.log(category,'이거확인')
+  const [sortValue,setSortValue]=useState("asc")
+  const fetch = useCallback(
+    async (category: string, sortValue:string, resetPage: boolean = false,resetPosts: boolean = false) => {
+    console.log(category,'category확인')
+    console.log(sortValue,'sort확인')
     try {
       if(MY_TOKEN){
-        if(category===''){
-          const data = await getData<ContentData>(`${RECIPE_URL}?size=5&page=${page.current}`,MY_TOKEN)
-          const contentData = data.content;
-          setPosts((prevPosts) => [...prevPosts, ...contentData]);
-          setHasNextPage(contentData.length === 5);
-          if (contentData.length) {
-            page.current += 1;
+        const targetPage = resetPage ? 0 : categoryPage.current;
+        let data;
+        if(category===''){  //제일 처음렌더링
+          if(sortValue==='createdAt'){  //제일처음 렌더링 하자마자 '최신순'으로 바꿨을 경우 (성공)
+            data = await getData<ContentData>(`${RECIPE_URL}?size=5&page=${categoryPage.current}&sort=createdAt`,MY_TOKEN)
+            const contentData = data.content;
+            if (resetPosts) {
+              setPosts(contentData);
+            } else {
+              setPosts((prevPosts) => [...prevPosts, ...contentData]);
+            }
+            setHasNextPage(contentData.length === 5);
+            if (contentData.length) {
+                  categoryPage.current += 1;
+              }
+          }else{ // 1. 제일처음 렌더링 하자마자  (성공)  2. '최신순'으로 바꿨다가 다시 '인기순' (성공)
+            data = await getData<ContentData>(`${RECIPE_URL}?size=5&page=${categoryPage.current}&sort=asc`,MY_TOKEN)
+            const contentData = data.content;
+            if (resetPosts) {
+              setPosts(contentData);
+            } else {
+              setPosts((prevPosts) => [...prevPosts, ...contentData]);
+            }
+            setHasNextPage(contentData.length === 5);
+            if (contentData.length) {
+              categoryPage.current += 1;
+            }
+          }
+        }else{  //카테고리 선택했을때
+          if(sortValue==='createdAt'){  //'최신순'선택했을때
+            data = await getData<ContentData>(`https://nengtul.shop/v1/recipe/category/${category}?size=5&page=${targetPage}&sort=createdAt`,MY_TOKEN);
+            const contentData = data.content;
+            if (resetPosts) {
+              setPosts(contentData);
+            } else {
+              setPosts((prevPosts) => [...prevPosts, ...contentData]);
+            }
+            setHasNextPage(contentData.length === 5);
+            if (contentData.length) {
+                  categoryPage.current += 1;
+              }
+
+          }else{
+            data = await getData<ContentData>(`https://nengtul.shop/v1/recipe/category/${category}?size=5&page=${targetPage}&sort=asc`,MY_TOKEN);
+            const contentData = data.content;
+            if (resetPosts) {
+              setPosts(contentData);
+            } else {
+              setPosts((prevPosts) => [...prevPosts, ...contentData]);
+            }
+            setHasNextPage(contentData.length === 5);
+            if (contentData.length) {
+                  categoryPage.current += 1;
+              }
           }
 
-        }else{
-          const data = await getData<ContentData>(`https://nengtul.shop/v1/recipe/category/${category}?size=5&page=${page.current}`,MY_TOKEN);
-          const contentData = data.content;
-          setPosts((prevPosts) => [...prevPosts, ...contentData]);
-          setHasNextPage(contentData.length === 5);
-          if (contentData.length) {
-            page.current += 1;
-          }
         }
       }
     } catch (err) {
       console.error(err);
     }
   },
-  []
-);
+  []);
 
-useEffect(() => {
-  const fetchData = () => {
-    if (inView && hasNextPage) {
-      fetch(category).catch((error) => {
-        console.error(error);
+  useEffect(() => {
+    const fetchData = () => {
+      if (inView && hasNextPage) {
+        fetch(category,sortValue).catch((error) => {
+          console.error(error);
+        });
+      }
+    };
+    fetchData();
+  }, [fetch, hasNextPage, inView, category,sortValue]);
+
+  //카테고리랑 sort 1개로 통일 
+  const select=(e: React.MouseEvent<HTMLButtonElement>) => {
+    const value=e.currentTarget.value; //'MAIN_DIST' or '인기순'
+    if (value === '인기순' || value === '최신순') {
+      setViewCount(value);
+      setViewCountView(!viewCountView);
+      categoryPage.current=0;
+      const engValue=value === '인기순' ? 'asc' : 'createdAt'
+      setSortValue (value === '인기순' ? 'asc' : 'createdAt');
+      if (category === '') {
+        fetch(category, engValue, true, true).catch((err)=>{
+          console.log(err)
+        });
+      } else {
+        fetch(category, engValue, true, true).catch((err)=>{
+          console.log(err)
+        });
+      }
+      
+    }else{
+      setCategory(value);
+      setCategoryName(e.currentTarget.innerText);
+      setCategoryView(!categoryView);
+      categoryPage.current=0;
+      fetch(value,sortValue,true,true).catch((err)=>{
+        console.log(err)
       });
     }
-  };
-  fetchData();
-}, [fetch, hasNextPage, inView, category]);
-
-const selectOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
-  const value = e.currentTarget.value;
-  console.log("value", value);
-  setCategory(value);
-  setCategoryName(e.currentTarget.innerText);
-  setCategoryView(!categoryView);
-};
-
-
-const selectViewOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
-  const value = e.currentTarget.value;
-  setViewCount(value);
-  setViewCountView(!viewCountView);
-};
+  }
+  
 
   return (
     <MobileWrap>
@@ -231,82 +169,82 @@ const selectViewOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
             {categoryView && (
               <ul>
                 <li>
-                  <button type="button" onClick={selectOpt} value="SIDE_DISH">
+                  <button type="button" onClick={select} value="SIDE_DISH">
                     밑반찬
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="MAIN_SIDE_DISH">
+                  <button type="button" onClick={select} value="MAIN_SIDE_DISH">
                     메인반찬
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="KOREAN_SOUP">
+                  <button type="button" onClick={select} value="KOREAN_SOUP">
                     국/탕
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="STEW">
+                  <button type="button" onClick={select} value="STEW">
                     찌개
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="DESSERT">
+                  <button type="button" onClick={select} value="DESSERT">
                     디저트
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="NOODLES_DUMPLINGS">
+                  <button type="button" onClick={select} value="NOODLES_DUMPLINGS">
                     면/만두
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="RICE_PORRIDGE_RICE_CAKE">
+                  <button type="button" onClick={select} value="RICE_PORRIDGE_RICE_CAKE">
                     밥/죽/떡
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="FUSION">
+                  <button type="button" onClick={select} value="FUSION">
                     퓨전
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="KIMCHI_SALTED_FISH_SAUCES">
+                  <button type="button" onClick={select} value="KIMCHI_SALTED_FISH_SAUCES">
                     김치/젓갈
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="SEASONING_SAUCE_JAM">
+                  <button type="button" onClick={select} value="SEASONING_SAUCE_JAM">
                     양념/소스
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="SALAD">
+                  <button type="button" onClick={select} value="SALAD">
                     샐러드
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="SOUP">
+                  <button type="button" onClick={select} value="SOUP">
                     스프
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="BREAD">
+                  <button type="button" onClick={select} value="BREAD">
                     빵
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="SNACKS">
+                  <button type="button" onClick={select} value="SNACKS">
                     과자
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="TEA_DRINK">
+                  <button type="button" onClick={select} value="TEA_DRINK">
                     차/음료
                   </button>
                 </li>
                 <li>
-                  <button type="button" onClick={selectOpt} value="ETC">
+                  <button type="button" onClick={select} value="ETC">
                     기타
                   </button>
                 </li>
@@ -325,12 +263,12 @@ const selectViewOpt = (e: React.MouseEvent<HTMLButtonElement>) => {
             {viewCountView && (
               <ul style={{ width: "200%" }}>
                 <li style={{ width: "50%" }}>
-                  <button onClick={selectViewOpt} value="인기순">
+                  <button onClick={select} value="인기순">
                     인기순
                   </button>
                 </li>
                 <li style={{ width: "50%" }}>
-                  <button onClick={selectViewOpt} value="최신순">
+                  <button onClick={select} value="최신순">
                     최신순
                   </button>
                 </li>
