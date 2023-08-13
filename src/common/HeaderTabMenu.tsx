@@ -1,19 +1,18 @@
 import { Link } from "react-router-dom";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart,faBookmark } from "@fortawesome/free-regular-svg-icons";
+import { faHeart, faBookmark } from "@fortawesome/free-regular-svg-icons";
 import theme from "./theme";
 import { faBowlRice, faBullhorn, faMapPin } from "@fortawesome/free-solid-svg-icons";
 import HeaderLatest from "./HeaderLatest";
 import styled, { keyframes } from "styled-components";
 import HeaderInfo from "./HeaderInfo";
 import { useDispatch } from "react-redux";
-import { setTokens } from "../Store/reducers";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../Store/store";
 import { USER_DETAIL_URL } from "../url";
-import { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import { getTokenData } from "../axios";
 
 interface UserData {
   name: string;
@@ -41,31 +40,22 @@ export default function HeaderTabMenu() {
   const dispatch = useDispatch();
   const [data, setData] = useState(DEFAULT_USER_DATA);
 
-  const getUserInfo = useCallback(async () => {
-    try {
-      if (MY_TOKEN) {
-        const headers = {
-          Authorization: `Bearer ${MY_TOKEN}`,
-          "Content-Type": "application/json",
-        };
-        const response = await axios.get<UserData>(USER_DETAIL_URL, {
-          headers: headers,
-        });
-        const userData = response.data;
-        setData(userData);
-        dispatch(
-          setTokens({
-            accessToken: MY_TOKEN,
-            refreshToken: REFRESH_TOKEN,
-          })
+  const getUserInfo = async () => {
+    if (MY_TOKEN && REFRESH_TOKEN) {
+      try {
+        const userData = await getTokenData<UserData>(
+          USER_DETAIL_URL,
+          MY_TOKEN,
+          dispatch,
+          REFRESH_TOKEN
         );
-      } else {
+        setData(userData);
+      } catch (error) {
+        console.error(error);
         setData(DEFAULT_USER_DATA);
       }
-    } catch (err) {
-      console.error(err);
     }
-  }, []);
+  };
 
   useEffect(() => {
     getUserInfo().catch((err) => {
