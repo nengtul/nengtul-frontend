@@ -12,6 +12,8 @@ import { RECIPE_URL } from "../url";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../Store/store";
 import { updateData } from "../axios";
+import OkModal from "../Modal/OkModal";
+import { useNavigate } from "react-router-dom";
 
 export default function RecipeWriteForm() {
   const [category, setCategory] = useState("");
@@ -28,10 +30,13 @@ export default function RecipeWriteForm() {
   const [listNum, setListNum] = useState(1);
   const [thumb, setThumb] = useState<File | null>(null);
   const [link, setLink] = useState("");
+  const [okModalOpen, setOkModalOpen] = useState(false);
 
   const Token = useSelector((state: RootState) => state.accessTokenValue);
   const { accessTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
+
+  const navigate = useNavigate();
 
   const handleSubmit = () => {
     const formData = new FormData();
@@ -62,6 +67,8 @@ export default function RecipeWriteForm() {
       updateData(RECIPE_URL, formData, MY_TOKEN)
         .then((res) => {
           console.log(res);
+          setOkModalOpen(true);
+          navigate(-1);
         })
         .catch((err) => {
           console.error(err);
@@ -118,6 +125,13 @@ export default function RecipeWriteForm() {
   };
   return (
     <>
+      {okModalOpen && (
+        <OkModal
+          title={"레시피 작성"}
+          okModalText={"작성을 완료했습니다."}
+          setokModalOpen={setOkModalOpen}
+        />
+      )}
       <CategoryWrap>
         <form>
           <RecipeWriteCategory

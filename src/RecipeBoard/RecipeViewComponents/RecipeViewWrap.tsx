@@ -114,6 +114,22 @@ export default function RecipeViewWrap() {
     }
   }, [recipe.cookingStep]);
 
+  useEffect(() => {
+    if (recipe.id && recipe.title) {
+      const savedRecipes: RecipeData[] = JSON.parse(
+        sessionStorage.getItem("savedRecipes") || "[]"
+      ) as RecipeData[];
+      if (savedRecipes.length >= 10) {
+        savedRecipes.shift();
+      }
+      const exists = savedRecipes.some((savedRecipe) => savedRecipe.id === recipe.id);
+      if (!exists) {
+        const updatedSavedRecipes = [...savedRecipes, recipe];
+        sessionStorage.setItem("savedRecipes", JSON.stringify(updatedSavedRecipes));
+      }
+    }
+  }, [recipe]);
+
   const handleDelete = () => {
     deleteData(deleteUrl, MY_TOKEN as string)
       .then((data) => {
@@ -190,7 +206,19 @@ export default function RecipeViewWrap() {
           <RecipeMainBanner thumb={recipe.thumbnailUrl} />
         )}
         {(ROLES === "admin" || USER_ID === recipe.userId) && (
-          <UpdateDeleteBtn handleUpdate={handleUpdate} handleModal={handleModal} />
+          <div
+            className="button-wrap"
+            style={{
+              width: "92%",
+              margin: "0 auto",
+              marginBottom: "-16px",
+              paddingTop: "10px",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <UpdateDeleteBtn handleUpdate={handleUpdate} handleModal={handleModal} />
+          </div>
         )}
         <RecipeViewInfo
           title={recipe.title}

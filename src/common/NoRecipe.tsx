@@ -30,7 +30,7 @@ const NoneRecipe = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding-bottom: 40px;
+  padding-bottom: 80px;
   p {
     font-size: 18rem;
     font-weight: 800;
