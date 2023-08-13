@@ -63,7 +63,7 @@ export default function LoginForm() {
       })
       .catch((err) => {
         console.error("로그인 요청 실패", err);
-        setModalOpen({ error: err as AxiosError }); // true가 아닌 객체로 상태 전달
+        setModalOpen({ error: err as AxiosError });
       });
   };
 

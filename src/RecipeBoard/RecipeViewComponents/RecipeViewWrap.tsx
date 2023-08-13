@@ -8,7 +8,7 @@ import theme from "../../common/theme";
 import RecipeComment from "../RecipeViewComponents/RecipeComment";
 import ContensWrap from "../../common/ContentsWrap";
 import { useParams, useNavigate } from "react-router-dom";
-import { deleteData, getData } from "../../axios";
+import { deleteData, getData, getTokenData } from "../../axios";
 import { LIKES_RECIPE_URL, RECIPE_DETAIL_URL, RECIPE_URL } from "../../url";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -19,6 +19,7 @@ import ComfirmModal from "../../Modal/ConfirmModal";
 import { simpleUpdateData } from "../../axios";
 import { SAVED_RICIPE_RECIPE_URL } from "../../url";
 import { AxiosError } from "axios";
+import { useDispatch } from "react-redux";
 import OkModal from "../../Modal/OkModal";
 
 interface RecipeData {
@@ -46,8 +47,9 @@ interface RecipeData {
 export default function RecipeViewWrap() {
   const navigate = useNavigate();
   const Token = useSelector((state: RootState) => state.accessTokenValue);
-  const { accessTokenValue } = Token;
+  const { accessTokenValue, refreshTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
+  const REFRESH_TOKEN = refreshTokenValue;
 
   const ROLES = sessionStorage.getItem("roles");
   const USER_ID = Number(sessionStorage.getItem("userId"));
@@ -86,9 +88,11 @@ export default function RecipeViewWrap() {
   const deleteUrl = `${RECIPE_URL}/${recipe.id}`;
   const likeUrl = `${LIKES_RECIPE_URL}/${recipe.id}`;
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (MY_TOKEN) {
-      getData(url, MY_TOKEN)
+    if (MY_TOKEN && REFRESH_TOKEN) {
+      getTokenData(url, MY_TOKEN, dispatch, REFRESH_TOKEN)
         .then((response) => {
           const responseData = response as RecipeData;
           setRecipe(responseData);

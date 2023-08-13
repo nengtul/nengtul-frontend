@@ -4,9 +4,10 @@ import SavedRecipeList from "./SavedRecipeList";
 import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
-import { getData } from "../axios";
+import { getTokenData } from "../axios";
 import { SAVED_RECIPE_URL } from "../url";
 import NoRecipe from "../common/NoRecipe";
+import { useDispatch } from "react-redux";
 
 export interface Post {
   createdAt: string;
@@ -22,19 +23,21 @@ interface ContentData {
 
 export default function MyRecipe() {
   const Token = useSelector((state: RootState) => state.accessTokenValue);
-  const { accessTokenValue } = Token;
+  const { accessTokenValue, refreshTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
+  const REFRESH_TOKEN = refreshTokenValue;
   const [posts, setPosts] = useState<Post[]>([]);
+
+  const dispatch = useDispatch();
 
   const fetch = useCallback(async () => {
     try {
       const url = SAVED_RECIPE_URL;
 
-      if (MY_TOKEN) {
-        await getData<ContentData>(`${url}`, MY_TOKEN)
+      if (MY_TOKEN && REFRESH_TOKEN) {
+        console.log(MY_TOKEN, REFRESH_TOKEN);
+        await getTokenData<ContentData>(`${url}`, MY_TOKEN, dispatch, REFRESH_TOKEN)
           .then((data) => {
-            console.log(data);
-            console.log(data.content);
             const contentData = data.content;
             setPosts((prevPosts) => [...prevPosts, ...contentData]);
           })
@@ -66,8 +69,8 @@ export default function MyRecipe() {
         </SectionTitle>
         <ListWrap>
           {posts.length > 0 ? (
-            posts?.map((post) => (
-              <SavedRecipeList key={post.id} post={post} onDeletePost={handleDeletePost} />
+            posts?.map((post, index) => (
+              <SavedRecipeList key={index} post={post} onDeletePost={handleDeletePost} />
             ))
           ) : (
             <NoRecipe title={"저장한"} />
