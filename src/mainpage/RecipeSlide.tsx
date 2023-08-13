@@ -31,7 +31,6 @@ export default function RecipeSlide() {
         if (response) {
           const slideData = response.content as SlideProps[];
           setHotRecipe(slideData);
-          console.log(slideData);
         }
       })
       .catch((err) => {

@@ -4,7 +4,8 @@ import { styled } from "styled-components";
 import MyRecipeList from "./MyRecipelist";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
-import { getData } from "../axios";
+import { getTokenData } from "../axios";
+import { useDispatch } from "react-redux";
 import NoRecipe from "../common/NoRecipe";
 export interface Post {
   createdAt: string;
@@ -28,14 +29,21 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
   const page = useRef<number>(0);
   const [ref, inView] = useInView();
 
+  const dispatch = useDispatch();
   const Token = useSelector((state: RootState) => state.accessTokenValue);
-  const { accessTokenValue } = Token;
+  const { accessTokenValue, refreshTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
+  const REFRESH_TOKEN = refreshTokenValue;
 
   const fetch = useCallback(async () => {
     try {
-      if (MY_TOKEN) {
-        await getData<ContentData>(`${apiEndPoint}?size=7&page=${page.current}`, MY_TOKEN)
+      if (MY_TOKEN && REFRESH_TOKEN) {
+        await getTokenData<ContentData>(
+          `${apiEndPoint}?size=7&page=${page.current}`,
+          MY_TOKEN,
+          dispatch,
+          REFRESH_TOKEN
+        )
           .then((data) => {
             console.log(data);
             const contentData = data.content;
@@ -52,7 +60,7 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
     } catch (err) {
       console.error(err);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     console.log(inView, hasNextPage);
@@ -66,7 +74,6 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
     fetchData();
   }, [fetch, hasNextPage, inView]);
 
-
   const handleDeletePost = (postId: number | string) => {
     if (typeof postId === "number") {
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
@@ -74,8 +81,6 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
       setPosts((prevPosts) => prevPosts.filter((post) => post.recipeId !== postId));
     }
   };
-
-  
 
   return (
     <>
@@ -88,7 +93,6 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
               onDeletePost={handleDeletePost}
               apiEndPoint={apiEndPoint}
             />
-            
           ))
         ) : (
           <NoRecipe title={"좋아하는"} />
@@ -100,7 +104,7 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
 }
 
 const CardWrap = styled.ul`
-  margin-top:60px;
+  margin-top: 60px;
   width: 100%;
   height: 100%;
 `;
