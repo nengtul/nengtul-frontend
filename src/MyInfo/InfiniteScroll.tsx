@@ -35,12 +35,12 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
   const fetch = useCallback(async () => {
     try {
       if (MY_TOKEN) {
-        await getData<ContentData>(`${apiEndPoint}?size=10&page=${page.current}`, MY_TOKEN)
+        await getData<ContentData>(`${apiEndPoint}?size=7&page=${page.current}`, MY_TOKEN)
           .then((data) => {
             console.log(data);
             const contentData = data.content;
             setPosts((prevPosts) => [...prevPosts, ...contentData]);
-            setHasNextPage(contentData.length === 10);
+            setHasNextPage(contentData.length === 7);
             if (contentData.length) {
               page.current += 1;
             }
@@ -52,7 +52,8 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
     } catch (err) {
       console.error(err);
     }
-  },  [])
+  }, [])
+
   useEffect(() => {
     console.log(inView, hasNextPage);
     const fetchData = () => {
