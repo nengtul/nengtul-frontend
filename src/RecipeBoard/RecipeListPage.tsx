@@ -10,10 +10,9 @@ import { useInView } from "react-intersection-observer";
 import RecipeWriteBtn from "./RecipeWriteBtn";
 import ContensWrap from "../common/ContentsWrap";
 import TabMenu from "../common/TabMenu";
-import { RECIPE_URL } from "../url";
+import { RECIPE_URL,RECIPE_CATEGORY_URL } from "../url";
 import { getData } from "../axios";
-import { RootState } from "../Store/store";
-import { useSelector } from "react-redux/es/hooks/useSelector";
+import NoRecipeCategory from "../common/NoRecipeCategory";
 export interface Post {
   likeCount: number;
   nickName: string;
@@ -26,9 +25,6 @@ interface ContentData {
   content: Post[];
 }
 export default function RecipeListPage() {
-  const Token=useSelector((state: RootState)=>state.accessTokenValue)
-  const {accessTokenValue}=Token;
-  const MY_TOKEN=accessTokenValue;
   const [category, setCategory] = useState(""); //영어
   const [categoryName, setCategoryName] = useState("전체"); //한글
   const [viewCount, setViewCount] = useState("인기순");
@@ -45,12 +41,11 @@ export default function RecipeListPage() {
     console.log(category,'category확인')
     console.log(sortValue,'sort확인')
     try {
-      if(MY_TOKEN){
         const targetPage = resetPage ? 0 : categoryPage.current;
         let data;
         if(category===''){  //제일 처음렌더링
           if(sortValue==='createdAt'){  //제일처음 렌더링 하자마자 '최신순'으로 바꿨을 경우 (성공)
-            data = await getData<ContentData>(`${RECIPE_URL}?size=5&page=${categoryPage.current}&sort=createdAt`,MY_TOKEN)
+            data = await getData<ContentData>(`${RECIPE_URL}?size=5&page=${categoryPage.current}&sort=createdAt`)
             const contentData = data.content;
             if (resetPosts) {
               setPosts(contentData);
@@ -62,7 +57,7 @@ export default function RecipeListPage() {
                   categoryPage.current += 1;
               }
           }else{ // 1. 제일처음 렌더링 하자마자  (성공)  2. '최신순'으로 바꿨다가 다시 '인기순' (성공)
-            data = await getData<ContentData>(`${RECIPE_URL}?size=5&page=${categoryPage.current}&sort=asc`,MY_TOKEN)
+            data = await getData<ContentData>(`${RECIPE_URL}?size=5&page=${categoryPage.current}&sort=asc`)
             const contentData = data.content;
             if (resetPosts) {
               setPosts(contentData);
@@ -76,7 +71,7 @@ export default function RecipeListPage() {
           }
         }else{  //카테고리 선택했을때
           if(sortValue==='createdAt'){  //'최신순'선택했을때
-            data = await getData<ContentData>(`https://nengtul.shop/v1/recipe/category/${category}?size=5&page=${targetPage}&sort=createdAt`,MY_TOKEN);
+            data = await getData<ContentData>(`${RECIPE_CATEGORY_URL}/${category}?size=5&page=${targetPage}&sort=createdAt`);
             const contentData = data.content;
             if (resetPosts) {
               setPosts(contentData);
@@ -89,7 +84,7 @@ export default function RecipeListPage() {
               }
 
           }else{
-            data = await getData<ContentData>(`https://nengtul.shop/v1/recipe/category/${category}?size=5&page=${targetPage}&sort=asc`,MY_TOKEN);
+            data = await getData<ContentData>(`${RECIPE_CATEGORY_URL}/${category}?size=5&page=${targetPage}&sort=asc`);
             const contentData = data.content;
             if (resetPosts) {
               setPosts(contentData);
@@ -101,8 +96,6 @@ export default function RecipeListPage() {
                   categoryPage.current += 1;
               }
           }
-
-        }
       }
     } catch (err) {
       console.error(err);
@@ -150,7 +143,7 @@ export default function RecipeListPage() {
       });
     }
   }
-  
+  console.log(posts.length)
 
   return (
     <MobileWrap>
@@ -276,7 +269,14 @@ export default function RecipeListPage() {
             )}
           </CategoryBtn>
           <CardWrap>
-            {posts?.map((post) => <RecipeListCard key={post.recipeId} post={post} />)}
+            <div ref={ref} />
+            {posts.length>0?(
+              posts?.map((post) => (
+                  <RecipeListCard key={post.recipeId} post={post} />
+              ))
+            ):(
+              <NoRecipeCategory title={"등록된"} />
+            )} 
             <div ref={ref} />
           </CardWrap>
         </ListWrap>

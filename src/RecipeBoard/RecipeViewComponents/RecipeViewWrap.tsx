@@ -17,7 +17,7 @@ import RecipeMainBanner from "./RecipeMainBanner";
 import UpdateDeleteBtn from "./UpdateDeleteBtn";
 import ComfirmModal from "../../Modal/ConfirmModal";
 import { simpleUpdateData } from "../../axios";
-import { SAVED_RICIPE_RECIPE_URL } from "../../url";
+import { SAVED_RICIPE_RECIPE_URL,FAV_PUB_URL } from "../../url";
 import { AxiosError } from "axios";
 import OkModal from "../../Modal/OkModal";
 
@@ -58,7 +58,7 @@ export default function RecipeViewWrap() {
   const [okModalText, setOkModalText] = useState("");
   const [okModalOpen, setokModalOpen] = useState(false);
   const [likes, setLikes] = useState(false);
-
+  const [favorites,setFavorites]=useState(false);
   const [recipe, setRecipe] = useState<RecipeData>({
     category: "",
     cookingStep: "",
@@ -79,13 +79,14 @@ export default function RecipeViewWrap() {
     point: 0,
     userProfileUrl: "",
     likes: false,
+    
   });
   const [isSaved, setIsSaved] = useState(false);
   const { recipeId } = useParams();
   const url = `${RECIPE_DETAIL_URL}/${recipeId}`;
   const deleteUrl = `${RECIPE_URL}/${recipe.id}`;
   const likeUrl = `${LIKES_RECIPE_URL}/${recipe.id}`;
-
+  const favoriteUrl=`${FAV_PUB_URL}/${recipe.userId}`
   useEffect(() => {
     if (MY_TOKEN) {
       getData(url, MY_TOKEN)
@@ -165,7 +166,18 @@ export default function RecipeViewWrap() {
         });
     }
   };
-
+  const handleFavorites = () => {
+    if (MY_TOKEN) {
+      simpleUpdateData(favoriteUrl, {}, MY_TOKEN)
+        .then((response) => {
+          console.log("즐겨찾기 성공", response);
+          setFavorites(true);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
   const onSave = () => {
     if (!isSaved) {
       setIsSaved(true);
@@ -229,6 +241,8 @@ export default function RecipeViewWrap() {
           userProfileUrl={recipe.userProfileUrl}
           handleLikes={hanldeLikes}
           likes={likes}
+          // favorites={favorites}
+          handleFavorites={handleFavorites}
         />
         <RequirerIngredient ingredient={recipe.ingredient} />
         <RecipeIntro thumbnailUrl={recipe.thumbnailUrl} intro={recipe.intro} />

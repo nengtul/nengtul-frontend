@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock, faHeart } from "@fortawesome/free-regular-svg-icons";
-import { faHeart as faHeart2 } from "@fortawesome/free-solid-svg-icons";
+import { faClock, faHeart,faBookmark  } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as faHeart2,faBookmark as faBookmark2 } from "@fortawesome/free-solid-svg-icons";
 import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 import LevelBadge from "../../common/LevelBadge";
 import defaultThumb from "../../assets/common/defaultThumb.svg";
@@ -15,6 +15,7 @@ interface RecipeInfoProps {
   userProfileUrl: string;
   likes: boolean;
   handleLikes: () => void;
+  handleFavorites: () => void;
 }
 
 export default function RecipeViewInfo({
@@ -26,6 +27,8 @@ export default function RecipeViewInfo({
   userProfileUrl,
   likes,
   handleLikes,
+  favorites,
+  handleFavorites,
 }: RecipeInfoProps) {
   return (
     <ViewWrap>
@@ -50,6 +53,13 @@ export default function RecipeViewInfo({
               </span>
             </div>
           </div>
+          <button onClick={handleFavorites}>
+            {favorites ? (
+              <FontAwesomeIcon icon={faBookmark2} style={{ fontSize: "20rem", color: "#213454"}} />
+             ) : ( 
+              <FontAwesomeIcon icon={faBookmark} style={{ fontSize: "20rem", color: "#213454" }} />
+             )} 
+          </button>
           <button onClick={handleLikes}>
             {likes ? (
               <FontAwesomeIcon icon={faHeart2} style={{ fontSize: "20rem", color: "red" }} />

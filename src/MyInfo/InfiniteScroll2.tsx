@@ -1,29 +1,26 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
 import { styled } from "styled-components";
-import MyRecipeList from "./MyRecipelist";
+import MyFavList from "./MyFavList";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
 import { getData } from "../axios";
 import NoRecipe from "../common/NoRecipe";
-export interface Post {
-  createdAt: string;
-  id: number;
-  recipeId: string;
-  thumbnailUrl: string;
-  title: string;
-  recipeUserNickName: string;
-  likeCount: number;
+export interface User {
+    id: number;
+    publisherId:number;
+    publisherNickName:string;
+    publisherProfilePhotoUrl:string;
 }
 interface ContentData {
-  content: Post[];
+  content: User[];
 }
 interface InfiniteScrollProps {
   apiEndPoint: string;
 }
 
-export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
-  const [posts, setPosts] = useState<Post[]>([]);
+export default function InfiniteScroll2({ apiEndPoint }: InfiniteScrollProps) {
+  const [users, setUsers] = useState<User[]>([]);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
   const page = useRef<number>(0);
   const [ref, inView] = useInView();
@@ -35,12 +32,12 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
   const fetch = useCallback(async () => {
     try {
       if (MY_TOKEN) {
-        await getData<ContentData>(`${apiEndPoint}?size=10&page=${page.current}`, MY_TOKEN)
+        await getData<ContentData>(apiEndPoint, MY_TOKEN)
           .then((data) => {
             console.log(data);
             const contentData = data.content;
-            setPosts((prevPosts) => [...prevPosts, ...contentData]);
-            setHasNextPage(contentData.length === 10);
+            setUsers((prevPosts) => [...prevPosts, ...contentData]);
+            setHasNextPage(contentData.length === 5);
             if (contentData.length) {
               page.current += 1;
             }
@@ -52,7 +49,12 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
     } catch (err) {
       console.error(err);
     }
-  },  [])
+  }, []);
+
+  const handleDeletePost = (postId: number) => {
+    setUsers((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+  };
+
   useEffect(() => {
     console.log(inView, hasNextPage);
     const fetchData = () => {
@@ -65,32 +67,20 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
     fetchData();
   }, [fetch, hasNextPage, inView]);
 
-
-  const handleDeletePost = (postId: number | string) => {
-    if (typeof postId === "number") {
-      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
-    } else if (typeof postId === "string") {
-      setPosts((prevPosts) => prevPosts.filter((post) => post.recipeId !== postId));
-    }
-  };
-
-  
-
   return (
     <>
-      <CardWrap style={{ height: "100%" }}>
-        {posts.length > 0 ? (
-          posts?.map((post) => (
-            <MyRecipeList
-              key={post.recipeId}
-              post={post}
+      <CardWrap>
+        {users.length > 0 ? (
+          users?.map((user) => (
+            <MyFavList
+              key={user.id}
+              user={user}
               onDeletePost={handleDeletePost}
               apiEndPoint={apiEndPoint}
             />
-            
           ))
         ) : (
-          <NoRecipe title={"좋아하는"} />
+          <NoRecipe title={"즐겨찾기 한"} />
         )}
         <div ref={ref} />
       </CardWrap>
@@ -100,6 +90,6 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
 
 const CardWrap = styled.ul`
   width: 100%;
-  height: 100%;
   padding-top: 60px;
+  margin-top:3px;
 `;
