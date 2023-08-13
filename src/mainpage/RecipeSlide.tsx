@@ -15,16 +15,21 @@ const sliderSettings = {
   autoplay: true,
   centerMode: true,
 };
+interface SlideProps {
+  recipeId: string;
+  thumbnailUrl: string;
+  title: string;
+}
 
 export default function RecipeSlide() {
-  const [hotRecipe, setHotRecipe] = useState([]);
+  const [hotRecipe, setHotRecipe] = useState<SlideProps[]>([]);
   const url = RECIPE_URL;
 
   useEffect(() => {
     getData(url)
       .then((response) => {
         if (response) {
-          const slideData = response.content;
+          const slideData = response.content as SlideProps[];
           setHotRecipe(slideData);
           console.log(slideData);
         }
@@ -42,12 +47,12 @@ export default function RecipeSlide() {
       <MainSlider>
         <Slider {...sliderSettings}>
           {hotRecipe?.map((item, index) => (
-            <Link className="slide-wrap" to={`/${item.recipeId}`}>
-              <div key={index}>
+            <div key={index}>
+              <Link className="slide-wrap" to={`/${item.recipeId}`}>
                 <img src={item.thumbnailUrl} alt="recipe-img" />
                 <SliderP>{item.title}</SliderP>
-              </div>
-            </Link>
+              </Link>
+            </div>
           ))}
         </Slider>
         <MoreButton to={"/recipelist"}>더보기</MoreButton>
