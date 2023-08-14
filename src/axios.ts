@@ -8,7 +8,7 @@ import { setTokens } from "./Store/reducers";
 
 interface SetTokensAction {
   type: string;
-  accessToken: string;
+  AccessToken: string;
   refreshToken: string;
 }
 
@@ -92,11 +92,48 @@ export const deleteData = <T>(url: string, token?: string): Promise<T> => {
     };
   }
   return axios
-    .delete<T>(url)
+    .delete<T>(url, { headers })
     .then((response) => response.data)
     .catch((error) => {
       throw error;
     });
+};
+
+export const deleteTokenData = async <T>(
+  url: string,
+  token: string,
+  dispatch: (action: SetTokensAction) => void,
+  refreshToken: string
+): Promise<T> => {
+  const headers = {
+    withCredentials: true,
+    Authorization: `Bearer ${token}`,
+  };
+
+  try {
+    const response = await axios.delete<T>(url, { headers });
+    return response.data;
+  } catch (error) {
+    if ((error as AxiosError).response?.status === 401 && token && refreshToken) {
+      const newToken = await getRefresh(token, refreshToken);
+      if (dispatch) {
+        dispatch(
+          setTokens({
+            accessToken: newToken.AccessToken,
+            refreshToken: newToken.refreshToken,
+          })
+        );
+      }
+      const headers = {
+        withCredentials: true,
+        Authorization: `Bearer ${newToken.AccessToken}`,
+      };
+      const newResponse = await axios.delete<T>(url, { headers });
+      return newResponse.data;
+    }
+
+    throw error;
+  }
 };
 
 export const updateData = <T>(url: string, formData: object, token?: string): Promise<T> => {
