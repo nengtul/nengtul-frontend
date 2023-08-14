@@ -7,7 +7,7 @@ import TabMenu from "../common/TabMenu";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../Store/store";
 import { useEffect,useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate} from "react-router-dom";
 export interface Post {
   roomId:string;
   latestChat:string;
@@ -19,7 +19,13 @@ function ChattingListPage() {
   const Token = useSelector((state: RootState) => state.accessTokenValue);
   const { accessTokenValue} = Token;
   const MY_TOKEN = accessTokenValue;
-  const [chatData, setChatData] = useState<Post[] | null>(null) 
+  const [chatData, setChatData] = useState<Post[] | null>(null) ;
+  const navigate = useNavigate();
+
+  const handleSendroomId = (chat:Post) => {
+    navigate('/chat2', { state: { chat } });
+  };
+
   useEffect(() => {
     if(MY_TOKEN){
       getData<Post[]>('https://nengtul.shop/v1/chat/list',MY_TOKEN)
@@ -39,9 +45,9 @@ function ChattingListPage() {
         <ContentWrapper>
           <Title>채팅</Title>
           <ChatList>
-            <Link to={"/chat"}>
+            
             {chatData?.map((chat, index) => (
-              <Chat key={index}>
+              <Chat key={index} onClick={() => handleSendroomId(chat)}>
                 {/* <UserPic></UserPic> */}
                 <UserText>
                   <UserInfo>
@@ -57,7 +63,7 @@ function ChattingListPage() {
                 {/* <IngredientPic></IngredientPic> */}
               </Chat>
             ))}
-          </Link>
+      
         </ChatList>
         </ContentWrapper>
       </ContensWrap>

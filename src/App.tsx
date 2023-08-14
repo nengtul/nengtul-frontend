@@ -13,6 +13,7 @@ import FindPasswordPage from "./FindAndCertify/FindPasswordPage";
 import MyPage from "./User/MyPage";
 import ChattingListPage from "./Chatting/ChattingListPage";
 import ChatPage from "./Chatting/ChatPage";
+import ChatPage2 from "./Chatting/ChatPage2";
 import RecipeView from "./RecipeBoard/RecipeViewPage";
 import IngredientMap from "./IngredientMap/IngredientMap";
 import IngredientWrite from "./IngredientMap/IngredientWrite";
@@ -43,6 +44,7 @@ function App() {
         <Route path="/update/:recipeId" element={<RecipeUpdatePage />} />
         <Route path="/chattingList" element={<ChattingListPage />} />
         <Route path="/chat" element={<ChatPage />} />
+        <Route path="/chat2" element={<ChatPage2 />} />
         <Route path="/market" element={<MarketPage />} />
         <Route path="/findId" element={<FindId />} />
         <Route path="/findPassword" element={<FindPasswordPage />} />
