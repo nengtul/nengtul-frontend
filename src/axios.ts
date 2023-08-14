@@ -2,9 +2,9 @@ import axios, { AxiosError } from "axios";
 import { REFRESH_URL } from "./url";
 import { setTokens } from "./Store/reducers";
 
-const setAuthorizationHeader = (token: string) => {
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-};
+// const setAuthorizationHeader = (token: string) => {
+//   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+// };
 
 interface SetTokensAction {
   type: string;
@@ -32,16 +32,17 @@ const getRefresh = (
 };
 export const getTokenData = async <T>(
   url: string,
-  token?: string,
-  dispatch?: (action: SetTokensAction) => void,
-  refreshToken?: string
+  token: string,
+  dispatch: (action: SetTokensAction) => void,
+  refreshToken: string
 ): Promise<T> => {
-  if (token) {
-    setAuthorizationHeader(token);
-  }
+  const headers = {
+    withCredentials: true,
+    Authorization: `Bearer ${token}`,
+  };
 
   try {
-    const response = await axios.get<T>(url);
+    const response = await axios.get<T>(url, { headers });
     return response.data;
   } catch (error) {
     if ((error as AxiosError).response?.status === 401 && token && refreshToken) {
@@ -54,8 +55,11 @@ export const getTokenData = async <T>(
           })
         );
       }
-      setAuthorizationHeader(newToken.AccessToken);
-      const newResponse = await axios.get<T>(url);
+      const headers = {
+        withCredentials: true,
+        Authorization: `Bearer ${newToken.AccessToken}`,
+      };
+      const newResponse = await axios.get<T>(url, { headers });
       return newResponse.data;
     }
 
@@ -64,11 +68,15 @@ export const getTokenData = async <T>(
 };
 
 export const getData = <T>(url: string, token?: string): Promise<T> => {
+  let headers;
   if (token) {
-    setAuthorizationHeader(token);
+    headers = {
+      withCredentials: true,
+      Authorization: `Bearer ${token}`,
+    };
   }
   return axios
-    .get<T>(url)
+    .get<T>(url, { headers })
     .then((response) => response.data)
     .catch((error) => {
       throw error;
@@ -76,8 +84,12 @@ export const getData = <T>(url: string, token?: string): Promise<T> => {
 };
 
 export const deleteData = <T>(url: string, token?: string): Promise<T> => {
+  let headers;
   if (token) {
-    setAuthorizationHeader(token);
+    headers = {
+      withCredentials: true,
+      Authorization: `Bearer ${token}`,
+    };
   }
   return axios
     .delete<T>(url)
@@ -88,18 +100,18 @@ export const deleteData = <T>(url: string, token?: string): Promise<T> => {
 };
 
 export const updateData = <T>(url: string, formData: object, token?: string): Promise<T> => {
-  if (token) {
-    setAuthorizationHeader(token);
-  }
-
-  const config = {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  };
+  const headers = token
+    ? {
+        withCredentials: true,
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      }
+    : {
+        "Content-Type": "multipart/form-data",
+      };
 
   return axios
-    .post<T>(url, formData, config)
+    .post<T>(url, formData, { headers })
     .then((response) => {
       console.log("response", response);
       console.log("수정완료!"); // 모달창으로 바꾸기
@@ -111,12 +123,15 @@ export const updateData = <T>(url: string, formData: object, token?: string): Pr
     });
 };
 export const simpleUpdateData = <T>(url: string, data?: object, token?: string): Promise<T> => {
+  let headers;
   if (token) {
-    setAuthorizationHeader(token);
+    headers = {
+      withCredentials: true,
+      Authorization: `Bearer ${token}`,
+    };
   }
-
   return axios
-    .post<T>(url, data)
+    .post<T>(url, data, { headers })
     .then((response) => {
       console.log("response", response); // 모달창으로 바꾸기
       return response.data;
@@ -128,12 +143,16 @@ export const simpleUpdateData = <T>(url: string, data?: object, token?: string):
 };
 
 export const putData = <T>(url: string, data: object, token?: string): Promise<T> => {
+  let headers;
   if (token) {
-    setAuthorizationHeader(token);
+    headers = {
+      withCredentials: true,
+      Authorization: `Bearer ${token}`,
+    };
   }
 
   return axios
-    .put<T>(url, data)
+    .put<T>(url, data, { headers })
     .then((response) => {
       console.log("response", response);
       return response.data;

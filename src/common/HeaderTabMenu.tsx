@@ -13,6 +13,7 @@ import { RootState } from "../Store/store";
 import { USER_DETAIL_URL, USER_LOGOUT_URL } from "../url";
 import { useEffect, useState } from "react";
 import { getTokenData, simpleUpdateData } from "../axios";
+import { useNavigate } from "react-router-dom";
 
 interface UserData {
   name: string;
@@ -38,6 +39,8 @@ export default function HeaderTabMenu() {
   const { accessTokenValue, refreshTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
   const REFRESH_TOKEN = refreshTokenValue;
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const [data, setData] = useState(DEFAULT_USER_DATA);
@@ -67,15 +70,16 @@ export default function HeaderTabMenu() {
 
   const setLogOut = () => {
     setData(DEFAULT_USER_DATA);
-    simpleUpdateData(USER_LOGOUT_URL)
+    simpleUpdateData(USER_LOGOUT_URL, {}, MY_TOKEN)
       .then((response) => {
         console.log(response, "로그아웃 완료");
+        sessionStorage.removeItem("userId");
+        sessionStorage.removeItem("roles");
+        navigate("/");
       })
       .catch((err) => {
         console.error(err);
       });
-    sessionStorage.removeItem("userId");
-    sessionStorage.removeItem("roles");
   };
 
   return (

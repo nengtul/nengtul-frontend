@@ -26,7 +26,7 @@ export default function RecipeSlide() {
   const url = RECIPE_URL;
 
   useEffect(() => {
-    getData(url)
+    getData(`${url}?sort=viewCount,desc`)
       .then((response) => {
         if (response) {
           const slideData = response.content as SlideProps[];
