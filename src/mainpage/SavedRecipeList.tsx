@@ -16,7 +16,6 @@ export default function SavedRecipeList({ post, onDeletePost }: RecipeListCardPr
   const Token = useSelector((state: RootState) => state.accessTokenValue);
   const { accessTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
-  console.log("post", post);
   const onDelete = () => {
     if (MY_TOKEN !== null) {
       deleteData(`${SAVED_RECIPE_URL}/${post.id}`, MY_TOKEN)
