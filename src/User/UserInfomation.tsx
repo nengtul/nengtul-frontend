@@ -80,40 +80,6 @@ function UserInfomation() {
 
   //회원정보 수정
   const onUpdate = () => {
-    // try{
-    //     const url=USER_DETAIL_URL;
-    //     const userUpdateDto = {
-    //         nickname: editedData.nickname,
-    //         phoneNumber: editedData.phoneNumber,
-    //       };
-
-    //     const formData = new FormData();
-    //     console.log(typeof(formData))
-    //     if (profileImage instanceof Blob) {
-    //         formData.append("image", profileImage);
-    //       }
-
-    //    const blob=new Blob([JSON.stringify(userUpdateDto)],{
-    //     type:'application/json'
-    //    });
-    //    formData.append("userUpdateDto", blob)
-    //    const config = {
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data',
-    //     },
-    // };
-    //   axios.post(url,formData,config)
-    //   .then((response) => {
-    //     console.log('response', response);
-    //     console.log('수정완료!'); // 모달창으로 바꾸기
-    //     // window.location.reload();
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-    // }catch (err) {
-    //     console.log(err)
-    // }
     try {
       // const url=USER_DETAIL_URL;
       const userUpdateDto = {
@@ -143,32 +109,12 @@ function UserInfomation() {
             console.log(error);
           });
       }
-      //     axios.post(url,formData,config)
-      //   .then((response) => {
-      //     console.log('response', response);
-      //     console.log('수정완료!'); // 모달창으로 바꾸기
-      //     // window.location.reload();
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //   });
     } catch (err) {
       console.log(err);
     }
   };
   //회원정보 삭제
   const onDelete = () => {
-    //axios.ts사용전
-    // axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-    // axios.delete<UserData>(USER_DETAIL_URL)
-    // .then((response) => {
-    //       console.log(response)
-    //         console.log('탈퇴되었습니다')//모달창으로 바꾸기
-    // })
-    // .catch((error) => {
-    //   console.error(error);
-    // })
-    //axios.ts사용후
     if (MY_TOKEN !== null) {
       deleteData<UserData>(USER_DETAIL_URL, MY_TOKEN)
         .then(() => {
@@ -184,7 +130,6 @@ function UserInfomation() {
   //이메일 인증
   const onVerify = () => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${MY_TOKEN}`;
-    // axios.post(`${USER_VERIFY_RESET_URL}/${data?.id}`)
     axios
       .post(`https://nengtul.shop/v1/users/${data?.id}/verify/reset `)
       .then((response) => {
@@ -432,14 +377,13 @@ const PasswordButton = styled.div`
 `;
 
 const Verify = styled.div`
-  width: 25%;
-  background-color: #5b90fb;
-  font-size: 20rem;
-  color: white;
-  text-align: center;
-  height: 40rem;
+  color: #fff;
+  font-size: 14rem;
+  font-weight: 700;
+  padding: 8rem 12rem;
   border-radius: 10rem;
-  padding-top: 10rem;
+  background-color: #5b90fb;
+  margin-left: 10px;
   cursor: pointer;
 `;
 
