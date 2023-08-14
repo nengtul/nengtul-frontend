@@ -1,6 +1,9 @@
 import styled from "styled-components";
+import { IngredientsProps } from "./IngreAfterRecipePage";
+import SearchList from "./SearchList";
+import theme from "../common/theme";
 
-function ChoosedListSection() {
+function ChoosedListSection({ ingredients }: IngredientsProps) {
   return (
     <GreenArea>
       <MainArea>
@@ -9,75 +12,41 @@ function ChoosedListSection() {
           <br />
           요리 가능한 레시피 입니다!
         </Text>
-        <IngredientArea>
-          <GridItem>
-            <Ingredient>계란</Ingredient>
-          </GridItem>
-          <GridItem>
-            <Ingredient>굴소스</Ingredient>
-          </GridItem>
-          <GridItem>
-            <Ingredient>참치</Ingredient>
-          </GridItem>
-          <GridItem>
-            <Ingredient>참치액</Ingredient>
-          </GridItem>
-          <GridItem>
-            <Ingredient>참기름</Ingredient>
-          </GridItem>
-          <GridItem>
-            <Ingredient>들기름</Ingredient>
-          </GridItem>
-        </IngredientArea>
+        {ingredients && <SearchList ingredient={ingredients.split(",")} />}
       </MainArea>
     </GreenArea>
   );
 }
 
 const GreenArea = styled.div`
-  background-color: #38db83;
+  background-color: ${theme.colors.main};
   width: 100%;
   height: auto;
 `;
 const MainArea = styled.div`
-  padding: 20rem 0 16rem 0;
+  padding: 20rem 0;
+  .search-list {
+    width: 80%;
+    margin: 0 auto;
+    max-height: 130px;
+    background-color: #fff;
+    margin-top: 10px;
+    li {
+      font-size: 14rem;
+      font-weight: 800;
+    }
+    svg {
+      display: none;
+    }
+  }
 `;
-const Text = styled.div`
-  width: 60%;
-  height: auto;
+const Text = styled.h2`
   margin: 0 auto;
   color: #fff;
-  font-size: 20px;
+  font-size: 22rem;
+  font-weight: 800;
   text-align: center;
   line-height: 1.3;
 `;
 
-const IngredientArea = styled.div`
-  display: grid;
-  margin: 0 auto;
-  margin-top: 4%;
-  width: 75%;
-  height: auto;
-
-  grid-template-columns: repeat(3, 1fr);
-  justify-content: center;
-`;
-const GridItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Ingredient = styled.div`
-  width: 80rem;
-  height: 34rem;
-  font-size: 14rem;
-  background-color: #fff;
-  color: #38db83;
-  border-radius: 10rem;
-  text-align: center;
-
-  padding: 9rem;
-  margin-bottom: 13%;
-`;
 export default ChoosedListSection;

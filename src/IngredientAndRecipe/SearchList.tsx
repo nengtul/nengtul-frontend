@@ -15,7 +15,7 @@ export default function SearchList({
   },
 }: SearchListProps) {
   return (
-    <SearchListWrap>
+    <SearchListWrap className="search-list">
       <ul>
         {ingredient.map((item, index) => (
           <li key={index}>

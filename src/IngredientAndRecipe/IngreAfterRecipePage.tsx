@@ -5,15 +5,23 @@ import ChoosedListSection from "./ChoosedListSection";
 import RecipeSection from "./RecipeSection";
 import ContensWrap from "../common/ContentsWrap";
 import TabMenu from "../common/TabMenu";
+import { useLocation } from "react-router-dom";
+
+export interface IngredientsProps {
+  ingredients: string | null;
+}
 
 function IngreAfterRecipePage() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const ingredients = searchParams.get("ingredients");
   return (
     <MobileWrap>
       <Wrap>
         <Header />
         <ContensWrap>
-          <ChoosedListSection />
-          <RecipeSection />
+          <ChoosedListSection ingredients={ingredients} />
+          <RecipeSection ingredients={ingredients} />
         </ContensWrap>
         <TabMenu />
       </Wrap>
