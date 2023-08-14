@@ -42,6 +42,7 @@ interface RecipeData {
   point: number;
   userProfileUrl: string;
   likes: boolean;
+  favorite:boolean;
 }
 
 export default function RecipeViewWrap() {
@@ -60,7 +61,9 @@ export default function RecipeViewWrap() {
   const [okModalText, setOkModalText] = useState("");
   const [okModalOpen, setokModalOpen] = useState(false);
   const [likes, setLikes] = useState(false);
-  const [favorites, setFavorites] = useState(false);
+
+  const [favorite,setFavorite]=useState(false);
+
   const [recipe, setRecipe] = useState<RecipeData>({
     category: "",
     cookingStep: "",
@@ -81,6 +84,10 @@ export default function RecipeViewWrap() {
     point: 0,
     userProfileUrl: "",
     likes: false,
+
+    favorite:false,
+    
+
   });
   const [isSaved, setIsSaved] = useState(false);
   const { recipeId } = useParams();
@@ -100,6 +107,7 @@ export default function RecipeViewWrap() {
           setStep(responseData.cookingStep.split("\\"));
           setImgArr(responseData.imageUrl.split("\\"));
           setLikes(recipe.likes);
+          setFavorite(recipe.favorite);
         })
         .catch((err) => {
           console.error(err);
@@ -112,6 +120,7 @@ export default function RecipeViewWrap() {
           setStep(responseData.cookingStep.split("\\"));
           setImgArr(responseData.imageUrl.split("\\"));
           setLikes(recipe.likes);
+          setFavorite(recipe.favorite);
         })
         .catch((err) => {
           console.error(err);
@@ -175,7 +184,7 @@ export default function RecipeViewWrap() {
       simpleUpdateData(favoriteUrl, {}, MY_TOKEN)
         .then((response) => {
           console.log("즐겨찾기 성공", response);
-          setFavorites(true);
+          setFavorite(true);
         })
         .catch((err) => {
           console.error(err);
@@ -207,7 +216,6 @@ export default function RecipeViewWrap() {
       setokModalOpen(true);
     }
   };
-
   return (
     <>
       {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} />}
@@ -245,7 +253,7 @@ export default function RecipeViewWrap() {
           userProfileUrl={recipe.userProfileUrl}
           handleLikes={hanldeLikes}
           likes={likes}
-          // favorites={favorites}
+          favorite={favorite}
           handleFavorites={handleFavorites}
         />
         <RequirerIngredient ingredient={recipe.ingredient} />

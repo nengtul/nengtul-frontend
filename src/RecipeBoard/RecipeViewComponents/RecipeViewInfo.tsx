@@ -16,6 +16,7 @@ interface RecipeInfoProps {
   likes: boolean;
   handleLikes: () => void;
   handleFavorites: () => void;
+  favorite:boolean;
 }
 
 export default function RecipeViewInfo({
@@ -27,7 +28,7 @@ export default function RecipeViewInfo({
   userProfileUrl,
   likes,
   handleLikes,
-  favorites,
+  favorite,
   handleFavorites,
 }: RecipeInfoProps) {
   return (
@@ -42,7 +43,16 @@ export default function RecipeViewInfo({
             />
             <div className="writer">
               <LevelBadge>{point}</LevelBadge>
-              <p>{nickName || "탈퇴한 사용자입니다."} 님</p>
+              <p>
+                {nickName || "탈퇴한 사용자입니다."} 님
+                <Fav onClick={handleFavorites}>
+                  {favorite ? (
+                    <FontAwesomeIcon icon={faBookmark2} style={{ fontSize: "20rem", color: "#213454"}} />
+                  ) : ( 
+                    <FontAwesomeIcon icon={faBookmark} style={{ fontSize: "20rem", color: "#213454" }} />
+                  )} 
+                </Fav>
+              </p>
               <span>
                 <FontAwesomeIcon icon={faClock} style={{ fontSize: "12px" }} />
                 {cookingTime}
@@ -53,20 +63,13 @@ export default function RecipeViewInfo({
               </span>
             </div>
           </div>
-          <button onClick={handleFavorites}>
-            {favorites ? (
-              <FontAwesomeIcon icon={faBookmark2} style={{ fontSize: "20rem", color: "#213454"}} />
-             ) : ( 
-              <FontAwesomeIcon icon={faBookmark} style={{ fontSize: "20rem", color: "#213454" }} />
-             )} 
-          </button>
-          <button onClick={handleLikes}>
+          <Like onClick={handleLikes}>
             {likes ? (
               <FontAwesomeIcon icon={faHeart2} style={{ fontSize: "20rem", color: "red" }} />
             ) : (
               <FontAwesomeIcon icon={faHeart} style={{ fontSize: "20rem", color: "red" }} />
             )}
-          </button>
+          </Like>
         </div>
       </WriteInfo>
     </ViewWrap>
@@ -98,6 +101,7 @@ const WriteInfo = styled.div`
         margin: 4px 0px 8px 8px;
         font-weight: 700;
         color: #636363;
+        
       }
       span {
         margin-left: 8px;
@@ -117,15 +121,26 @@ const WriteInfo = styled.div`
     background-size: cover;
     background-color: #333;
   }
-  button {
-    width: 52px;
-    height: 52px;
-    border-radius: 10px;
-    background-color: #57da9391;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    cursor: pointer;
-  }
+
 `;
+const Fav=styled.button`
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background-color:white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+`
+const Like=styled.button`
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+`
