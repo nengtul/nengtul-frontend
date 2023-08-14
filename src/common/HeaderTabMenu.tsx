@@ -10,9 +10,9 @@ import HeaderInfo from "./HeaderInfo";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../Store/store";
-import { USER_DETAIL_URL } from "../url";
+import { USER_DETAIL_URL, USER_LOGOUT_URL } from "../url";
 import { useEffect, useState } from "react";
-import { getTokenData } from "../axios";
+import { getTokenData, simpleUpdateData } from "../axios";
 
 interface UserData {
   name: string;
@@ -21,6 +21,7 @@ interface UserData {
   likeRecipe: number;
   myRecipe: number;
   shareList: number;
+  favoriteList: number;
 }
 const DEFAULT_USER_DATA: UserData = {
   name: "",
@@ -29,6 +30,7 @@ const DEFAULT_USER_DATA: UserData = {
   likeRecipe: 0,
   myRecipe: 0,
   shareList: 0,
+  favoriteList: 0,
 };
 
 export default function HeaderTabMenu() {
@@ -65,6 +67,13 @@ export default function HeaderTabMenu() {
 
   const setLogOut = () => {
     setData(DEFAULT_USER_DATA);
+    simpleUpdateData(USER_LOGOUT_URL)
+      .then((response) => {
+        console.log(response, "로그아웃 완료");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("roles");
   };
@@ -118,7 +127,7 @@ export default function HeaderTabMenu() {
               style={{ height: "16rem", color: `${theme.colors.main}` }}
             />
             즐겨찾기
-            <span>({data.shareList})</span>
+            <span>({data.favoriteList})</span>
           </Link>
         </li>
         <li>

@@ -5,9 +5,9 @@ import MarkerCard from "./MarkerCard";
 import { styled } from "styled-components";
 import theme from "../common/theme";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot,faPen } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faPen } from "@fortawesome/free-solid-svg-icons";
 import { SHAREBOARD_URL } from "../url";
-import  {getData} from "../axios";
+import { getData } from "../axios";
 type EventListener = (event: kakao.maps.event.MouseEvent) => void;
 
 declare global {
@@ -27,27 +27,27 @@ declare global {
   }
 }
 export interface Post {
-  id: number,
-  userId: number,
-  userNickname: string,
-  title: string,
-  content: string,
-  place: string,
-  shareImg: string,
-  price: number,
-  lat: number,
-  lon: number,
-  createdAt: string,
-  modifiedAt: string,
-  closed: boolean
-  
+  id: number;
+  userId: number;
+  userNickname: string;
+  title: string;
+  content: string;
+  place: string;
+  shareImg: string;
+  price: number;
+  lat: number;
+  lon: number;
+  createdAt: string;
+  modifiedAt: string;
+  closed: boolean;
+  point: number;
 }
 
 export default function MarkerMap() {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [selectedMarker, setSelectedMarker] = useState<Post | null>(null);
   const [location, setLocation] = useState([0, 0]);
-  console.log(selectedMarker)
+  console.log(selectedMarker);
   const getDefaultLocation = () => {
     const defaultLocation = [37.564718, 126.977108];
     setLocation(defaultLocation);
@@ -102,7 +102,9 @@ export default function MarkerMap() {
           const lat = location[0];
           const lon = location[1];
           // const response = await axios.get<Post[]>(`${SHAREBOARD_URL}?lat=${lat}&lon=${lon}&range=10000`);
-          const response = await getData<Post[]>(`${SHAREBOARD_URL}?lat=${lat}&lon=${lon}&range=10000`,);
+          const response = await getData<Post[]>(
+            `${SHAREBOARD_URL}?lat=${lat}&lon=${lon}&range=10000`
+          );
           // const postData: Post[] = response.data;
           const postData: Post[] = response;
           postData.forEach((data) => {
@@ -127,17 +129,17 @@ export default function MarkerMap() {
     }
   }, [location]);
   const navigate = useNavigate();
-  const goToWrite=()=>{
-    navigate('/ingredientWrite')
-  }
+  const goToWrite = () => {
+    navigate("/ingredientWrite");
+  };
   return (
     <MarkerWrap>
       <div ref={mapRef} style={{ width: "100%", height: "100%", position: "relative" }}>
         <button type="button" onClick={requestLocation} className="location-btn">
           <FontAwesomeIcon icon={faLocationDot} /> 현재 위치로
         </button>
-        <button type="button"  className="write-btn" onClick={goToWrite}>
-        <FontAwesomeIcon icon={faPen} />
+        <button type="button" className="write-btn" onClick={goToWrite}>
+          <FontAwesomeIcon icon={faPen} />
         </button>
       </div>
       {selectedMarker && (
@@ -171,19 +173,18 @@ const MarkerWrap = styled.div`
     z-index: 9999;
   }
 
-  .write-btn{
-    width:58rem;
-    height:58rem;
-    color:white;
-    background-color:${theme.colors.main};
+  .write-btn {
+    width: 58rem;
+    height: 58rem;
+    color: white;
+    background-color: ${theme.colors.main};
     display: inline-block;
     cursor: pointer;
     position: absolute;
     left: 83%;
-    font-size:30rem;
+    font-size: 30rem;
     bottom: 20px;
     z-index: 9999;
-    border-radius:100%;
+    border-radius: 100%;
   }
 `;
-

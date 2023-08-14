@@ -8,6 +8,7 @@ import { USER_DETAIL_URL } from "../url";
 import { useDispatch } from "react-redux";
 import { getTokenData, deleteData, updateData } from "../axios";
 import { useNavigate } from "react-router-dom";
+import defaultThumb from "../assets/common/defaultThumb.svg";
 //1.회원정보보여주기  2.회원정보 수정하기  3.회원 탈퇴하기
 export interface UserData {
   name: string;
@@ -33,21 +34,8 @@ function UserInfomation() {
   const dispatch = useDispatch();
 
   const [data, setData] = useState<UserData | null>(null);
-  // const MY_TOKEN = getLogin();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  //이거는 session할때 필요한 애ㅡ들
   useEffect(() => {
-    //axios.ts사용전
-    // axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-    // axios.get<UserData>(USER_DETAIL_URL)
-    //   .then((response) => {
-    //         setData(response.data);
-    //         setEditedData(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    // });
-    //axios.ts사용후
     console.log("내 토큰", MY_TOKEN);
     if (MY_TOKEN && REFRESH_TOKEN) {
       getTokenData<UserData>(USER_DETAIL_URL, MY_TOKEN, dispatch, REFRESH_TOKEN)
@@ -213,7 +201,9 @@ function UserInfomation() {
     <UserInfoArea>
       {data && !editing && (
         <>
-          <UserPic src={data?.profileImageUrl}></UserPic>
+          <div className="thumb-img">
+            <UserPic src={data?.profileImageUrl || defaultThumb}></UserPic>
+          </div>
           <EachAreaPart>
             <EachArea>
               <Category>닉네임</Category>
@@ -233,18 +223,28 @@ function UserInfomation() {
               {data.emailVerifiedYn === false ? (
                 <Verify onClick={onVerify}>인증하기</Verify>
               ) : (
-                <VerifyCheck>인증됨</VerifyCheck>
+                <VerifyCheck>인증완료</VerifyCheck>
               )}
             </EachArea>
           </EachAreaPart>
           <ModifyButton onClick={onModify}>회원정보 수정하기</ModifyButton>
-          <DeleteButton onClick={onDelete}>탈퇴하기</DeleteButton>
+          <DeleteButton onClick={onDelete}>회원 탈퇴하기</DeleteButton>
         </>
       )}
       {data && editing && (
         <>
-          <form>
-            <UserPic src={data?.profileImageUrl}></UserPic>
+          <form
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+              width: "100%",
+            }}
+          >
+            <div className="thumb-img">
+              <UserPic src={data?.profileImageUrl || defaultThumb}></UserPic>
+            </div>
             <ModifyProfileBtn onClick={handleButtonClick}>+</ModifyProfileBtn>
             <input
               type="file"
@@ -258,7 +258,7 @@ function UserInfomation() {
                 <UserNickName style={{ color: "red" }}>
                   <input
                     style={{
-                      fontSize: "19rem",
+                      fontSize: "14rem",
                       outline: "none",
                       border: "none",
                       color: "gray",
@@ -284,7 +284,7 @@ function UserInfomation() {
                 <UserPhoneNumber>
                   <input
                     style={{
-                      fontSize: "19rem",
+                      fontSize: "14rem",
                       outline: "none",
                       border: "none",
                       color: "gray",
@@ -302,7 +302,15 @@ function UserInfomation() {
                 </UserPhoneNumber>
               </EachArea>
             </EachAreaPart>
-            <Link to="/changePassword">
+            <Link
+              to="/changePassword"
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <PasswordButton>비밀번호 변경하기</PasswordButton>
             </Link>
             <UpdateButton onClick={onUpdate}>완료</UpdateButton>
@@ -314,7 +322,13 @@ function UserInfomation() {
   );
 }
 const UserInfoArea = styled.div`
-  margin-top: 60rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .thumb-img {
+    padding: 30px 0px;
+  }
 `;
 const UserPic = styled.img`
   width: 130rem;
@@ -322,87 +336,99 @@ const UserPic = styled.img`
   border-radius: 100%;
   background-color: gray;
   margin: 0 auto;
-  margin-bottom: 50rem;
   display: block;
   position: relative;
 `;
-const EachAreaPart = styled.div`
-  border-top: 1px solid rgb(239, 239, 239);
-  border-bottom: 1px solid rgb(239, 239, 239);
-  padding: 5rem 0;
+const EachAreaPart = styled.ul`
+  width: 92%;
+  box-shadow: 0px 0px 3px #2f2b2b;
+  border-radius: 10px;
+  overflow: hidden;
 `;
-const EachArea = styled.div`
+const EachArea = styled.li`
   display: flex;
   align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  height: auto;
 `;
 const Category = styled.div`
-  font-size: 20rem;
+  font-size: 14rem;
+  font-weight: 800;
   width: 120rem;
-  padding: 20rem 20rem;
+  height: 55px;
+  padding: 10px 0px;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 const UserNickName = styled.div`
-  font-size: 20rem;
-  border-bottom: 1px solid rgb(239, 239, 239);
-  padding: 20rem 0rem;
-  width: 60%;
+  font-size: 14rem;
+  font-weight: 700;
+  width: calc(100% - 120rem);
+  padding: 0px 10px;
 `;
 const UserName = styled.div`
-  font-size: 20rem;
-  border-bottom: 1px solid rgb(239, 239, 239);
-  padding: 20rem 0rem;
-  width: 60%;
+  font-size: 14rem;
+  font-weight: 700;
+  width: calc(100% - 120rem);
+  padding: 0px 10px;
 `;
 
 const UserPhoneNumber = styled.div`
-  font-size: 20rem;
-  padding: 20rem 0rem;
-  width: 60%;
+  font-size: 14rem;
+  font-weight: 700;
+  width: calc(100% - 120rem);
+  padding: 0px 10px;
 `;
 
 const ModifyButton = styled.div`
+  display: inline-block;
   cursor: pointer;
   background-color: #38db83;
   color: white;
-  width: 70%;
   text-align: center;
-  padding: 20rem 40rem;
-  font-size: 20rem;
-  margin: 30rem auto;
-  margin-bottom: 0;
-  border-radius: 40rem;
+  font-size: 16rem;
+  font-weight: 800;
+  padding: 14px 0px;
+  width: 92%;
+  margin-top: 10px;
 `;
 const DeleteButton = styled.div`
+  display: inline-block;
   cursor: pointer;
-  color: #38db83;
-  width: 70%;
+  background-color: #fc8f6c;
+  color: #fff;
   text-align: center;
-  padding: 20rem 40rem;
-  font-size: 20rem;
-  margin: 30rem auto;
-  border: 1px solid #38db83;
-  border-radius: 40rem;
+  font-size: 16rem;
+  font-weight: 800;
+  padding: 14px 0px;
+  width: 92%;
+  margin-top: 10px;
 `;
 const UpdateButton = styled.div`
+  display: inline-block;
   cursor: pointer;
-  color: #38db83;
-  width: 70%;
+  background-color: #38db83;
+  color: white;
   text-align: center;
-  padding: 20rem 40rem;
-  font-size: 20rem;
-  margin: 30rem auto 10rem auto;
-  border: 1px solid #38db83;
-  border-radius: 40rem;
+  font-size: 16rem;
+  font-weight: 800;
+  padding: 14px 0px;
+  width: 92%;
+  margin-top: 10px;
 `;
 const PasswordButton = styled.div`
+  display: inline-block;
   cursor: pointer;
-  color: #38db83;
-  width: 70%;
+  background-color: #38db83;
+  color: white;
   text-align: center;
-  padding: 20rem 40rem;
-  font-size: 20rem;
-  margin: 10rem auto;
-  border: 1px solid #38db83;
-  border-radius: 40rem;
+  font-size: 16rem;
+  font-weight: 800;
+  padding: 14px 0px;
+  width: 92%;
+  margin-top: 10px;
 `;
 
 const Verify = styled.div`
@@ -418,11 +444,13 @@ const Verify = styled.div`
 `;
 
 const VerifyCheck = styled.div`
-  color: #5b90fb;
-  font-size: 20rem;
-  padding: 10rem;
+  color: #fff;
+  font-size: 14rem;
+  font-weight: 700;
+  padding: 8rem 12rem;
   border-radius: 10rem;
-  border: 1px solid #5b90fb;
+  background-color: #5b90fb;
+  margin-left: 10px;
 `;
 
 const ModifyProfileBtn = styled.button`
@@ -433,7 +461,7 @@ const ModifyProfileBtn = styled.button`
   background-color: pink;
   border-radius: 100%;
   position: absolute;
-  top: 210rem;
+  top: 180rem;
   right: 130rem;
   cursor: pointer;
 `;

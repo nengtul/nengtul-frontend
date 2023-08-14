@@ -1,60 +1,105 @@
-import styled from 'styled-components';
-import FoodImg from '../assets/recipe/noodle.png';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-regular-svg-icons';
-import { useInView } from 'react-intersection-observer';
-import { useEffect, useState } from 'react';
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useInView } from "react-intersection-observer";
+import { useEffect, useState, useRef, useCallback } from "react";
+import { getTokenData } from "../axios";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../Store/store";
+import { useDispatch } from "react-redux";
+import { RECIPE_INGREDIENT_URL } from "../url";
+import { faEye } from "@fortawesome/free-regular-svg-icons";
+import { IngredientsProps } from "./IngreAfterRecipePage";
 
-function RecipeSection() {
+interface SearchResultProps {
+  likeCount: number;
+  nickName: string;
+  recipeId: string;
+  thumbnailUrl: string;
+  title: string;
+  viewCount: number;
+}
+interface RecipeSectionProps {
+  content: SearchResultProps[];
+}
+
+function RecipeSection({ ingredients }: IngredientsProps) {
+  const [posts, setPosts] = useState<SearchResultProps[]>([]);
+  const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+  const page = useRef<number>(0);
   const [ref, inView] = useInView();
-  const [recipes, setRecipes] = useState<JSX.Element[]>([]);
 
-  const recipeFetch = () => {
-    const newRecipes = Array.from({ length: 5 }, (_, index) => (
-      <Recipe key={index + recipes.length}>
-        <img src={FoodImg} alt="noodle" />
-        <TextArea>
-          <Title>비빔국수의 핵심은 양념장!</Title>
-          <Heart>
-            <FontAwesomeIcon icon={faHeart} style={{ height: '16rem', color: 'red' }} />
-            <HeartRate>50</HeartRate>
-          </Heart>
-          <Writer>김제로</Writer>
-        </TextArea>
-      </Recipe>
-    ));
-    setRecipes((prevRecipes) => [...prevRecipes, ...newRecipes]);
-  };
+  const dispatch = useDispatch();
+  const Token = useSelector((state: RootState) => state.accessTokenValue);
+  const { accessTokenValue, refreshTokenValue } = Token;
+  const MY_TOKEN = accessTokenValue;
+  const REFRESH_TOKEN = refreshTokenValue;
 
-  useEffect(() => {
-    if (inView) {
-      console.log('무한스크롤시작');
-      recipeFetch();
+  const url = `${RECIPE_INGREDIENT_URL}/${ingredients}`;
+
+  const fetch = useCallback(async () => {
+    try {
+      if (MY_TOKEN && REFRESH_TOKEN) {
+        await getTokenData<RecipeSectionProps>(
+          `${url}?size=7&page=${page.current}&sort=viewCount,desc`,
+          MY_TOKEN,
+          dispatch,
+          REFRESH_TOKEN
+        )
+          .then((data) => {
+            console.log(data);
+            const contentData = data.content;
+            setPosts((prevPosts) => [...prevPosts, ...contentData]);
+            setHasNextPage(contentData.length === 7);
+            if (contentData.length) {
+              page.current += 1;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    } catch (err) {
+      console.error(err);
     }
-  }, [inView]);
+  }, []);
 
   useEffect(() => {
-    const numberOfRecipes = 5; // 생성할 레시피 개수
-
-    const initialRecipeList = Array.from({ length: numberOfRecipes }, (_, index) => (
-      <Recipe key={index}>
-        <img src={FoodImg} alt="noodle" />
-        <TextArea>
-          <Title>비빔국수의 핵심은 양념장!</Title>
-          <Heart>
-            <FontAwesomeIcon icon={faHeart} style={{ height: '16rem', color: 'red' }} />
-            <HeartRate>50</HeartRate>
-          </Heart>
-          <Writer>김제로</Writer>
-        </TextArea>
-      </Recipe>
-    ));
-    setRecipes(initialRecipeList);
-  }, []);
+    console.log(inView, hasNextPage);
+    const fetchData = () => {
+      if (inView && hasNextPage) {
+        fetch().catch((error) => {
+          console.error(error);
+        });
+      }
+    };
+    fetchData();
+  }, [fetch, hasNextPage, inView]);
 
   return (
     <RecipeArea>
-      {recipes}
+      {posts?.map((post, index) => (
+        <Recipe key={index}>
+          <Link to={`/${post.recipeId}`}>
+            <img src={post.thumbnailUrl} alt="noodle" />
+            <TextArea>
+              <Title>{post.title}</Title>
+              <Heart>
+                <div>
+                  <FontAwesomeIcon icon={faHeart} style={{ height: "14rem", color: "#d01818" }} />
+                  <HeartRate>{post.likeCount}</HeartRate>
+                </div>
+                <div style={{ marginLeft: "10px" }}>
+                  <FontAwesomeIcon icon={faEye} style={{ height: "14rem", color: "#c1ffa9" }} />
+                  <HeartRate>{post.viewCount}</HeartRate>
+                </div>
+              </Heart>
+              <Writer>{post.nickName}</Writer>
+            </TextArea>
+          </Link>
+        </Recipe>
+      ))}
       <Observer ref={ref}></Observer>
     </RecipeArea>
   );
@@ -78,27 +123,49 @@ const RecipeArea = styled.div`
 `;
 
 const Recipe = styled.div`
-  display: flex;
-  padding: 15rem 10rem;
+  padding: 4px;
   cursor: pointer;
   border-bottom: 1px solid #dddddd;
+  img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    object-position: center;
+  }
+  a {
+    display: flex;
+    align-items: center;
+  }
 `;
 const TextArea = styled.div`
-  padding: 15rem 0 15rem 10rem;
+  padding: 12rem 10rem;
 `;
 const Title = styled.div`
-  font-size: 18rem;
-  font-weight: 700;
-  margin-bottom: 12rem;
+  font-size: 16rem;
+  font-weight: 800;
+  line-height: 1.3;
+  max-height: 2.6;
+  overflow: hidden;
+  text-overflow: elipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: keep-all;
+  margin-bottom: 4px;
 `;
 const Heart = styled.div`
   margin-bottom: 12rem;
   display: flex;
   align-items: center;
+  div {
+    display: flex;
+    align-items: center;
+  }
 `;
-const HeartRate = styled.div`
+const HeartRate = styled.span`
   font-size: 14rem;
-  margin-left: 2%;
+  margin-left: 4px;
+  font-weight: 700;
 `;
 const Writer = styled.div`
   font-size: 14rem;

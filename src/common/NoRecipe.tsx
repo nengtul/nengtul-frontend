@@ -14,7 +14,7 @@ export default function NoRecipe({ title }: TitleProps) {
     <>
       <NoneRecipe>
         <img src={Egg} alt="logo" />
-        <p>아직 {title} 레시피가 없습니다!</p>
+        <p>아직 {title} 없습니다!</p>
         <Link to={"/recipeList"}>
           레시피 보러가기
           <FontAwesomeIcon icon={faAngleRight} />

@@ -11,11 +11,13 @@ interface MarkerCardProps {
 }
 
 export default function MarkerCard({ selectedMarker, setSelectedMarker }: MarkerCardProps) {
+
   const navigate = useNavigate();
 
   const handleSendMessage = () => {
     navigate('/chat', { state: { selectedMarker } });
   };
+
 
   return (
     <>
@@ -29,7 +31,7 @@ export default function MarkerCard({ selectedMarker, setSelectedMarker }: Marker
           <div className="info">
             <div className="thumb"></div>
             <div>
-              <LevelBadge>견습 요리사</LevelBadge>
+              <LevelBadge>{selectedMarker.point}</LevelBadge>
               <p>{selectedMarker.userNickname} 님</p>
             </div>
           </div>
@@ -41,8 +43,8 @@ export default function MarkerCard({ selectedMarker, setSelectedMarker }: Marker
               <h4>{selectedMarker.title}</h4>
               <p className="price">
                 {selectedMarker.price === 0 ? (
-                  <span >무료 나눔 !</span>
-                 ) : (
+                  <span>무료 나눔 !</span>
+                ) : (
                   <>
                     <span>{selectedMarker.price}</span> 원
                   </>

@@ -8,6 +8,7 @@ export const USER_FINDID_URL = "https://nengtul.shop/v1/users/findid";
 export const USER_FINDPW_URL = "https://nengtul.shop/v1/users/findpw";
 
 export const AUTH_REFRESH_URL = "https://nengtul.shop/v1/auth/refresh";
+export const USER_LOGOUT_URL = "https://nengtul.shop/v1/users/logout";
 
 //나눔게시판 부분
 export const SHAREBOARD_URL = "https://nengtul.shop/v1/shareboards";
@@ -21,7 +22,8 @@ export const NOTICES_URL = "https://nengtul.shop/v1/notices";
 export const RECIPE_URL = "https://nengtul.shop/v1/recipe";
 export const RECIPE_DETAIL_URL = "https://nengtul.shop/v1/recipe/detail";
 export const RECIPE_COMMENT_LIST_URL = "https://nengtul.shop/v1/recipes";
-export const RECIPE_CATEGORY_URL="https://nengtul.shop/v1/recipe/category";
+export const RECIPE_CATEGORY_URL = "https://nengtul.shop/v1/recipe/category";
+export const RECIPE_INGREDIENT_URL = "https://nengtul.shop/v1/recipe/ingredient";
 
 //댓글 부분
 export const REPLY_COMMENT_URL = "https://nengtul.shop/v1/comments";
@@ -41,7 +43,6 @@ export const SAVED_RECIPE_URL = "https://nengtul.shop/v1/saved-recipe";
 //내가 작성한 레시피 부분
 export const RECIPE_USER_URL = "https://nengtul.shop/v1/recipe/user";
 
-
 //즐겨찾기 부분
-export const FAV_PUB_URL="https://nengtul.shop/v1/favorite/publisher";
-export const FAV_URL="https://nengtul.shop/v1/favorite"
+export const FAV_PUB_URL = "https://nengtul.shop/v1/favorite/publisher";
+export const FAV_URL = "https://nengtul.shop/v1/favorite";

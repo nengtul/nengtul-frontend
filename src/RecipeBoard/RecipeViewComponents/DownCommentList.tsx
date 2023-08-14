@@ -88,7 +88,7 @@ export default function DownCommentList({ item, commentsInput }: CommentListProp
           <p>
             {item.userNickname} / {date}
           </p>
-          {(MY_ROLE === "admin" || MY_ID == item.userId) && (
+          {(MY_ROLE === "ADMIN" || MY_ID == item.userId) && (
             <UpdateDeleteBtn handleUpdate={handleUpdate} handleModal={handleModal} />
           )}
         </div>

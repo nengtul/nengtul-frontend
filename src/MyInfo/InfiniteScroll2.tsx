@@ -7,10 +7,10 @@ import { RootState } from "../Store/store";
 import { getData } from "../axios";
 import NoRecipe from "../common/NoRecipe";
 export interface User {
-    id: number;
-    publisherId:number;
-    publisherNickName:string;
-    publisherProfilePhotoUrl:string;
+  id: number;
+  publisherId: number;
+  publisherNickName: string;
+  publisherProfilePhotoUrl: string;
 }
 interface ContentData {
   content: User[];
@@ -80,7 +80,7 @@ export default function InfiniteScroll2({ apiEndPoint }: InfiniteScrollProps) {
             />
           ))
         ) : (
-          <NoRecipe title={"즐겨찾기 한"} />
+          <NoRecipe title={"즐겨찾기 한 사용자가"} />
         )}
         <div ref={ref} />
       </CardWrap>
@@ -90,6 +90,5 @@ export default function InfiniteScroll2({ apiEndPoint }: InfiniteScrollProps) {
 
 const CardWrap = styled.ul`
   width: 100%;
-  padding-top: 60px;
-  margin-top:3px;
+  height: 100%;
 `;

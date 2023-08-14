@@ -42,7 +42,9 @@ export default function IngredientSearch() {
               />
               <SearchList ingredient={ingredient} removeItem={removeItem} />
             </div>
-            <SearchButton to={"/ingredientRecipe"}>레시피 조회</SearchButton>
+            <SearchButton to={`/ingredientRecipe?ingredients=${ingredient.join(",")}`}>
+              레시피 조회
+            </SearchButton>
           </SearchWrap>
         </ContensWrap>
         <TabMenu />

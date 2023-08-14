@@ -10,7 +10,7 @@ import { useInView } from "react-intersection-observer";
 import RecipeWriteBtn from "./RecipeWriteBtn";
 import ContensWrap from "../common/ContentsWrap";
 import TabMenu from "../common/TabMenu";
-import { RECIPE_URL,RECIPE_CATEGORY_URL } from "../url";
+import { RECIPE_URL, RECIPE_CATEGORY_URL } from "../url";
 import { getData } from "../axios";
 import NoRecipeCategory from "../common/NoRecipeCategory";
 export interface Post {
@@ -35,17 +35,26 @@ export default function RecipeListPage() {
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
   const categoryPage = useRef<number>(0);
   const [ref, inView] = useInView();
-  const [sortValue,setSortValue]=useState("asc")
+  const [sortValue, setSortValue] = useState("viewCount,desc");
   const fetch = useCallback(
-    async (category: string, sortValue:string, resetPage: boolean = false,resetPosts: boolean = false) => {
-    console.log(category,'category확인')
-    console.log(sortValue,'sort확인')
-    try {
+    async (
+      category: string,
+      sortValue: string,
+      resetPage: boolean = false,
+      resetPosts: boolean = false
+    ) => {
+      console.log(category, "category확인");
+      console.log(sortValue, "sort확인");
+      try {
         const targetPage = resetPage ? 0 : categoryPage.current;
         let data;
-        if(category===''){  //제일 처음렌더링
-          if(sortValue==='createdAt'){  //제일처음 렌더링 하자마자 '최신순'으로 바꿨을 경우 (성공)
-            data = await getData<ContentData>(`${RECIPE_URL}?size=5&page=${categoryPage.current}&sort=createdAt`)
+        if (category === "") {
+          //제일 처음렌더링
+          if (sortValue === "createdAt") {
+            //제일처음 렌더링 하자마자 '최신순'으로 바꿨을 경우 (성공)
+            data = await getData<ContentData>(
+              `${RECIPE_URL}?size=5&page=${categoryPage.current}&sort=createdAt`
+            );
             const contentData = data.content;
             if (resetPosts) {
               setPosts(contentData);
@@ -54,10 +63,13 @@ export default function RecipeListPage() {
             }
             setHasNextPage(contentData.length === 5);
             if (contentData.length) {
-                  categoryPage.current += 1;
-              }
-          }else{ // 1. 제일처음 렌더링 하자마자  (성공)  2. '최신순'으로 바꿨다가 다시 '인기순' (성공)
-            data = await getData<ContentData>(`${RECIPE_URL}?size=5&page=${categoryPage.current}&sort=asc`)
+              categoryPage.current += 1;
+            }
+          } else {
+            // 1. 제일처음 렌더링 하자마자  (성공)  2. '최신순'으로 바꿨다가 다시 '인기순' (성공)
+            data = await getData<ContentData>(
+              `${RECIPE_URL}?size=5&page=${categoryPage.current}&sort=viewCount,desc`
+            );
             const contentData = data.content;
             if (resetPosts) {
               setPosts(contentData);
@@ -69,9 +81,13 @@ export default function RecipeListPage() {
               categoryPage.current += 1;
             }
           }
-        }else{  //카테고리 선택했을때
-          if(sortValue==='createdAt'){  //'최신순'선택했을때
-            data = await getData<ContentData>(`${RECIPE_CATEGORY_URL}/${category}?size=5&page=${targetPage}&sort=createdAt`);
+        } else {
+          //카테고리 선택했을때
+          if (sortValue === "createdAt") {
+            //'최신순'선택했을때
+            data = await getData<ContentData>(
+              `${RECIPE_CATEGORY_URL}/${category}?size=5&page=${targetPage}&sort=createdAt`
+            );
             const contentData = data.content;
             if (resetPosts) {
               setPosts(contentData);
@@ -80,11 +96,12 @@ export default function RecipeListPage() {
             }
             setHasNextPage(contentData.length === 5);
             if (contentData.length) {
-                  categoryPage.current += 1;
-              }
-
-          }else{
-            data = await getData<ContentData>(`${RECIPE_CATEGORY_URL}/${category}?size=5&page=${targetPage}&sort=asc`);
+              categoryPage.current += 1;
+            }
+          } else {
+            data = await getData<ContentData>(
+              `${RECIPE_CATEGORY_URL}/${category}?size=5&page=${targetPage}&sort=viewCount,desc`
+            );
             const contentData = data.content;
             if (resetPosts) {
               setPosts(contentData);
@@ -93,57 +110,57 @@ export default function RecipeListPage() {
             }
             setHasNextPage(contentData.length === 5);
             if (contentData.length) {
-                  categoryPage.current += 1;
-              }
+              categoryPage.current += 1;
+            }
           }
+        }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      console.error(err);
-    }
-  },
-  []);
+    },
+    []
+  );
 
   useEffect(() => {
     const fetchData = () => {
       if (inView && hasNextPage) {
-        fetch(category,sortValue).catch((error) => {
+        fetch(category, sortValue).catch((error) => {
           console.error(error);
         });
       }
     };
     fetchData();
-  }, [fetch, hasNextPage, inView, category,sortValue]);
+  }, [fetch, hasNextPage, inView, category, sortValue]);
 
-  //카테고리랑 sort 1개로 통일 
-  const select=(e: React.MouseEvent<HTMLButtonElement>) => {
-    const value=e.currentTarget.value; //'MAIN_DIST' or '인기순'
-    if (value === '인기순' || value === '최신순') {
+  //카테고리랑 sort 1개로 통일
+  const select = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const value = e.currentTarget.value; //'MAIN_DIST' or '인기순'
+    if (value === "인기순" || value === "최신순") {
       setViewCount(value);
       setViewCountView(!viewCountView);
-      categoryPage.current=0;
-      const engValue=value === '인기순' ? 'asc' : 'createdAt'
-      setSortValue (value === '인기순' ? 'asc' : 'createdAt');
-      if (category === '') {
-        fetch(category, engValue, true, true).catch((err)=>{
-          console.log(err)
+      categoryPage.current = 0;
+      const engValue = value === "인기순" ? "viewCount,desc" : "createdAt";
+      setSortValue(value === "인기순" ? "viewCount,desc" : "createdAt");
+      if (category === "") {
+        fetch(category, engValue, true, true).catch((err) => {
+          console.log(err);
         });
       } else {
-        fetch(category, engValue, true, true).catch((err)=>{
-          console.log(err)
+        fetch(category, engValue, true, true).catch((err) => {
+          console.log(err);
         });
       }
-      
-    }else{
+    } else {
       setCategory(value);
       setCategoryName(e.currentTarget.innerText);
       setCategoryView(!categoryView);
-      categoryPage.current=0;
-      fetch(value,sortValue,true,true).catch((err)=>{
-        console.log(err)
+      categoryPage.current = 0;
+      fetch(value, sortValue, true, true).catch((err) => {
+        console.log(err);
       });
     }
-  }
-  console.log(posts.length)
+  };
+  console.log(posts.length);
 
   return (
     <MobileWrap>
@@ -270,13 +287,11 @@ export default function RecipeListPage() {
           </CategoryBtn>
           <CardWrap>
             <div ref={ref} />
-            {posts.length>0?(
-              posts?.map((post) => (
-                  <RecipeListCard key={post.recipeId} post={post} />
-              ))
-            ):(
+            {posts.length > 0 ? (
+              posts?.map((post) => <RecipeListCard key={post.recipeId} post={post} />)
+            ) : (
               <NoRecipeCategory title={"등록된"} />
-            )} 
+            )}
             <div ref={ref} />
           </CardWrap>
         </ListWrap>
