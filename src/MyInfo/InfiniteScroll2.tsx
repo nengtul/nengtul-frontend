@@ -90,5 +90,6 @@ export default function InfiniteScroll2({ apiEndPoint }: InfiniteScrollProps) {
 
 const CardWrap = styled.ul`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 60px);
+  margin-top: 60px;
 `;

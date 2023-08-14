@@ -84,7 +84,7 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
 
   return (
     <>
-      <CardWrap style={{ height: "100%" }}>
+      <CardWrap>
         {posts.length > 0 ? (
           posts?.map((post) => (
             <MyRecipeList
@@ -95,7 +95,7 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
             />
           ))
         ) : (
-          <NoRecipe title={"좋아하는 레시피가"} />
+          <NoRecipe title={"레시피"} />
         )}
         <div ref={ref} />
       </CardWrap>
@@ -106,5 +106,5 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
 const CardWrap = styled.ul`
   margin-top: 60px;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 60px);
 `;

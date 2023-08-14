@@ -18,6 +18,7 @@ const getRefresh = (
 ): Promise<{ AccessToken: string; refreshToken: string }> => {
   const refreshUrl = REFRESH_URL;
   const headers = {
+    withCredentials: true,
     Authorization: `Bearer ${token}`,
     RefreshToken: `Bearer ${refreshToken}`,
   };
