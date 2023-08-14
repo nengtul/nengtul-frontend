@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { deleteData } from "../axios";
+import { deleteTokenData } from "../axios";
 import { Post } from "./MyRecipe";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
 import { SAVED_RECIPE_URL } from "../url";
 import RecipeDeleteBtn from "../common/RecipeDeleteBtn";
+import { useDispatch } from "react-redux";
 
 interface RecipeListCardProps {
   post: Post;
@@ -14,11 +15,15 @@ interface RecipeListCardProps {
 
 export default function SavedRecipeList({ post, onDeletePost }: RecipeListCardProps) {
   const Token = useSelector((state: RootState) => state.accessTokenValue);
-  const { accessTokenValue } = Token;
+  const { accessTokenValue, refreshTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
+  const REFRESH_TOKEN = refreshTokenValue;
+
+  const dispatch = useDispatch();
+
   const handleClick = () => {
-    if (MY_TOKEN !== null) {
-      deleteData(`${SAVED_RECIPE_URL}/${post.id}`, MY_TOKEN)
+    if (MY_TOKEN !== null && REFRESH_TOKEN) {
+      deleteTokenData(`${SAVED_RECIPE_URL}/${post.id}`, MY_TOKEN, dispatch, REFRESH_TOKEN)
         .then(() => {
           console.log("삭제되었습니다");
           onDeletePost(post.id);
