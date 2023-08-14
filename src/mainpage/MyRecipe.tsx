@@ -73,7 +73,7 @@ export default function MyRecipe() {
               <SavedRecipeList key={index} post={post} onDeletePost={handleDeletePost} />
             ))
           ) : (
-            <NoRecipe title={"저장한"} />
+            <NoRecipe title={"저장한 레시피가"} />
           )}
         </ListWrap>
       </MainPageSection>

@@ -95,7 +95,7 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
             />
           ))
         ) : (
-          <NoRecipe title={"좋아하는"} />
+          <NoRecipe title={"좋아하는 레시피가"} />
         )}
         <div ref={ref} />
       </CardWrap>
