@@ -1,14 +1,16 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft} from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 function ChatHeader(){
+    const navigate = useNavigate();
     return (
         <ChtHeader>
             <Header>
                 <UserName>user1</UserName>
             </Header>
             <GoBack>
-            <FontAwesomeIcon icon={faChevronLeft} style={{ height: "23rem", color: "black" }}/> 
+            <FontAwesomeIcon icon={faChevronLeft} style={{ height: "23rem", color: "black" }} onClick={() => {navigate(-1);}}/> 
             </GoBack>
         </ChtHeader>
     )

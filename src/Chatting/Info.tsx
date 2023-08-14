@@ -1,15 +1,20 @@
 import styled from "styled-components";
-
-function Info(){
+import { Post } from "../IngredientMap/MarkerMap";
+interface MarkerProps {
+    selectedMarker: Post;
+  
+  }
+  
+function Info({selectedMarker}:MarkerProps){
     return (
         <InfoArea>
-            <InfoPic></InfoPic>
+            <InfoPic><img src={selectedMarker.shareImg}/></InfoPic>
             <InfoText>
                 <div style={{display:"flex", paddingBottom:"7rem"}}>
                     <InfoState>거래중</InfoState>
-                    <InfoTitle>양배추 반 개 팝니다</InfoTitle>
+                    <InfoTitle>{selectedMarker.title}</InfoTitle>
                 </div>
-                <InfoPrice>5,000원</InfoPrice>
+                <InfoPrice>{selectedMarker.price}원</InfoPrice>
             </InfoText>
         </InfoArea>
     )
@@ -29,6 +34,10 @@ const InfoPic= styled.div`
     height:55rem;
     background-color:#DDDDDD;
     border-radius:5rem;
+    img{
+        width:55rem;
+        height:55rem;
+    }
 `
 const InfoText=styled.div`
     display:flex;

@@ -4,13 +4,19 @@ import LevelBadge from "../common/LevelBadge";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentDots } from "@fortawesome/free-regular-svg-icons";
 import theme from "../common/theme";
-
+import { useNavigate } from 'react-router-dom';
 interface MarkerCardProps {
   selectedMarker: Post;
   setSelectedMarker: React.Dispatch<React.SetStateAction<Post | null>>;
 }
 
 export default function MarkerCard({ selectedMarker, setSelectedMarker }: MarkerCardProps) {
+  const navigate = useNavigate();
+
+  const handleSendMessage = () => {
+    navigate('/chat', { state: { selectedMarker } });
+  };
+
   return (
     <>
       <Card>
@@ -41,10 +47,15 @@ export default function MarkerCard({ selectedMarker, setSelectedMarker }: Marker
                     <span>{selectedMarker.price}</span> 원
                   </>
                 )}
-              </p>
-              <button type="button">
+              </p>            
+              {/* <Link to={{
+                pathname: '/chat',
+                state: { selectedMarker: selectedMarker }
+              } as Location}> */}
+              <button type="button" onClick={handleSendMessage}>
                 <FontAwesomeIcon icon={faCommentDots} /> 메세지 보내기
               </button>
+              {/* </Link> */}
             </div>
           </div>
         </div>
