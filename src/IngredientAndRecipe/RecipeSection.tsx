@@ -42,7 +42,7 @@ function RecipeSection({ ingredients }: IngredientsProps) {
     try {
       if (MY_TOKEN && REFRESH_TOKEN) {
         await getTokenData<RecipeSectionProps>(
-          `${url}?size=7&page=${page.current}&sort=viewCount,asc`,
+          `${url}?size=7&page=${page.current}&sort=viewCount,desc`,
           MY_TOKEN,
           dispatch,
           REFRESH_TOKEN
@@ -92,7 +92,7 @@ function RecipeSection({ ingredients }: IngredientsProps) {
                 </div>
                 <div style={{ marginLeft: "10px" }}>
                   <FontAwesomeIcon icon={faEye} style={{ height: "14rem", color: "#c1ffa9" }} />
-                  <HeartRate>{post.likeCount}</HeartRate>
+                  <HeartRate>{post.viewCount}</HeartRate>
                 </div>
               </Heart>
               <Writer>{post.nickName}</Writer>
