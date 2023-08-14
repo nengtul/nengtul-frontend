@@ -21,6 +21,7 @@ interface UserData {
   likeRecipe: number;
   myRecipe: number;
   shareList: number;
+  favoriteList: number;
 }
 const DEFAULT_USER_DATA: UserData = {
   name: "",
@@ -29,6 +30,7 @@ const DEFAULT_USER_DATA: UserData = {
   likeRecipe: 0,
   myRecipe: 0,
   shareList: 0,
+  favoriteList: 0,
 };
 
 export default function HeaderTabMenu() {
@@ -118,7 +120,7 @@ export default function HeaderTabMenu() {
               style={{ height: "16rem", color: `${theme.colors.main}` }}
             />
             즐겨찾기
-            <span>({data.shareList})</span>
+            <span>({data.favoriteList})</span>
           </Link>
         </li>
         <li>
