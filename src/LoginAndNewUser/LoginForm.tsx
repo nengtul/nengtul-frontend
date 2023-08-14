@@ -48,6 +48,7 @@ export default function LoginForm() {
             console.log(userData);
             sessionStorage.setItem("userId", userData.id.toString());
             sessionStorage.setItem("roles", userData.roles);
+            sessionStorage.setItem("nickName", userData.nickname);
           })
           .catch((error) => {
             console.log(error);

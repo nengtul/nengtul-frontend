@@ -2,12 +2,17 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-function ChatHeader(){
+// import { Post } from "../IngredientMap/MarkerMap";
+// interface MarkerProps {
+//     selectedMarker: Post;
+  
+//   }
+function ChatHeader({ user }: { user: string }){
     const navigate = useNavigate();
     return (
         <ChtHeader>
             <Header>
-                <UserName>user1</UserName>
+                <UserName>{user}</UserName>
             </Header>
             <GoBack>
             <FontAwesomeIcon icon={faChevronLeft} style={{ height: "23rem", color: "black" }} onClick={() => {navigate(-1);}}/> 
