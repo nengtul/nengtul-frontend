@@ -34,7 +34,7 @@ function Chatting2({chatMessages}:ChatMess){
 
 const MyMessage =styled.div`
     font-size: 14rem;
-    // display:inline-block;
+    display:inline-block;
     max-width: 200rem;
     height:auto;
     background-color: #38DB83;
@@ -45,7 +45,7 @@ const MyMessage =styled.div`
 
     margin: 10rem 10rem 0rem 180rem;
     line-height:1.3;
-    // float:right;
+    float:right;
 `
 const GetMessage =styled.div`
     font-size: 14rem;
