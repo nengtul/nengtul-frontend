@@ -8,9 +8,6 @@ import { Provider } from "react-redux";
 import store from "../Redux/store";
 
 function MarketPage() {
-  // function handleMarketInfoChange(info) {
-  //     setSelectedPlace(info);
-  // }
   return (
     <MobileWrap style={{ height: "800px" }}>
       <MarketPageArea>

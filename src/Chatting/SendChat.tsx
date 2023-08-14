@@ -2,14 +2,20 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera,faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import {useRef,useEffect,useState,ChangeEvent,KeyboardEvent} from 'react';
-
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { RootState } from "../Store/store";
+import * as StompJs from '@stomp/stompjs';
 interface SendChatProps {
     updateChatInfo: (newInfo: string) => void; 
+    stompClient: StompJs.Client;
+    selectedMarkerId: number; 
   }
-function SendChat({ updateChatInfo }:SendChatProps){
-
+function SendChat({ updateChatInfo, stompClient ,selectedMarkerId}:SendChatProps){
+    const [first,setFirst]=useState(false)
     const inputTextRef = useRef<HTMLTextAreaElement>(null!);
-
+    const Token = useSelector((state: RootState) => state.accessTokenValue);
+    const { accessTokenValue} = Token;
+    const MY_TOKEN = accessTokenValue;
     const [inputValue, setInputValue] = useState('');
     const updateHeight=()=>{
         if (inputTextRef.current) {
@@ -37,6 +43,20 @@ function SendChat({ updateChatInfo }:SendChatProps){
 
     const handleSubmit = () => {
         if (inputValue.trim() !== '') {
+            if(!first){
+                console.log('여기까진 가나??')
+                stompClient.publish({
+                    destination:`/pub/chat/start/shareboards/${selectedMarkerId}`,
+                    body: 
+                        inputValue
+                    ,
+                    headers:{Authorization: `Bearer ${MY_TOKEN}`},
+                }
+                )
+                    setFirst(true)
+            }else{
+                // stompClient.publish('/pub/chat/send/rooms/{roomId}', {}, JSON.stringify({ message: inputValue }));
+            }
           setInputValue('');
           inputTextRef.current.style.height = '40rem';
           updateChatInfo(inputValue);
