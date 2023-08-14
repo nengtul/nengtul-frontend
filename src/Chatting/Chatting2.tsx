@@ -53,7 +53,7 @@ const GetMessage = styled.div`
   display: inline-block;
   max-width: 200rem;
   height: auto;
-  background-color: red;
+  background-color:#c3c3c3;
   padding: 10rem;
   border-radius: 15rem;
   white-space: pre-wrap;
