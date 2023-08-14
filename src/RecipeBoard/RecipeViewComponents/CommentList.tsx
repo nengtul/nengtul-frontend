@@ -126,7 +126,7 @@ export default function CommentList({ item, commentsInput }: CommentListProps) {
               <p className="writer">{item.userNickname} 님</p>
             </div>
           </div>
-          {(MY_ROLE === "admin" || MY_ID == item.userId) && (
+          {(MY_ROLE === "ADMIN" || MY_ID == item.userId) && (
             <UpdateDeleteBtn handleUpdate={handleUpdate} handleModal={handleModal} />
           )}
         </div>
