@@ -16,7 +16,7 @@ export default function SavedRecipeList({ post, onDeletePost }: RecipeListCardPr
   const Token = useSelector((state: RootState) => state.accessTokenValue);
   const { accessTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
-  const onDelete = () => {
+  const handleClick = () => {
     if (MY_TOKEN !== null) {
       deleteData(`${SAVED_RECIPE_URL}/${post.id}`, MY_TOKEN)
         .then(() => {
@@ -31,10 +31,7 @@ export default function SavedRecipeList({ post, onDeletePost }: RecipeListCardPr
   return (
     <>
       <RecipeLi>
-        {/* <button className="delete-image-btn" onClick={onDelete}>
-          <FontAwesomeIcon icon={faTrash} />
-        </button> */}
-        <RecipeDeleteBtn onDelete={onDelete} />
+        <RecipeDeleteBtn handleClick={handleClick} />
         <RecipeLink to={`/${post.recipeId}`}>
           <img src={post.thumbnailUrl} alt="food-img" />
           <RecipeInfo>

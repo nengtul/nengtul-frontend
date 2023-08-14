@@ -42,7 +42,7 @@ interface RecipeData {
   point: number;
   userProfileUrl: string;
   likes: boolean;
-  favorite:boolean;
+  favorite: boolean;
 }
 
 export default function RecipeViewWrap() {
@@ -62,7 +62,7 @@ export default function RecipeViewWrap() {
   const [okModalOpen, setokModalOpen] = useState(false);
   const [likes, setLikes] = useState(false);
 
-  const [favorite,setFavorite]=useState(false);
+  const [favorite, setFavorite] = useState(false);
 
   const [recipe, setRecipe] = useState<RecipeData>({
     category: "",
@@ -85,9 +85,7 @@ export default function RecipeViewWrap() {
     userProfileUrl: "",
     likes: false,
 
-    favorite:false,
-    
-
+    favorite: false,
   });
   const [isSaved, setIsSaved] = useState(false);
   const { recipeId } = useParams();
@@ -223,13 +221,12 @@ export default function RecipeViewWrap() {
         <OkModal setokModalOpen={setokModalOpen} title={"레시피 저장"} okModalText={okModalText} />
       )}
       <ContensWrap>
-        {/* <RecipeVideo /> */}
         {recipe.videoUrl ? (
           <RecipeVideo video={recipe.videoUrl} />
         ) : (
           <RecipeMainBanner thumb={recipe.thumbnailUrl} />
         )}
-        {(ROLES === "admin" || USER_ID === recipe.userId) && (
+        {(ROLES === "ADMIN" || USER_ID === recipe.userId) && (
           <div
             className="button-wrap"
             style={{
