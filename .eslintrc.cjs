@@ -21,4 +21,9 @@ module.exports = {
     "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     "@typescript-eslint/no-non-null-assertion": "off",
   },
+  resolve:{
+    alias:{
+      'sockjs-client': 'sockjs-client/dist/sockjs.js',
+    }
+  }
 };

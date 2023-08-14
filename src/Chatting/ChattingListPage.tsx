@@ -1,33 +1,64 @@
 import styled from "styled-components";
-
+import { getData } from "../axios";
 import MobileWrap from "../common/MobileWrap";
 import Header from "../common/Header";
 import ContensWrap from "../common/ContentsWrap";
 import TabMenu from "../common/TabMenu";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { RootState } from "../Store/store";
+import { useEffect,useState } from "react";
+import { Link } from "react-router-dom";
+export interface Post {
+  roomId:string;
+  latestChat:string;
+  memberNicknames:Array<string>;
+  shareBoardTitle:string
+  
+}
 function ChattingListPage() {
-  const chattings = Array.from({ length: 8 }, (_, index) => (
-    <Chat key={index}>
-      <UserPic></UserPic>
-      <UserText>
-        <UserInfo>
-          <UserId>user1</UserId>
-          <UserPlace>번동</UserPlace>
-          <ChatTime>1달 전</ChatTime>
-        </UserInfo>
-
-        <ChatContent>안녕하세요 가능합니다닷</ChatContent>
-      </UserText>
-      <NewChat>2</NewChat>
-      <IngredientPic></IngredientPic>
-    </Chat>
-  ));
+  const Token = useSelector((state: RootState) => state.accessTokenValue);
+  const { accessTokenValue} = Token;
+  const MY_TOKEN = accessTokenValue;
+  const [chatData, setChatData] = useState<Post[] | null>(null) 
+  useEffect(() => {
+    if(MY_TOKEN){
+      getData<Post[]>('https://nengtul.shop/v1/chat/list',MY_TOKEN)
+      .then((response) => {
+        console.log(response)
+        setChatData(response);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    }
+  }, []);
   return (
     <MobileWrap>
       <Header />
       <ContensWrap>
         <ContentWrapper>
           <Title>채팅</Title>
-          <ChatList>{chattings}</ChatList>
+          <ChatList>
+            <Link to={"/chat"}>
+            {chatData?.map((chat, index) => (
+              <Chat key={index}>
+                {/* <UserPic></UserPic> */}
+                <UserText>
+                  <UserInfo>
+                    <UserId>{chat.memberNicknames[0]},{chat.memberNicknames[1]}</UserId>
+                    {/* <UserId>{chat.memberNicknames[1]}</UserId> */}
+                    {/* <UserPlace>번동</UserPlace>
+                    <ChatTime>1달 전</ChatTime> */}
+                  </UserInfo>
+
+                  <ChatContent>{chat.latestChat}</ChatContent>
+                </UserText>
+                {/* <NewChat>2</NewChat> */}
+                {/* <IngredientPic></IngredientPic> */}
+              </Chat>
+            ))}
+          </Link>
+        </ChatList>
         </ContentWrapper>
       </ContensWrap>
       <TabMenu />
@@ -63,11 +94,12 @@ const ChatList = styled.div`
 const Chat = styled.div`
   position: relative;
   display: flex;
-  justify-content: center;
+  // justify-content: center;
   align-items: center;
   width: 100%;
   height: 111rem;
   border-bottom: 1px solid #dddddd;
+  border-top: 1px solid #dddddd;
   cursor: pointer;
 `;
 const UserPic = styled.div`
@@ -81,8 +113,8 @@ const UserPic = styled.div`
 const UserText = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 10rem 0 10rem;
-  width: 200rem;
+  margin: 0 10rem 0 50rem;
+  // width: 200rem;
 `;
 
 const UserInfo = styled.div`
@@ -91,7 +123,7 @@ const UserInfo = styled.div`
   padding-bottom: 7rem;
 `;
 const UserId = styled.div`
-  font-size: 22rem;
+  font-size: 18rem;
   font-weight: 600;
   margin-right: 9rem;
 `;
