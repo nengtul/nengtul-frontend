@@ -32,6 +32,7 @@ function Chatting2({ chatMessages }: ChatMess) {
   );
 }
 
+
 const MyMessage = styled.div`
   font-size: 14rem;
   // display:inline-block;
@@ -57,6 +58,7 @@ const GetMessage = styled.div`
   border-radius: 15rem;
   white-space: pre-wrap;
   word-wrap: break-word;
+
 
   margin: 10rem 10rem 0rem 20rem;
   line-height: 1.3;
