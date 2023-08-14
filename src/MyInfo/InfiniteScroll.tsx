@@ -97,7 +97,7 @@ export default function InfiniteScroll({ apiEndPoint }: InfiniteScrollProps) {
         ) : (
           <NoRecipe title={"레시피"} />
         )}
-        <div ref={ref} />
+        <div ref={ref} style={{ height: "50px" }} />
       </CardWrap>
     </>
   );
