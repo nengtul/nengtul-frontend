@@ -5,18 +5,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
-import {useState, useRef} from "react";
+import { useState, useRef } from "react";
 import { SHAREBOARD_URL } from "../url";
-import  {updateData} from "../axios";
+import { updateData } from "../axios";
+import WriteModal from "../Modal/WriteSuccess";
 
 export default function WriteForm() {
   //토큰가져오기
-  const Token=useSelector((state: RootState)=>state.accessTokenValue)
-  const {accessTokenValue}=Token;
-  const MY_TOKEN=accessTokenValue
+  const Token = useSelector((state: RootState) => state.accessTokenValue);
+  const { accessTokenValue } = Token;
+  const MY_TOKEN = accessTokenValue;
 
-  const LatLng=useSelector((state: RootState)=>state.latlngInfo)
-  const {moveLatitude,moveLongitude}=LatLng;
+  const LatLng = useSelector((state: RootState) => state.latlngInfo);
+  const { moveLatitude, moveLongitude } = LatLng;
   //거래위치 props로 받아옴
   const [locationInfo, setLocationInfo] = useState<string>("");
   const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,139 +34,108 @@ export default function WriteForm() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [tradeImage, setTradeImage] = useState<Blob | null>(null);
 
+  const [writeModal, setWriteModal] = useState(false);
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file=e.target.files?.[0];
-    console.log('file',file)
+    const file = e.target.files?.[0];
+    console.log("file", file);
     if (file) {
-        setTradeImage(file);
-        console.log('file',file)
-      } else {
-        // setTradeImage("");
-        setTradeImage(null);
-      }
-      
-  }
+      setTradeImage(file);
+      console.log("file", file);
+    } else {
+      // setTradeImage("");
+      setTradeImage(null);
+    }
+  };
   const imageURL = tradeImage ? URL.createObjectURL(tradeImage) : null;
- 
+
   //이미지+shareBoardDto 같이 보내기
-  const handleSubmit=(e:React.FormEvent<HTMLFormElement>): void=>{
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const title=formData.get('title') as string;
-    const content=formData.get('content') as string;
-    const price = isFree ? 0 : Number(formData.get('price') as string);
-    const latitude=moveLatitude;
-    const longitude=moveLongitude;
-    const place= locationInfo;
-
-    
-    
-    // try{
-    //   axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-    //   const url=SHAREBOARD_URL;
-    //   const shareBoardDto={
-    //     title: title,
-    //     content: content,
-    //     place: place,
-    //     price: price,
-    //     lat: latitude,
-    //     lon:longitude,
-    //   }
-    //   console.log('image!!!',tradeImage)
-
-    //   if (tradeImage instanceof Blob) {
-    //     formData.append("image", tradeImage);
-    //   }
-
-    //   console.log('shareBoardDto:', shareBoardDto);
-    //   const blob=new Blob([JSON.stringify(shareBoardDto)],{
-    //     type:'application/json'
-    //    });
-    //    formData.append("shareBoardDto", blob)
-    //    const config = {
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data',
-    //     },
-    //   };
-    //   axios.post(url,formData,config)
-    //   .then((response) => {
-    //     console.log('response', response);
-    //     console.log('등록완료!'); // 모달창으로 바꾸기
-  
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-    // } catch(err){
-    //   console.log(err)
-    // }
-    try{
-      const shareBoardDto={
+    const title = formData.get("title") as string;
+    const content = formData.get("content") as string;
+    const price = isFree ? 0 : Number(formData.get("price") as string);
+    const latitude = moveLatitude;
+    const longitude = moveLongitude;
+    const place = locationInfo;
+    try {
+      const shareBoardDto = {
         title: title,
         content: content,
         place: place,
         price: price,
         lat: latitude,
-        lon:longitude,
-      }
-  
+        lon: longitude,
+      };
+
       if (tradeImage instanceof Blob) {
         formData.append("image", tradeImage);
       }
 
-      const blob=new Blob([JSON.stringify(shareBoardDto)],{
-        type:'application/json'
-       });
-       formData.append("shareBoardDto", blob)
-       
-      if(MY_TOKEN!==null){
-        updateData(SHAREBOARD_URL,formData,MY_TOKEN)
-         .then((data)=>{
+      const blob = new Blob([JSON.stringify(shareBoardDto)], {
+        type: "application/json",
+      });
+      formData.append("shareBoardDto", blob);
+
+      if (MY_TOKEN !== null) {
+        updateData(SHAREBOARD_URL, formData, MY_TOKEN)
+          .then((data) => {
             console.log(data);
-
-        })
-        .catch(error=>{
-            console.log(error)
-        })
+            setWriteModal(true);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
-    } catch(err){
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     }
-    
-  }
-  
-  return (
-      <WriteWrap>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <h4>제목</h4>
-            <input type="text" name="title" placeholder="제목을 입력해주세요." />
-          </div>
-          <div style={{ marginTop: "20px" }}>
-            <h4>내용</h4>
-            <textarea name="content" placeholder="내용을 입력해주세요."></textarea>
-          </div>
-          <div className="price-chk">
-            <input type="checkbox" id="chk-box"  checked={isFree} onChange={handleIsFreeChange}/>
-            <label htmlFor="chk-box"></label>
-            <span>무료 나눔이라면 체크해주세요!</span>
-          </div>
-          <input type="text" name="price" placeholder="가격을 입력해주세요." />
-          <div className="input-file">
-            <label htmlFor="img-file">
-              <FontAwesomeIcon icon={faPlus} />
-            </label>
-            <input type="file" id="img-file" accept="image/*"  ref={fileInputRef} onChange={handleImageChange} />
-            {tradeImage instanceof Blob ? <img src={imageURL || ""} alt="recipe-img" /> : <></>}
-            {tradeImage ? <></> : <span>* 이미지를 업로드해 주세요.</span>}
-          </div>
+  };
 
-          <TrandingLocation location={locationInfo} onLocationChange={handleLocationChange}/>
-          <SubmitBtn type="submit" >
-              작성하기
-          </SubmitBtn>
-        </form>
-      </WriteWrap>
+  return (
+    <WriteWrap>
+      {writeModal && (
+        <WriteModal
+          title={"성공"}
+          setWriteModal={setWriteModal}
+          navi={"/ingredientMap"}
+        ></WriteModal>
+      )}
+      <form onSubmit={handleSubmit}>
+        <div>
+          <h4>제목</h4>
+          <input type="text" name="title" placeholder="제목을 입력해주세요." />
+        </div>
+        <div style={{ marginTop: "20px" }}>
+          <h4>내용</h4>
+          <textarea name="content" placeholder="내용을 입력해주세요."></textarea>
+        </div>
+        <div className="price-chk">
+          <input type="checkbox" id="chk-box" checked={isFree} onChange={handleIsFreeChange} />
+          <label htmlFor="chk-box"></label>
+          <span>무료 나눔이라면 체크해주세요!</span>
+        </div>
+        <input type="text" name="price" placeholder="가격을 입력해주세요." />
+        <div className="input-file">
+          <label htmlFor="img-file">
+            <FontAwesomeIcon icon={faPlus} />
+          </label>
+          <input
+            type="file"
+            id="img-file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleImageChange}
+          />
+          {tradeImage instanceof Blob ? <img src={imageURL || ""} alt="recipe-img" /> : <></>}
+          {tradeImage ? <></> : <span>* 이미지를 업로드해 주세요.</span>}
+        </div>
+
+        <TrandingLocation location={locationInfo} onLocationChange={handleLocationChange} />
+        <SubmitBtn type="submit">작성하기</SubmitBtn>
+      </form>
+    </WriteWrap>
   );
 }
 
@@ -253,12 +223,11 @@ const WriteWrap = styled.div`
       color: #817f7f;
       margin-left: 4px;
     }
-    img{
-      width:70rem;
-      height:70rem;
-      margin-left:5rem;
+    img {
+      width: 70rem;
+      height: 70rem;
+      margin-left: 5rem;
     }
-   
   }
 `;
 
