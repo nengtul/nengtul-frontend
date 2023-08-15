@@ -21,7 +21,8 @@ export default function MyFavList({ user, onDeletePost, apiEndPoint }: RecipeLis
   const { accessTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
   console.log("user", user);
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     setIsLiked((prev) => !prev);
   };
   if (!isLiked) {
