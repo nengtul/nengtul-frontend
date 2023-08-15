@@ -6,6 +6,7 @@ import { useState } from "react";
 import { simpleUpdateData } from "../../axios";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store/store";
+import OkModal from "../../Modal/OkModal";
 
 type CommentsInputFunction = () => void;
 
@@ -15,6 +16,8 @@ interface CommentInputProps {
 export default function CommentInput({ commentsInput }: CommentInputProps) {
   const { recipeId } = useParams();
   const [comment, setComment] = useState("");
+  const [okModalText, setOkModalText] = useState("");
+  const [okModalOpen, setokModalOpen] = useState(false);
   const url = `${RECIPE_COMMENT_LIST_URL}/${recipeId}/comments`;
 
   const Token = useSelector((state: RootState) => state.accessTokenValue);
@@ -35,11 +38,18 @@ export default function CommentInput({ commentsInput }: CommentInputProps) {
         .catch((err) => {
           console.error(err);
         });
+    } else {
+      setOkModalText("로그인이 필요한 서비스입니다.");
+      setokModalOpen(true);
+      setComment("");
     }
   };
 
   return (
     <Commet>
+      {okModalOpen && (
+        <OkModal setokModalOpen={setokModalOpen} title={"레시피"} okModalText={okModalText} />
+      )}
       <form>
         <textarea
           name="comment"

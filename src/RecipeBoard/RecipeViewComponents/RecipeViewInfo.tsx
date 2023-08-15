@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock, faHeart,faBookmark  } from "@fortawesome/free-regular-svg-icons";
-import { faHeart as faHeart2,faBookmark as faBookmark2 } from "@fortawesome/free-solid-svg-icons";
+import { faClock, faHeart, faBookmark } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as faHeart2, faBookmark as faBookmark2 } from "@fortawesome/free-solid-svg-icons";
 import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 import LevelBadge from "../../common/LevelBadge";
 import defaultThumb from "../../assets/common/defaultThumb.svg";
@@ -16,7 +16,7 @@ interface RecipeInfoProps {
   likes: boolean;
   handleLikes: () => void;
   handleFavorites: () => void;
-  favorite:boolean;
+  favorite: boolean;
 }
 
 export default function RecipeViewInfo({
@@ -43,16 +43,7 @@ export default function RecipeViewInfo({
             />
             <div className="writer">
               <LevelBadge>{point}</LevelBadge>
-              <p>
-                {nickName || "탈퇴한 사용자입니다."} 님
-                <Fav onClick={handleFavorites}>
-                  {favorite ? (
-                    <FontAwesomeIcon icon={faBookmark2} style={{ fontSize: "20rem", color: "#213454"}} />
-                  ) : ( 
-                    <FontAwesomeIcon icon={faBookmark} style={{ fontSize: "20rem", color: "#213454" }} />
-                  )} 
-                </Fav>
-              </p>
+              <p>{nickName || "탈퇴한 사용자입니다."} 님</p>
               <span>
                 <FontAwesomeIcon icon={faClock} style={{ fontSize: "12px" }} />
                 {cookingTime}
@@ -63,13 +54,28 @@ export default function RecipeViewInfo({
               </span>
             </div>
           </div>
-          <Like onClick={handleLikes}>
-            {likes ? (
-              <FontAwesomeIcon icon={faHeart2} style={{ fontSize: "20rem", color: "red" }} />
-            ) : (
-              <FontAwesomeIcon icon={faHeart} style={{ fontSize: "20rem", color: "red" }} />
-            )}
-          </Like>
+          <div>
+            <Like onClick={handleFavorites} title="즐겨찾기">
+              {favorite ? (
+                <FontAwesomeIcon
+                  icon={faBookmark2}
+                  style={{ fontSize: "20rem", color: "rgb(159, 154, 231)" }}
+                />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faBookmark}
+                  style={{ fontSize: "20rem", color: "rgb(159, 154, 231)" }}
+                />
+              )}
+            </Like>
+            <Like onClick={handleLikes} title="좋아요">
+              {likes ? (
+                <FontAwesomeIcon icon={faHeart2} style={{ fontSize: "20rem", color: "red" }} />
+              ) : (
+                <FontAwesomeIcon icon={faHeart} style={{ fontSize: "20rem", color: "red" }} />
+              )}
+            </Like>
+          </div>
         </div>
       </WriteInfo>
     </ViewWrap>
@@ -101,7 +107,6 @@ const WriteInfo = styled.div`
         margin: 4px 0px 8px 8px;
         font-weight: 700;
         color: #636363;
-        
       }
       span {
         margin-left: 8px;
@@ -121,20 +126,9 @@ const WriteInfo = styled.div`
     background-size: cover;
     background-color: #333;
   }
-
 `;
-const Fav=styled.button`
-  width: 30px;
-  height: 30px;
-  border-radius: 10px;
-  background-color:white;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  cursor: pointer;
-`
-const Like=styled.button`
+
+const Like = styled.button`
   width: 52px;
   height: 52px;
   border-radius: 10px;
@@ -143,4 +137,7 @@ const Like=styled.button`
   justify-content: center;
   color: #fff;
   cursor: pointer;
-`
+  &:nth-of-type(1) {
+    margin-right: 4px;
+  }
+`;
