@@ -8,15 +8,21 @@ export default function LoginSNS() {
   return (
     <>
       <SNSButtonArea>
-        <SNSButton id="kakao">
-          <img src={KakaoIcon} alt="EggIcon" />
-        </SNSButton>
-        <SNSButton id="Google">
-          <img src={GoogleIcon} alt="EggIcon" />
-        </SNSButton>
-        <SNSButton id="Naver">
-          <img src={NaverIcon} alt="EggIcon" />
-        </SNSButton>
+          <a href="/oauth2/authorization/kakao">
+            <SNSButton id="kakao">
+            <img src={KakaoIcon} alt="EggIcon" />
+            </SNSButton>
+          </a>
+          <a href="/oauth2/authorization/google">
+            <SNSButton id="Google">
+              <img src={GoogleIcon} alt="EggIcon" />
+            </SNSButton>
+          </a>
+          <a href="/oauth2/authorization/naver">
+            <SNSButton id="Naver">
+              <img src={NaverIcon} alt="EggIcon" />
+            </SNSButton>
+        </a>
       </SNSButtonArea>
     </>
   );
@@ -38,5 +44,10 @@ const SNSButton = styled.button`
 
   img {
     width: 28rem;
+  }
+  a{
+    width: 62rem;
+    height: 62rem;
+    border-radius: 100%;
   }
 `;
