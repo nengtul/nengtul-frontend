@@ -3,7 +3,7 @@ import EggPart from "./EggPart.tsx";
 import HomePart from "./HomePart.tsx";
 import MobileWrap from "../common/MobileWrap.tsx";
 import LoginForm from "./LoginForm.tsx";
-// import LoginSNS from "./LoginSNS.tsx";
+import LoginSNS from "./LoginSNS.tsx";
 import FindIdPassword from "../FindAndCertify/FindIdPassword.tsx";
 export default function Login() {
   return (
@@ -12,7 +12,7 @@ export default function Login() {
         <HomePart />
         <EggPart />
         <LoginForm />
-        {/* <LoginSNS /> */}
+        <LoginSNS />
         <FindIdPassword/>
       </Wrapper>
     </MobileWrap>
