@@ -42,9 +42,13 @@ export default function IngredientSearch() {
               />
               <SearchList ingredient={ingredient} removeItem={removeItem} />
             </div>
-            <SearchButton to={`/ingredientRecipe?ingredients=${ingredient.join(",")}`}>
-              레시피 조회
-            </SearchButton>
+            {ingredient.length > 0 ? (
+              <SearchButton to={`/ingredientRecipe?ingredients=${ingredient.join(",")}`}>
+                레시피 조회
+              </SearchButton>
+            ) : (
+              <div className="no-ingredient">하나 이상의 재료를 입력해주세요.</div>
+            )}
           </SearchWrap>
         </ContensWrap>
         <TabMenu />
@@ -65,6 +69,20 @@ const SearchWrap = styled.div`
 
   .searchWrap {
     width: 90%;
+  }
+  .no-ingredient {
+    width: 90%;
+    height: 46px;
+    background-color: #7a8d83;
+    font-size: 16rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 40px;
+    border-radius: 5px;
+    cursor: not-allowed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
