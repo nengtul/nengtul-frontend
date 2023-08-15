@@ -194,3 +194,43 @@ export const putData = <T>(url: string, data: object, token?: string): Promise<T
       throw error;
     });
 };
+
+export const putTokenData = async <T>(
+  url: string,
+  data: object,
+  token: string,
+  dispatch: (
+    action: PayloadAction<{ accessToken: string | null; refreshToken: string | null }>
+  ) => void,
+  refreshToken: string
+): Promise<T> => {
+  const headers = {
+    withCredentials: true,
+    Authorization: `Bearer ${token}`,
+  };
+
+  try {
+    const response = await axios.put<T>(url, data, { headers });
+    return response.data;
+  } catch (error) {
+    if ((error as AxiosError).response?.status === 401 && token && refreshToken) {
+      const newToken = await getRefresh(token, refreshToken);
+      if (dispatch) {
+        dispatch(
+          setTokens({
+            accessToken: newToken.AccessToken,
+            refreshToken: newToken.refreshToken,
+          })
+        );
+      }
+      const headers = {
+        withCredentials: true,
+        Authorization: `Bearer ${newToken.AccessToken}`,
+      };
+      const newResponse = await axios.put<T>(url, data, { headers });
+      return newResponse.data;
+    }
+
+    throw error;
+  }
+};

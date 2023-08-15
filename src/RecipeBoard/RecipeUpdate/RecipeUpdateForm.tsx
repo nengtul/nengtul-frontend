@@ -11,8 +11,9 @@ import RecipeWriteIntro from "./RecipeWriteIntro";
 import { RECIPE_URL } from "../../url";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../../Store/store";
-import { putData } from "../../axios";
+import { putTokenData } from "../../axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 interface RecipeData {
   category: string;
@@ -60,6 +61,8 @@ export default function RecipeUpdateForm() {
   const [link, setLink] = useState(recipeData.videoUrl);
   const [changeImage, setChangeImage] = useState<string[]>([]);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (recipeData.category === "밑반찬") setCategory("SIDE_DISH");
     else if (recipeData.category === "메인 반찬") setCategory("MAIN_SIDE_DISH");
@@ -86,8 +89,9 @@ export default function RecipeUpdateForm() {
   }, [category]);
 
   const Token = useSelector((state: RootState) => state.accessTokenValue);
-  const { accessTokenValue } = Token;
+  const { accessTokenValue, refreshTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
+  const REFRESH_TOKEN = refreshTokenValue;
 
   const url = `${RECIPE_URL}/${recipeData.id}`;
   const handleSubmit = () => {
@@ -125,8 +129,8 @@ export default function RecipeUpdateForm() {
       }
     }
 
-    if (MY_TOKEN !== null) {
-      putData(url, formData, MY_TOKEN)
+    if (MY_TOKEN !== null && REFRESH_TOKEN) {
+      putTokenData(url, formData, MY_TOKEN, dispatch, REFRESH_TOKEN)
         .then((res) => {
           console.log(res);
           navigate(`/${recipeData.id}`);
