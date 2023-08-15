@@ -10,7 +10,7 @@ function Chatting2({ chatMessages }: ChatMess) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight; //현재 스크롤의 위치를 스크롤의 길이만큼 설정해 놓으면 항상 채팅 젤 밑을 볼 수 있다.
     }
   }, [chatMessages]);
-  console.log("이거는보이나?", chatMessages);
+
   return (
     <ChattingArea ref={scrollRef}>
       {chatMessages.map((message, index) => (
@@ -22,9 +22,6 @@ function Chatting2({ chatMessages }: ChatMess) {
           ) : (
             <GetMessage>{message.message}</GetMessage>
           )}
-          {/* <Message isMyMessage={message.isMyMessage}>
-                    {message.message}
-                </Message> */}
           <br />
         </div>
       ))}

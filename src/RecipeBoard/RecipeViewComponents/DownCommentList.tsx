@@ -82,7 +82,7 @@ export default function DownCommentList({ item, commentsInput }: CommentListProp
 
   return (
     <>
-      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} />}
+      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} message={'정말 삭제하시겠습니까?'}/>}
       <List key={item.replyCommentId}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <p>

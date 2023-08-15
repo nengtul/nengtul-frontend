@@ -169,7 +169,7 @@ function UserInfomation() {
           okModalText={"메일로 인증 링크를 보냈습니다."}
         />
       )}
-      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} />}
+      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} message={'정말 탈퇴하시겠습니까?'}/>}
       {data && !editing && (
         <>
           <div className="thumb-img">

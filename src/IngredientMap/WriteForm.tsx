@@ -43,7 +43,6 @@ export default function WriteForm() {
       setTradeImage(file);
       console.log("file", file);
     } else {
-      // setTradeImage("");
       setTradeImage(null);
     }
   };
@@ -59,6 +58,7 @@ export default function WriteForm() {
     const latitude = moveLatitude;
     const longitude = moveLongitude;
     const place = locationInfo;
+
     try {
       const shareBoardDto = {
         title: title,

@@ -14,8 +14,11 @@ import { faCamera,faArrowUp } from "@fortawesome/free-solid-svg-icons";
 interface Chat{
   roomId:string;
   latestChat:string;
-  
-
+  receiverNickname:string;
+  shareBoardTitle:string;
+  receiverPhoto:string;
+  shareBoardMainPhoto:string;
+  shareBoardPrice:number;
 }
 //채팅 목록에서 채팅으로 들어가는 경우
 function ChatPage2() {
@@ -115,7 +118,7 @@ function ChatPage2() {
       }
   function handleKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
       if (e.key === "Enter") {
-          e.preventDefault(); // 엔터 키의 기본 동작인 줄바꿈 방지
+          e.preventDefault(); 
           handleSubmit();
       }
   }
@@ -137,14 +140,13 @@ function ChatPage2() {
             })
         setInputValue('');
         inputTextRef.current.style.height = '40rem';
-        // handleChatInfoChange(inputValue);
       }
     };
   return (
     <MobileWrap>
       <ChatWrap>
-        <ChatHeader user={'berry0112'}/>
-        {/* <Info selectedMarker={selectedMarker} /> */}
+        <ChatHeader user={chat.receiverNickname}/>
+        <Info title={chat.shareBoardTitle} photo={chat.shareBoardMainPhoto}  price={chat.shareBoardPrice}/>
         <Chatting2 chatMessages={[...receivedChatMessages]} />
         <SendChatArea >
           <FontAwesomeIcon icon={faCamera} style={{color: "#000000",height:"30rem",padding:"0 11rem 0 17rem",cursor:"pointer"}} />
