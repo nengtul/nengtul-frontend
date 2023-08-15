@@ -6,28 +6,28 @@ import Chatting2 from "./Chatting2";
 import Info from "./Info";
 import { useState,useEffect,useRef,KeyboardEvent ,ChangeEvent} from "react";
 import { useLocation } from 'react-router-dom';
-// import { Post } from "../IngredientMap/MarkerMap";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../Store/store";
 import * as StompJs from '@stomp/stompjs';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera,faArrowUp } from "@fortawesome/free-solid-svg-icons";
 interface Chat{
+  roomId:string;
+  latestChat:string;
+  
 
 }
+//채팅 목록에서 채팅으로 들어가는 경우
 function ChatPage2() {
   const userID=Number(sessionStorage.getItem('userId'));
-//   const [chatMessages, setChatMessages] = useState<string[]>([]);
-//   const handleChatInfoChange = (newInfo: string) => {
-//     setChatMessages((prevMessages) => [...prevMessages, newInfo]);
-//   };
   const location = useLocation();
 
   const [receivedChatMessages, setReceivedChatMessages] = useState<
     { message: string; isMyMessage: boolean }[]
   >([]);
- 
-  const ROOMID: Chat= location.state.chat.roomId;
+  console.log(location.state.chat)
+  const chat:Chat=location.state.chat
+  const ROOMID=chat.roomId;
   const Token = useSelector((state: RootState) => state.accessTokenValue);
   const { accessTokenValue} = Token;
   const MY_TOKEN = accessTokenValue;
@@ -47,6 +47,7 @@ function ChatPage2() {
             },
         onConnect: () => {
           console.log('success');
+          subBeforeChat(userID,ROOMID)
           subChat(userID);
         },
       });
@@ -54,8 +55,33 @@ function ChatPage2() {
     };
     connect();
     return () => disconnect();
-  },[ userID])
+  },[ userID,ROOMID])
 
+  const subBeforeChat=(userID:number,ROOMID:string)=>{
+    console.log('여기는 가나?')
+    console.log(userID,ROOMID)
+    client.current.subscribe(
+      `/sub/chat/get/users/${userID}`,
+      (message:any)=>{
+        console.log('보여라3',JSON.parse(message.body))
+        const messages = JSON.parse(message.body); 
+        messages.forEach((jsonMessage: any) => {
+          const isMyMessage = jsonMessage.senderNickname === sessionStorage.getItem('nickName') ? true : false;
+          setReceivedChatMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              message: jsonMessage.content,
+              isMyMessage: isMyMessage,
+            },
+          ]);
+        });
+    }
+    )
+    client.current.publish({
+      destination:`/pub/chat/get/rooms/${ROOMID}`,
+    }
+    )
+  }
   const subChat=(userID:number)=>{
     console.log('id',userID)
     client.current.subscribe(
@@ -74,6 +100,7 @@ function ChatPage2() {
                 ]);
             }
           )
+    
   }
 
 

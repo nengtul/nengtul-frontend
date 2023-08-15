@@ -46,3 +46,7 @@ export const RECIPE_USER_URL = "https://nengtul.shop/v1/recipe/user";
 //즐겨찾기 부분
 export const FAV_PUB_URL = "https://nengtul.shop/v1/favorite/publisher";
 export const FAV_URL = "https://nengtul.shop/v1/favorite";
+
+//채팅부분
+export const CHAT_LIST_URL="https://nengtul.shop/v1/chat/list";
+export const CHAT_LEAVE_ROOMS_URL="https://nengtul.shop/v1/chat/leave/rooms";

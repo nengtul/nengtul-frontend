@@ -7,7 +7,10 @@ import TabMenu from "../common/TabMenu";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../Store/store";
 import { useEffect,useState } from "react";
-import { Link,useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
+import RecipeDeleteBtn from "../common/RecipeDeleteBtn";
+import { deleteData } from "../axios";
+import { CHAT_LIST_URL,CHAT_LEAVE_ROOMS_URL } from "../url";
 export interface Post {
   roomId:string;
   latestChat:string;
@@ -19,16 +22,17 @@ function ChattingListPage() {
   const Token = useSelector((state: RootState) => state.accessTokenValue);
   const { accessTokenValue} = Token;
   const MY_TOKEN = accessTokenValue;
-  const [chatData, setChatData] = useState<Post[] | null>(null) ;
+  const [chatData, setChatData] = useState<Post[]>() ;
   const navigate = useNavigate();
 
   const handleSendroomId = (chat:Post) => {
     navigate('/chat2', { state: { chat } });
   };
+  const myNickName=sessionStorage.getItem('nickName');
 
   useEffect(() => {
     if(MY_TOKEN){
-      getData<Post[]>('https://nengtul.shop/v1/chat/list',MY_TOKEN)
+      getData<Post[]>(CHAT_LIST_URL,MY_TOKEN)
       .then((response) => {
         console.log(response)
         setChatData(response);
@@ -38,6 +42,18 @@ function ChattingListPage() {
       });
     }
   }, []);
+  const handleClick = (chat:Post) => {
+    if (MY_TOKEN) {
+      deleteData(`${CHAT_LEAVE_ROOMS_URL}/${chat.roomId}`, MY_TOKEN)
+        .then(() => {
+          console.log("채팅방에 나가셨습니다"); //모달창 
+          setChatData( prevChatData => prevChatData?.filter(item => item.roomId !== chat.roomId));   
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
   return (
     <MobileWrap>
       <Header />
@@ -47,21 +63,21 @@ function ChattingListPage() {
           <ChatList>
             
             {chatData?.map((chat, index) => (
-              <Chat key={index} onClick={() => handleSendroomId(chat)}>
-                {/* <UserPic></UserPic> */}
-                <UserText>
+              
+              <Chat key={index} >
+                <UserText onClick={() => handleSendroomId(chat)}>
                   <UserInfo>
-                    <UserId>{chat.memberNicknames[0]},{chat.memberNicknames[1]}</UserId>
-                    {/* <UserId>{chat.memberNicknames[1]}</UserId> */}
-                    {/* <UserPlace>번동</UserPlace>
-                    <ChatTime>1달 전</ChatTime> */}
+                  <UserId>
+                    {chat.memberNicknames.find(memberNickname => memberNickname !== myNickName)}
+                  </UserId>
                   </UserInfo>
 
                   <ChatContent>{chat.latestChat}</ChatContent>
                 </UserText>
-                {/* <NewChat>2</NewChat> */}
-                {/* <IngredientPic></IngredientPic> */}
+               
+              <RecipeDeleteBtn handleClick={()=>handleClick(chat)} />
               </Chat>
+          
             ))}
       
         </ChatList>
@@ -108,13 +124,7 @@ const Chat = styled.div`
   border-top: 1px solid #dddddd;
   cursor: pointer;
 `;
-const UserPic = styled.div`
-  margin: 0 10rem 0 10rem;
-  width: 60rem;
-  height: 60rem;
-  border-radius: 100%;
-  background-color: #dddddd;
-`;
+
 
 const UserText = styled.div`
   display: flex;
@@ -133,39 +143,11 @@ const UserId = styled.div`
   font-weight: 600;
   margin-right: 9rem;
 `;
-const UserPlace = styled.div`
-  font-size: 16rem;
-  color: #b0b0b0;
-  margin-right: 7rem;
-`;
-const ChatTime = styled.div`
-  font-size: 16rem;
-  color: #b0b0b0;
-`;
+
 const ChatContent = styled.div`
-  font-size: 20rem;
+  font-size: 18rem;
   height: 20rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-`;
-const NewChat = styled.div`
-  position: absolute;
-  width: 22rem;
-  height: 22rem;
-  border-radius: 100%;
-  background-color: #38db83;
-  color: white;
-  font-size: 12rem;
-  font-weight: 1000;
-  text-align: center;
-  right: 80rem;
-  padding: 4px;
-`;
-const IngredientPic = styled.div`
-  margin: 0 10rem 0 10rem;
-  width: 55rem;
-  height: 55rem;
-  border-radius: 5rem;
-  background-color: #dddddd;
 `;
