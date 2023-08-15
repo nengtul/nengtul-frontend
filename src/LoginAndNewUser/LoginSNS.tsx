@@ -8,17 +8,17 @@ export default function LoginSNS() {
   return (
     <>
       <SNSButtonArea>
-          <a href="/oauth2/authorization/kakao">
+          <a href="https://nengtul.shop/oauth2/authorization/kakao">
             <SNSButton id="kakao">
             <img src={KakaoIcon} alt="EggIcon" />
             </SNSButton>
           </a>
-          <a href="/oauth2/authorization/google">
+          <a href="https://nengtul.shop/oauth2/authorization/google">
             <SNSButton id="Google">
               <img src={GoogleIcon} alt="EggIcon" />
             </SNSButton>
           </a>
-          <a href="/oauth2/authorization/naver">
+          <a href="https://nengtul.shop/oauth2/authorization/naver">
             <SNSButton id="Naver">
               <img src={NaverIcon} alt="EggIcon" />
             </SNSButton>
