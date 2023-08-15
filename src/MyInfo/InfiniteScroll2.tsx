@@ -11,6 +11,8 @@ export interface User {
   publisherId: number;
   publisherNickName: string;
   publisherProfilePhotoUrl: string;
+  publisherPoint: number;
+  publisherRecipeCount: number;
 }
 interface ContentData {
   content: User[];
@@ -92,4 +94,6 @@ const CardWrap = styled.ul`
   width: 100%;
   height: calc(100% - 60px);
   margin-top: 60px;
+  padding-top: 1px;
+  background-color: #f9f9f9;
 `;
