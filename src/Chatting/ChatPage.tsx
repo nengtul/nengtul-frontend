@@ -2,7 +2,6 @@ import styled from "styled-components";
 import MobileWrap from "../common/MobileWrap";
 import ChatHeader from "./ChatHeader";
 import Chatting2 from "./Chatting2";
-import SendChat from "./SendChat";
 import Info from "./Info";
 import { useState,useEffect,useRef,KeyboardEvent ,ChangeEvent} from "react";
 import { useLocation } from 'react-router-dom';
@@ -15,10 +14,6 @@ import { faCamera,faArrowUp } from "@fortawesome/free-solid-svg-icons";
 function ChatPage() {
   const userID=Number(sessionStorage.getItem('userId'));
   const [roomId, setRoomId] = useState<string | null>(null);
-  // const [chatMessages, setChatMessages] = useState<string[]>([]);
-  // const handleChatInfoChange = (newInfo: string) => {
-  //   setChatMessages((prevMessages) => [...prevMessages, newInfo]);
-  // };
   const location = useLocation();
   const selectedMarker: Post= location.state.selectedMarker;
   const [user,setUser]=useState("");
@@ -66,9 +61,14 @@ function ChatPage() {
         console.log('보여라1',JSON.parse(message.body))
         const JsonMessage=JSON.parse(message.body)
         const roomID=JsonMessage.roomId;
-        console.log('roomId',roomID);
         setRoomId(roomID);
-        console.log('roomId2',roomID);
+        setReceivedChatMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              message: JsonMessage.content,
+              isMyMessage: true,
+            },
+        ]);
         client.current.subscribe(
           `/sub/chat/send/rooms/${roomID}`,
           (message:any)=>{
@@ -137,7 +137,6 @@ function ChatPage() {
           }
         setInputValue('');
         inputTextRef.current.style.height = '40rem';
-        // handleChatInfoChange(inputValue);
       }
     };
   return (
