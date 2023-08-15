@@ -67,6 +67,8 @@ const RecipeLink = styled(Link)`
   img {
     width: 104px;
     height: 104px;
+    object-fit: cover;
+    object-position: center;
   }
 `;
 

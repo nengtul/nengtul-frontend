@@ -13,6 +13,7 @@ import OkModal from "../Modal/OkModal";
 import ComfirmModal from "../Modal/ConfirmModal";
 import { setTokens } from "../Store/reducers";
 import { PURGE } from "redux-persist";
+import LevelBadge from "../common/LevelBadge";
 
 //1.회원정보보여주기  2.회원정보 수정하기  3.회원 탈퇴하기
 export interface UserData {
@@ -23,6 +24,7 @@ export interface UserData {
   emailVerifiedYn: boolean;
   id: number;
   roles: string;
+  point: number;
 }
 interface UpdateUserData {
   nickname: string;
@@ -169,7 +171,13 @@ function UserInfomation() {
           okModalText={"메일로 인증 링크를 보냈습니다."}
         />
       )}
-      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} message={'정말 탈퇴하시겠습니까?'}/>}
+      {modalOpen && (
+        <ComfirmModal
+          closeModal={closeModal}
+          handleDelete={handleDelete}
+          message={"정말 탈퇴하시겠습니까?"}
+        />
+      )}
       {data && !editing && (
         <>
           <div className="thumb-img">
@@ -179,6 +187,12 @@ function UserInfomation() {
             <EachArea>
               <Category>닉네임</Category>
               <UserNickName>{data.nickname}</UserNickName>
+            </EachArea>
+            <EachArea>
+              <Category>등급</Category>
+              <UserNickName>
+                <LevelBadge>{data.point}</LevelBadge>
+              </UserNickName>
             </EachArea>
             <EachArea>
               <Category>이름</Category>
@@ -321,6 +335,9 @@ const EachArea = styled.li`
   align-items: center;
   border-bottom: 1px solid #e0e0e0;
   height: auto;
+  .level-badge {
+    margin-left: 0;
+  }
 `;
 const Category = styled.div`
   font-size: 14rem;

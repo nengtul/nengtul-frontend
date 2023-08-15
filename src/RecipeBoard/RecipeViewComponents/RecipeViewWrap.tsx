@@ -170,23 +170,37 @@ export default function RecipeViewWrap() {
       simpleUpdateData(likeUrl, {}, MY_TOKEN)
         .then((response) => {
           console.log("좋아요", response);
+          setOkModalText("좋아하는 레시피에 추가했습니다.");
+          setokModalOpen(true);
           setLikes(true);
         })
         .catch((err) => {
           console.error(err);
+          setOkModalText("이미 좋아하는 레시피입니다.");
+          setokModalOpen(true);
         });
+    } else {
+      setOkModalText("로그인이 필요한 서비스입니다.");
+      setokModalOpen(true);
     }
   };
   const handleFavorites = () => {
     if (MY_TOKEN) {
       simpleUpdateData(favoriteUrl, {}, MY_TOKEN)
         .then((response) => {
-          console.log("즐겨찾기 성공", response);
+          console.log(response);
+          setOkModalText("즐겨찾기에 추가했습니다.");
+          setokModalOpen(true);
           setFavorite(true);
         })
         .catch((err) => {
           console.error(err);
+          setOkModalText("이미 즐겨찾기한 레시피입니다.");
+          setokModalOpen(true);
         });
+    } else {
+      setOkModalText("로그인이 필요한 서비스입니다.");
+      setokModalOpen(true);
     }
   };
   const onSave = () => {
@@ -208,6 +222,9 @@ export default function RecipeViewWrap() {
               }
             }
           });
+      } else {
+        setOkModalText("로그인이 필요한 서비스입니다.");
+        setokModalOpen(true);
       }
     } else {
       setOkModalText("이미 저장한 레시피입니다.");
@@ -216,9 +233,15 @@ export default function RecipeViewWrap() {
   };
   return (
     <>
-      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} message={'정말 삭제하시겠습니까?'}/>}
+      {modalOpen && (
+        <ComfirmModal
+          closeModal={closeModal}
+          handleDelete={handleDelete}
+          message={"정말 삭제하시겠습니까?"}
+        />
+      )}
       {okModalOpen && (
-        <OkModal setokModalOpen={setokModalOpen} title={"레시피 저장"} okModalText={okModalText} />
+        <OkModal setokModalOpen={setokModalOpen} title={"레시피"} okModalText={okModalText} />
       )}
       <ContensWrap>
         {recipe.videoUrl ? (

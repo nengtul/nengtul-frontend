@@ -12,6 +12,7 @@ import UpdateDeleteBtn from "./UpdateDeleteBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import ComfirmModal from "../../Modal/ConfirmModal";
+import OkModal from "../../Modal/OkModal";
 
 interface Comment {
   recipeId: string;
@@ -39,6 +40,8 @@ export default function CommentList({ item, commentsInput }: CommentListProps) {
   const [update, setUpdate] = useState(false);
   const [updateComment, setUpdateComment] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [okModalText, setOkModalText] = useState("");
+  const [okModalOpen, setokModalOpen] = useState(false);
 
   const url = `${REPLY_COMMENT_URL}/${item.commentId}`;
   const updateUrl = `${UPDATE_COMMENT_URL}/${item.commentId}`;
@@ -66,6 +69,10 @@ export default function CommentList({ item, commentsInput }: CommentListProps) {
         .catch((err) => {
           console.error(err);
         });
+    } else {
+      setOkModalText("로그인이 필요한 서비스입니다.");
+      setokModalOpen(true);
+      setreplayComment("");
     }
   };
 
@@ -113,7 +120,16 @@ export default function CommentList({ item, commentsInput }: CommentListProps) {
 
   return (
     <>
-      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} message={'정말 삭제하시겠습니까?'}/>}
+      {modalOpen && (
+        <ComfirmModal
+          closeModal={closeModal}
+          handleDelete={handleDelete}
+          message={"정말 삭제하시겠습니까?"}
+        />
+      )}
+      {okModalOpen && (
+        <OkModal setokModalOpen={setokModalOpen} title={"레시피"} okModalText={okModalText} />
+      )}
       <CommentLi>
         <div className="info">
           <div>

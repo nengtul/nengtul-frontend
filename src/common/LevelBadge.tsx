@@ -36,7 +36,9 @@ export default function LevelBadge({ children }: LevelBadgeProps) {
 
   return (
     <>
-      <Badge $backgroundcolor={levelColors[level]}>{level}</Badge>
+      <Badge className="level-badge" $backgroundcolor={levelColors[level]}>
+        {level}
+      </Badge>
     </>
   );
 }
