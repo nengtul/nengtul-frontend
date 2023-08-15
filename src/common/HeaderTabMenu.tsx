@@ -70,16 +70,18 @@ export default function HeaderTabMenu() {
 
   const setLogOut = () => {
     setData(DEFAULT_USER_DATA);
-    simpleUpdateData(USER_LOGOUT_URL, {}, MY_TOKEN)
-      .then((response) => {
-        console.log(response, "로그아웃 완료");
-        sessionStorage.removeItem("userId");
-        sessionStorage.removeItem("roles");
-        navigate("/");
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    if (MY_TOKEN !== null) {
+      simpleUpdateData(USER_LOGOUT_URL, {}, MY_TOKEN)
+        .then((response) => {
+          console.log(response, "로그아웃 완료");
+          sessionStorage.removeItem("userId");
+          sessionStorage.removeItem("roles");
+          navigate("/");
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   };
 
   return (
