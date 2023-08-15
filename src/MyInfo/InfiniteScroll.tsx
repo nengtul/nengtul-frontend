@@ -15,6 +15,7 @@ export interface Post {
   title: string;
   recipeUserNickName: string;
   likeCount: number;
+  viewCount: number;
 }
 interface ContentData {
   content: Post[];
