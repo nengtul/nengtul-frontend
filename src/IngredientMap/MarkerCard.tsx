@@ -49,15 +49,10 @@ export default function MarkerCard({ selectedMarker, setSelectedMarker }: Marker
                     <span>{selectedMarker.price}</span> 원
                   </>
                 )}
-              </p>            
-              {/* <Link to={{
-                pathname: '/chat',
-                state: { selectedMarker: selectedMarker }
-              } as Location}> */}
+              </p>
               <button type="button" onClick={handleSendMessage}>
                 <FontAwesomeIcon icon={faCommentDots} /> 메세지 보내기
               </button>
-              {/* </Link> */}
             </div>
           </div>
         </div>

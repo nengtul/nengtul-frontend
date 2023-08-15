@@ -216,7 +216,7 @@ export default function RecipeViewWrap() {
   };
   return (
     <>
-      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} />}
+      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} message={'정말 삭제하시겠습니까?'}/>}
       {okModalOpen && (
         <OkModal setokModalOpen={setokModalOpen} title={"레시피 저장"} okModalText={okModalText} />
       )}

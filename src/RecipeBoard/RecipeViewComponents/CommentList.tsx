@@ -113,7 +113,7 @@ export default function CommentList({ item, commentsInput }: CommentListProps) {
 
   return (
     <>
-      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} />}
+      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} message={'정말 삭제하시겠습니까?'}/>}
       <CommentLi>
         <div className="info">
           <div>

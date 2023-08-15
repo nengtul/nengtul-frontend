@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { getData } from "../axios";
+import { getTokenData,deleteTokenData} from "../axios";
 import MobileWrap from "../common/MobileWrap";
 import Header from "../common/Header";
 import ContensWrap from "../common/ContentsWrap";
@@ -7,32 +7,35 @@ import TabMenu from "../common/TabMenu";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../Store/store";
 import { useEffect,useState } from "react";
-import { useNavigate} from "react-router-dom";
+
 import RecipeDeleteBtn from "../common/RecipeDeleteBtn";
-import { deleteData } from "../axios";
 import { CHAT_LIST_URL,CHAT_LEAVE_ROOMS_URL } from "../url";
-export interface Post {
+import { useDispatch } from "react-redux";
+
+import EachChattingList from "./EachChattingList";
+export interface Chatting {
   roomId:string;
   latestChat:string;
-  memberNicknames:Array<string>;
-  shareBoardTitle:string
+  receiverNickname:string;
+  shareBoardTitle:string;
+  receiverPhoto:string;
+  shareBoardMainPhoto:string;
+  shareBoardPrice:number;
   
 }
 function ChattingListPage() {
   const Token = useSelector((state: RootState) => state.accessTokenValue);
-  const { accessTokenValue} = Token;
+  const { accessTokenValue, refreshTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
-  const [chatData, setChatData] = useState<Post[]>() ;
-  const navigate = useNavigate();
+  const REFRESH_TOKEN = refreshTokenValue;
+  const [chatData, setChatData] = useState<Chatting[]>() ;
+  const dispatch = useDispatch();
 
-  const handleSendroomId = (chat:Post) => {
-    navigate('/chat2', { state: { chat } });
-  };
-  const myNickName=sessionStorage.getItem('nickName');
+ 
 
   useEffect(() => {
-    if(MY_TOKEN){
-      getData<Post[]>(CHAT_LIST_URL,MY_TOKEN)
+    if(MY_TOKEN&& REFRESH_TOKEN){
+      getTokenData<Chatting[]>(CHAT_LIST_URL,MY_TOKEN,dispatch,REFRESH_TOKEN)
       .then((response) => {
         console.log(response)
         setChatData(response);
@@ -42,9 +45,9 @@ function ChattingListPage() {
       });
     }
   }, []);
-  const handleClick = (chat:Post) => {
-    if (MY_TOKEN) {
-      deleteData(`${CHAT_LEAVE_ROOMS_URL}/${chat.roomId}`, MY_TOKEN)
+  const handleClick = (chat:Chatting) => {
+    if (MY_TOKEN&& REFRESH_TOKEN) {
+      deleteTokenData(`${CHAT_LEAVE_ROOMS_URL}/${chat.roomId}`, MY_TOKEN,dispatch,REFRESH_TOKEN)
         .then(() => {
           console.log("채팅방에 나가셨습니다"); //모달창 
           setChatData( prevChatData => prevChatData?.filter(item => item.roomId !== chat.roomId));   
@@ -63,21 +66,10 @@ function ChattingListPage() {
           <ChatList>
             
             {chatData?.map((chat, index) => (
-              
-              <Chat key={index} >
-                <UserText onClick={() => handleSendroomId(chat)}>
-                  <UserInfo>
-                  <UserId>
-                    {chat.memberNicknames.find(memberNickname => memberNickname !== myNickName)}
-                  </UserId>
-                  </UserInfo>
-
-                  <ChatContent>{chat.latestChat}</ChatContent>
-                </UserText>
-               
-              <RecipeDeleteBtn handleClick={()=>handleClick(chat)} />
-              </Chat>
-          
+              <EachChattingList
+                key={index}
+                chat={chat}
+                />
             ))}
       
         </ChatList>
@@ -112,42 +104,4 @@ const ChatList = styled.div`
   padding-top: 60px;
   width: 100%;
   flex-grow: 1;
-`;
-const Chat = styled.div`
-  position: relative;
-  display: flex;
-  // justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 111rem;
-  border-bottom: 1px solid #dddddd;
-  border-top: 1px solid #dddddd;
-  cursor: pointer;
-`;
-
-
-const UserText = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 0 10rem 0 50rem;
-  // width: 200rem;
-`;
-
-const UserInfo = styled.div`
-  display: flex;
-  align-items: center;
-  padding-bottom: 7rem;
-`;
-const UserId = styled.div`
-  font-size: 18rem;
-  font-weight: 600;
-  margin-right: 9rem;
-`;
-
-const ChatContent = styled.div`
-  font-size: 18rem;
-  height: 20rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;

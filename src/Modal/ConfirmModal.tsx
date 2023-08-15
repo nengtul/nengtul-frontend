@@ -6,9 +6,10 @@ import { faQuestion } from "@fortawesome/free-solid-svg-icons";
 interface CommentProps {
   handleDelete: () => void;
   closeModal: () => void;
+  message:string;
 }
 
-export default function ComfirmModal({ handleDelete, closeModal }: CommentProps) {
+export default function ComfirmModal({ handleDelete, closeModal ,message}: CommentProps) {
   return (
     <ModalWrap>
       <div className="modal-component">
@@ -18,7 +19,7 @@ export default function ComfirmModal({ handleDelete, closeModal }: CommentProps)
           </p>
         </div>
         <div className="check-return">
-          <p>정말 삭제하시겠습니까?</p>
+          <p>{message}</p>
           <button type="button" onClick={handleDelete}>
             확인
           </button>
