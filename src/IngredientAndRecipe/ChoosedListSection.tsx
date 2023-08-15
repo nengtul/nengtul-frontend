@@ -28,7 +28,7 @@ const MainArea = styled.div`
   .search-list {
     width: 80%;
     margin: 0 auto;
-    max-height: 130px;
+    max-height: 110px;
     background-color: #fff;
     margin-top: 10px;
     li {
