@@ -5,8 +5,10 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
 import { deleteData } from "../axios";
-import RecipeDeleteBtn from "../common/RecipeDeleteBtn";
 import defaultThumb from "../assets/common/defaultThumb.svg";
+import LevelBadge from "../common/LevelBadge";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBook, faBookmark } from "@fortawesome/free-solid-svg-icons";
 interface RecipeListCardProps {
   user: User;
   onDeletePost: (postId: number) => void;
@@ -37,54 +39,84 @@ export default function MyFavList({ user, onDeletePost, apiEndPoint }: RecipeLis
   return (
     <List>
       <Link to={`recipe/user/${user.publisherId}`}>
-        <MemberThumb
-          style={{ backgroundImage: `url(${user.publisherProfilePhotoUrl || defaultThumb})` }}
-        />
         <div className="info">
-          <Writer>{user.publisherNickName}</Writer>
+          <div
+            className="thumb"
+            style={{ backgroundImage: `url(${user.publisherProfilePhotoUrl || defaultThumb})` }}
+          ></div>
+          <div className="writer">
+            <LevelBadge>{user.publisherPoint}</LevelBadge>
+            <p>{user.publisherNickName} 님</p>
+            <span className="write-count">
+              <FontAwesomeIcon icon={faBook} />
+              {user.publisherRecipeCount}
+            </span>
+          </div>
         </div>
-        <RecipeDeleteBtn handleClick={handleClick} />
+        <Like onClick={handleClick}>
+          <FontAwesomeIcon icon={faBookmark} style={{ fontSize: "20rem", color: "#9f9ae7" }} />
+        </Like>
       </Link>
     </List>
   );
 }
 const List = styled.li`
-  display: flex;
-  padding: 4rem;
-  cursor: pointer;
-  position: relative;
-  border-bottom: 1px solid #dddddd;
-  display: flex;
+  width: 97%;
+  margin: 10px auto 0;
+  background-color: #fff;
+  padding: 10px 14px;
+  border-radius: 15px;
+  box-shadow: 0px 0px 3px #333;
+  padding: 10px 14px;
+  border-bottom: 1px solid #e1e1e1;
+  .writer {
+    margin-left: 4px;
+  }
   a {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   .info {
     display: flex;
     align-items: center;
-    margin-left: 15rem;
+    p {
+      font-size: 16rem;
+      margin: 4px 0px 8px 8px;
+      font-weight: 700;
+    }
+    .thumb {
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      background-size: cover;
+      background-color: #333;
+    }
+    .write-count {
+      font-size: 13rem;
+      background-color: #000000a8;
+      font-weight: 700;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      margin-left: 7px;
+      padding: 4px 10px;
+      color: #fff;
+      svg {
+        margin-right: 10px;
+        color: #c1ffa9;
+      }
+    }
   }
-  .delete-image-btn {
-    width: 40rem;
-    height: 40rem;
-    background-color: rgb(254, 98, 98);
-    color: white;
-    border-radius: 100%;
-    font-size: 20rem;
-    position: absolute;
-    top: 3px;
-    right: 2rem;
-    cursor: pointer;
-  }
-`;
-const MemberThumb = styled.div`
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background-size: cover;
-  margin-left: 10rem;
 `;
 
-const Writer = styled.div`
-  font-size: 20rem;
-  font-weight: 700;
+const Like = styled.button`
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
 `;

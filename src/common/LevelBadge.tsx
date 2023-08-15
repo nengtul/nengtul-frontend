@@ -50,6 +50,6 @@ const Badge = styled.div<{ $backgroundcolor: string }>`
   color: #fff;
   font-weight: 700;
   border-radius: 5px;
-  margin-left: 4px;
+  margin-left: 7px;
   display: inline-block;
 `;
