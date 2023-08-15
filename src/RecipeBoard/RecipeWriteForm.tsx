@@ -68,7 +68,7 @@ export default function RecipeWriteForm() {
         .then((res) => {
           console.log(res);
           setOkModalOpen(true);
-          navigate(-1);
+          navigate(`/${res}`);
         })
         .catch((err) => {
           console.error(err);
