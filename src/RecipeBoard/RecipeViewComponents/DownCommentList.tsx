@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import UpdateDeleteBtn from "./UpdateDeleteBtn";
-import { deleteData, putData } from "../../axios";
+import { deleteData, putTokenData } from "../../axios";
 import { REPLY_COMMENT_URL } from "../../url";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store/store";
@@ -9,6 +9,7 @@ import ComfirmModal from "../../Modal/ConfirmModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import theme from "../../common/theme";
+import { useDispatch } from "react-redux";
 
 interface Comment {
   commentId: number;
@@ -29,11 +30,14 @@ export default function DownCommentList({ item, commentsInput }: CommentListProp
   const date = item.createdAt.split("T")[0];
   const url = `${REPLY_COMMENT_URL}/${item.commentId}/replycommets/${item.replyCommentId}`;
   const Token = useSelector((state: RootState) => state.accessTokenValue);
-  const { accessTokenValue } = Token;
+  const { accessTokenValue, refreshTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
+  const REFRESH_TOKEN = refreshTokenValue;
 
   const MY_ID = Number(sessionStorage.getItem("userId"));
   const MY_ROLE = sessionStorage.getItem("roles");
+
+  const dispatch = useDispatch();
 
   const [update, setUpdate] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -55,8 +59,8 @@ export default function DownCommentList({ item, commentsInput }: CommentListProp
     const data = {
       replyComment: updateComment,
     };
-    if (MY_TOKEN !== null) {
-      putData(url, data, MY_TOKEN)
+    if (MY_TOKEN !== null && REFRESH_TOKEN) {
+      putTokenData(url, data, MY_TOKEN, dispatch, REFRESH_TOKEN)
         .then((data) => {
           console.log(data);
           setUpdate(false);

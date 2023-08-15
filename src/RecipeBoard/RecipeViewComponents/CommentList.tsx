@@ -4,7 +4,7 @@ import theme from "../../common/theme";
 import { useState } from "react";
 import DownCommentList from "./DownCommentList";
 import { REPLY_COMMENT_URL, UPDATE_COMMENT_URL } from "../../url";
-import { deleteData, putData, simpleUpdateData } from "../../axios";
+import { deleteData, putTokenData, simpleUpdateData } from "../../axios";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store/store";
 import defaultThumb from "../../assets/common/defaultThumb.svg";
@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import ComfirmModal from "../../Modal/ConfirmModal";
 import OkModal from "../../Modal/OkModal";
+import { useDispatch } from "react-redux";
 
 interface Comment {
   recipeId: string;
@@ -46,11 +47,14 @@ export default function CommentList({ item, commentsInput }: CommentListProps) {
   const url = `${REPLY_COMMENT_URL}/${item.commentId}`;
   const updateUrl = `${UPDATE_COMMENT_URL}/${item.commentId}`;
   const Token = useSelector((state: RootState) => state.accessTokenValue);
-  const { accessTokenValue } = Token;
+  const { accessTokenValue, refreshTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
+  const REFRESH_TOKEN = refreshTokenValue;
 
   const MY_ID = Number(sessionStorage.getItem("userId"));
   const MY_ROLE = sessionStorage.getItem("roles");
+
+  const dispatch = useDispatch();
 
   console.log(item);
   console.log(MY_ID, MY_ROLE, item.userId);
@@ -80,8 +84,8 @@ export default function CommentList({ item, commentsInput }: CommentListProps) {
     const data = {
       comment: updateComment,
     };
-    if (MY_TOKEN !== null) {
-      putData(updateUrl, data, MY_TOKEN)
+    if (MY_TOKEN !== null && REFRESH_TOKEN) {
+      putTokenData(updateUrl, data, MY_TOKEN, dispatch, REFRESH_TOKEN)
         .then((data) => {
           console.log(data);
           setUpdate(false);
