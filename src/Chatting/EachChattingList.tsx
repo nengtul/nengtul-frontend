@@ -3,24 +3,55 @@ import { styled } from "styled-components";
 import defaultThumb from "../assets/common/defaultThumb.svg";
 import { useNavigate} from "react-router-dom";
 import RecipeDeleteBtn from "../common/RecipeDeleteBtn";
+import ComfirmModal from "../Modal/ConfirmModal";
+import {useState} from "react";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { RootState } from "../Store/store";
+import { CHAT_LEAVE_ROOMS_URL } from "../url";
+import { useDispatch } from "react-redux";
+import { deleteTokenData } from "../axios";
 interface EachChatProps{
     chat:Chatting;
+    onDeleteChat: (roomId: string) => void;
 }
-export default function EachChattingList({chat}:EachChatProps){
+export default function EachChattingList({chat, onDeleteChat}:EachChatProps){
+    const [modalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate();
     const handleSendroomId = (chat:Chatting) => {
         navigate('/chat2', { state: { chat } });
       };
-
+    const Token = useSelector((state: RootState) => state.accessTokenValue);
+    const { accessTokenValue, refreshTokenValue } = Token;
+    const MY_TOKEN = accessTokenValue;
+    const REFRESH_TOKEN = refreshTokenValue;
+    const dispatch = useDispatch();
+    const handleDelete = () => {
+        if (MY_TOKEN && REFRESH_TOKEN) {
+          deleteTokenData(`${CHAT_LEAVE_ROOMS_URL}/${chat.roomId}`, MY_TOKEN,dispatch,REFRESH_TOKEN)
+            .then(() => {
+              console.log('삭제됨')
+              onDeleteChat(chat.roomId);
+              setModalOpen(false)
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      };
 
     const handleClick=()=>{
-        
+        setModalOpen(true);
     }
+    const closeModal = () => {
+        setModalOpen(false);
+      };
     return (
+        <>
+             {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} message={'정말 채팅방을 나가시겠습니까?'}/>}
          <Chat >
                 <UserPic
                   style={{ backgroundImage: `url(${chat.receiverPhoto || defaultThumb})` }}
-                />
+                  />
                 <UserText onClick={() => handleSendroomId(chat)}>
                     <UserInfo>
                         <UserId>{chat.receiverNickname}</UserId>
@@ -28,11 +59,10 @@ export default function EachChattingList({chat}:EachChatProps){
                         <ChatContent>{chat.latestChat}</ChatContent>
 
                 </UserText>
-               <IngredientPic
-                style={{ backgroundImage: `url(${chat.shareBoardMainPhoto})` }}
-               />
+               <IngredientPic/>
               <RecipeDeleteBtn handleClick={handleClick} />
               </Chat>
+                </>
     )
 }
 
@@ -42,8 +72,7 @@ const Chat = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-//   height: 111rem;
-  height: 131rem;
+  height: 111rem;
   border-bottom: 1px solid #dddddd;
   border-top: 1px solid #dddddd;
   cursor: pointer;
@@ -90,6 +119,4 @@ const IngredientPic = styled.div`
   width: 55rem;
   height: 55rem;
   border-radius: 5rem;
-  background-color: #dddddd;
-  background-size: cover;
 `;

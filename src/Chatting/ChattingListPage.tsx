@@ -45,17 +45,9 @@ function ChattingListPage() {
       });
     }
   }, []);
-  const handleClick = (chat:Chatting) => {
-    if (MY_TOKEN&& REFRESH_TOKEN) {
-      deleteTokenData(`${CHAT_LEAVE_ROOMS_URL}/${chat.roomId}`, MY_TOKEN,dispatch,REFRESH_TOKEN)
-        .then(() => {
-          console.log("채팅방에 나가셨습니다"); //모달창 
-          setChatData( prevChatData => prevChatData?.filter(item => item.roomId !== chat.roomId));   
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+ 
+  const onDeleteChat = (roomId: string) => {
+    setChatData( prevChatData => prevChatData?.filter(item => item.roomId !== roomId)); 
   };
   return (
     <MobileWrap>
@@ -64,14 +56,13 @@ function ChattingListPage() {
         <ContentWrapper>
           <Title>채팅</Title>
           <ChatList>
-            
             {chatData?.map((chat, index) => (
               <EachChattingList
                 key={index}
                 chat={chat}
+                onDeleteChat={onDeleteChat}
                 />
             ))}
-      
         </ChatList>
         </ContentWrapper>
       </ContensWrap>
