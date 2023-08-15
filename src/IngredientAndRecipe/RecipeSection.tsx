@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { RECIPE_INGREDIENT_URL } from "../url";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { IngredientsProps } from "./IngreAfterRecipePage";
+import NoneSearchData from "./NoneSearchData";
 
 interface SearchResultProps {
   likeCount: number;
@@ -79,27 +80,31 @@ function RecipeSection({ ingredients }: IngredientsProps) {
 
   return (
     <RecipeArea>
-      {posts?.map((post, index) => (
-        <Recipe key={index}>
-          <Link to={`/${post.recipeId}`}>
-            <img src={post.thumbnailUrl} alt="noodle" />
-            <TextArea>
-              <Title>{post.title}</Title>
-              <Heart>
-                <div>
-                  <FontAwesomeIcon icon={faHeart} style={{ height: "14rem", color: "#d01818" }} />
-                  <HeartRate>{post.likeCount}</HeartRate>
-                </div>
-                <div style={{ marginLeft: "10px" }}>
-                  <FontAwesomeIcon icon={faEye} style={{ height: "14rem", color: "#c1ffa9" }} />
-                  <HeartRate>{post.viewCount}</HeartRate>
-                </div>
-              </Heart>
-              <Writer>{post.nickName}</Writer>
-            </TextArea>
-          </Link>
-        </Recipe>
-      ))}
+      {posts.length > 0 ? (
+        posts?.map((post, index) => (
+          <Recipe key={index}>
+            <Link to={`/${post.recipeId}`}>
+              <img src={post.thumbnailUrl} alt="noodle" />
+              <TextArea>
+                <Title>{post.title}</Title>
+                <Heart>
+                  <div>
+                    <FontAwesomeIcon icon={faHeart} style={{ height: "14rem", color: "#d01818" }} />
+                    <HeartRate>{post.likeCount}</HeartRate>
+                  </div>
+                  <div style={{ marginLeft: "10px" }}>
+                    <FontAwesomeIcon icon={faEye} style={{ height: "14rem", color: "#c1ffa9" }} />
+                    <HeartRate>{post.viewCount}</HeartRate>
+                  </div>
+                </Heart>
+                <Writer>{post.nickName}</Writer>
+              </TextArea>
+            </Link>
+          </Recipe>
+        ))
+      ) : (
+        <NoneSearchData />
+      )}
       <Observer ref={ref}></Observer>
     </RecipeArea>
   );
