@@ -1,20 +1,20 @@
 import styled from "styled-components";
-import { Post } from "../IngredientMap/MarkerMap";
-interface MarkerProps {
-    selectedMarker: Post;
+interface InfoProps {
+    title: string;
+    photo: string;
+    price: number;
+}
   
-  }
-  
-function Info({selectedMarker}:MarkerProps){
+function Info({title, photo, price}:InfoProps){
     return (
         <InfoArea>
-            <InfoPic><img src={selectedMarker.shareImg}/></InfoPic>
+            <InfoPic><img src={photo}/></InfoPic>
             <InfoText>
                 <div style={{display:"flex", paddingBottom:"7rem"}}>
                     <InfoState>거래중</InfoState>
-                    <InfoTitle>{selectedMarker.title}</InfoTitle>
+                    <InfoTitle>{title}</InfoTitle>
                 </div>
-                <InfoPrice>{selectedMarker.price}원</InfoPrice>
+                <InfoPrice>{price}원</InfoPrice>
             </InfoText>
         </InfoArea>
     )

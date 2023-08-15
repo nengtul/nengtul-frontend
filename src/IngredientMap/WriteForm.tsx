@@ -40,7 +40,6 @@ export default function WriteForm() {
         setTradeImage(file);
         console.log('file',file)
       } else {
-        // setTradeImage("");
         setTradeImage(null);
       }
       
@@ -58,47 +57,7 @@ export default function WriteForm() {
     const longitude=moveLongitude;
     const place= locationInfo;
 
-    
-    
-    // try{
-    //   axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-    //   const url=SHAREBOARD_URL;
-    //   const shareBoardDto={
-    //     title: title,
-    //     content: content,
-    //     place: place,
-    //     price: price,
-    //     lat: latitude,
-    //     lon:longitude,
-    //   }
-    //   console.log('image!!!',tradeImage)
 
-    //   if (tradeImage instanceof Blob) {
-    //     formData.append("image", tradeImage);
-    //   }
-
-    //   console.log('shareBoardDto:', shareBoardDto);
-    //   const blob=new Blob([JSON.stringify(shareBoardDto)],{
-    //     type:'application/json'
-    //    });
-    //    formData.append("shareBoardDto", blob)
-    //    const config = {
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data',
-    //     },
-    //   };
-    //   axios.post(url,formData,config)
-    //   .then((response) => {
-    //     console.log('response', response);
-    //     console.log('등록완료!'); // 모달창으로 바꾸기
-  
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-    // } catch(err){
-    //   console.log(err)
-    // }
     try{
       const shareBoardDto={
         title: title,

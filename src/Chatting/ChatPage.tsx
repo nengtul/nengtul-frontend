@@ -143,7 +143,7 @@ function ChatPage() {
     <MobileWrap>
       <ChatWrap>
         <ChatHeader user={user} />
-        <Info selectedMarker={selectedMarker} />
+        <Info title={selectedMarker.title} photo={selectedMarker.shareImg}  price={selectedMarker.price}/>
         <Chatting2 chatMessages={[...receivedChatMessages]} />
         <SendChatArea >
           <FontAwesomeIcon icon={faCamera} style={{color: "#000000",height:"30rem",padding:"0 11rem 0 17rem",cursor:"pointer"}} />
