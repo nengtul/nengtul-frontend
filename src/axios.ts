@@ -1,16 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { REFRESH_URL } from "./url";
 import { setTokens } from "./Store/reducers";
-
-// const setAuthorizationHeader = (token: string) => {
-//   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-// };
-
-interface SetTokensAction {
-  type: string;
-  AccessToken: string;
-  refreshToken: string;
-}
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 const getRefresh = (
   token: string,
@@ -33,7 +24,9 @@ const getRefresh = (
 export const getTokenData = async <T>(
   url: string,
   token: string,
-  dispatch: (action: SetTokensAction) => void,
+  dispatch: (
+    action: PayloadAction<{ accessToken: string | null; refreshToken: string | null }>
+  ) => void,
   refreshToken: string
 ): Promise<T> => {
   const headers = {
@@ -102,7 +95,9 @@ export const deleteData = <T>(url: string, token?: string): Promise<T> => {
 export const deleteTokenData = async <T>(
   url: string,
   token: string,
-  dispatch: (action: SetTokensAction) => void,
+  dispatch: (
+    action: PayloadAction<{ accessToken: string | null; refreshToken: string | null }>
+  ) => void,
   refreshToken: string
 ): Promise<T> => {
   const headers = {

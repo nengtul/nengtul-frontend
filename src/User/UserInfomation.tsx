@@ -9,6 +9,11 @@ import { useDispatch } from "react-redux";
 import { getTokenData, deleteData, updateData } from "../axios";
 import { useNavigate } from "react-router-dom";
 import defaultThumb from "../assets/common/defaultThumb.svg";
+import OkModal from "../Modal/OkModal";
+import ComfirmModal from "../Modal/ConfirmModal";
+import { setTokens } from "../Store/reducers";
+import { PURGE } from "redux-persist";
+
 //1.회원정보보여주기  2.회원정보 수정하기  3.회원 탈퇴하기
 export interface UserData {
   name: string;
@@ -32,6 +37,28 @@ function UserInfomation() {
   const MY_TOKEN = accessTokenValue;
   const REFRESH_TOKEN = refreshTokenValue;
   const dispatch = useDispatch();
+
+  const [okModalOpen, setokModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleDelete = () => {
+    if (MY_TOKEN !== null) {
+      deleteData<UserData>(USER_DETAIL_URL, MY_TOKEN)
+        .then(() => {
+          dispatch(setTokens({ accessToken: null, refreshToken: null }));
+          dispatch({ type: PURGE, key: ["root"], result: () => null });
+          sessionStorage.removeItem("userId");
+          sessionStorage.removeItem("roles");
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   const [data, setData] = useState<UserData | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -115,16 +142,7 @@ function UserInfomation() {
   };
   //회원정보 삭제
   const onDelete = () => {
-    if (MY_TOKEN !== null) {
-      deleteData<UserData>(USER_DETAIL_URL, MY_TOKEN)
-        .then(() => {
-          console.log("탈퇴되었습니다"); //이거 모달창으로 뜨게
-          navigate("/");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    setModalOpen(true);
   };
 
   //이메일 인증
@@ -135,7 +153,7 @@ function UserInfomation() {
       .then((response) => {
         console.log(response);
         console.log("인증메일이 전송됨"); //모달창으로 바꾸기
-        window.location.reload();
+        setokModalOpen(true);
       })
       .catch((error) => {
         console.error(error);
@@ -144,6 +162,14 @@ function UserInfomation() {
   console.log("data", data);
   return (
     <UserInfoArea>
+      {okModalOpen && (
+        <OkModal
+          setokModalOpen={setokModalOpen}
+          title={"레시피 저장"}
+          okModalText={"메일로 인증 링크를 보냈습니다."}
+        />
+      )}
+      {modalOpen && <ComfirmModal closeModal={closeModal} handleDelete={handleDelete} />}
       {data && !editing && (
         <>
           <div className="thumb-img">
