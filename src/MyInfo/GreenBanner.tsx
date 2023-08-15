@@ -24,7 +24,7 @@ const Banner = styled.div`
   z-index: 10;
   p {
     color: #fff;
-    font-size: 20rem;
+    font-size: 19rem;
     font-weight: 700;
     text-align: center;
   }

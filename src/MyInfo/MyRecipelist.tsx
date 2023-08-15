@@ -8,6 +8,8 @@ import { RootState } from "../Store/store";
 import { LIKES_URL, RECIPE_URL } from "../url";
 import { deleteData } from "../axios";
 import RecipeDeleteBtn from "../common/RecipeDeleteBtn";
+import { useLocation } from "react-router-dom";
+import ViewAndHeart from "../common/ViewAndHeart";
 interface RecipeListCardProps {
   post: Post;
   onDeletePost: (postId: number | string) => void;
@@ -18,6 +20,9 @@ export default function MyRecipeList({ post, onDeletePost, apiEndPoint }: Recipe
   const Token = useSelector((state: RootState) => state.accessTokenValue);
   const { accessTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
+
+  const param = useLocation();
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (MY_TOKEN !== null) {
@@ -51,13 +56,10 @@ export default function MyRecipeList({ post, onDeletePost, apiEndPoint }: Recipe
         </div>
         <div className="info">
           <Title>{post.title}</Title>
-          <Heart>
-            <FontAwesomeIcon icon={faHeart} style={{ height: "16rem", color: "red" }} />
-            <HeartRate>{post.likeCount}</HeartRate>
-          </Heart>
+          <ViewAndHeart viewCount={post.viewCount} heartCount={post.likeCount} />
           <Writer>{post.recipeUserNickName}</Writer>
         </div>
-        <RecipeDeleteBtn handleClick={handleClick} />
+        {param.pathname === "/heartLecipe" ? <RecipeDeleteBtn handleClick={handleClick} /> : <></>}
       </Link>
     </List>
   );
@@ -69,6 +71,7 @@ const List = styled.li`
   border-bottom: 1px solid #dddddd;
   a {
     display: flex;
+    align-items: center;
   }
   .img {
     width: 110px;
@@ -82,6 +85,15 @@ const List = styled.li`
   }
   .info {
     padding: 10rem;
+    width: calc(100% - 110px);
+    .view-wrap {
+      position: inherit;
+      display: inline-flex;
+      padding: 6px 10px;
+      p {
+        font-weight: 700;
+      }
+    }
   }
   .delete-image-btn {
     width: 40rem;
@@ -99,27 +111,19 @@ const List = styled.li`
 
 const Title = styled.h4`
   font-size: 15rem;
-  font-weight: 700;
-  margin-bottom: 12rem;
-  display: block;
+  font-weight: 800;
+  margin-bottom: 6rem;
   display: -webkit-box;
   line-height: 1.3;
   max-height: 2.6;
   overflow: hidden;
-  text-overflow: elipse;
+  text-overflow: ellipsis;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 `;
-const Heart = styled.div`
-  margin-bottom: 12rem;
-  display: flex;
-  align-items: center;
-`;
-const HeartRate = styled.div`
-  font-size: 14rem;
-  margin-left: 2%;
-`;
+
 const Writer = styled.div`
   font-size: 13rem;
   font-weight: 700;
+  margin-top: 10px;
 `;
