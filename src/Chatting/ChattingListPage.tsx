@@ -57,20 +57,20 @@ function ChattingListPage() {
       <ContensWrap>
         <ContentWrapper>
           <ChatList>
-            {chatData && chatData.length > 0
-              ? chatData.map((chat, index) => (
-                  <EachChattingList key={index} chat={chat} onDeleteChat={onDeleteChat} />
-                ))
-              : chatData && (
-                  <NoneRecipe>
-                    <img src={Egg} alt="logo" />
-                    <p>아직 진행중인 채팅이 없습니다!</p>
-                    <Link to={"/recipeList"}>
-                      재료나눔 보러가기
-                      <FontAwesomeIcon icon={faAngleRight} />
-                    </Link>
-                  </NoneRecipe>
-                )}
+            {chatData && chatData.length > 0 ? (
+              chatData.map((chat, index) => (
+                <EachChattingList key={index} chat={chat} onDeleteChat={onDeleteChat} />
+              ))
+            ) : (
+              <NoneRecipe>
+                <img src={Egg} alt="logo" />
+                <p>아직 진행중인 채팅이 없습니다!</p>
+                <Link to={"/ingredientMap"}>
+                  재료나눔 보러가기
+                  <FontAwesomeIcon icon={faAngleRight} />
+                </Link>
+              </NoneRecipe>
+            )}
           </ChatList>
         </ContentWrapper>
       </ContensWrap>
