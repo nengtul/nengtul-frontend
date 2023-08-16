@@ -30,7 +30,9 @@ export default function NoticeWrap() {
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
-    getData<ContentData>(`${NOTICES_LIST_URL}?page=${currentPage}&size=${itemsPerPage}`)
+    getData<ContentData>(
+      `${NOTICES_LIST_URL}?page=${currentPage}&size=${itemsPerPage}&sort=createdAt,desc`
+    )
       .then((data: ContentData) => {
         const contentArr = data.content;
         setContents(contentArr);
