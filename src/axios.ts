@@ -154,6 +154,49 @@ export const updateData = <T>(url: string, formData: object, token?: string): Pr
       throw error;
     });
 };
+
+export const updataTokenData = async <T>(
+  url: string,
+  formData: object,
+  token: string,
+  dispatch: (
+    action: PayloadAction<{ accessToken: string | null; refreshToken: string | null }>
+  ) => void,
+  refreshToken: string
+): Promise<T> => {
+  const headers = {
+    withCredentials: true,
+    "Content-Type": "multipart/form-data",
+    Authorization: `Bearer ${token}`,
+  };
+
+  try {
+    const response = await axios.post<T>(url, formData, { headers });
+    return response.data;
+  } catch (error) {
+    if ((error as AxiosError).response?.status === 401 && token && refreshToken) {
+      const newToken = await getRefresh(token, refreshToken);
+      if (dispatch) {
+        dispatch(
+          setTokens({
+            accessToken: newToken.AccessToken,
+            refreshToken: newToken.refreshToken,
+          })
+        );
+      }
+      const headers = {
+        withCredentials: true,
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${newToken.AccessToken}`,
+      };
+      const newResponse = await axios.put<T>(url, formData, { headers });
+      return newResponse.data;
+    }
+
+    throw error;
+  }
+};
+
 export const simpleUpdateData = <T>(url: string, data?: object, token?: string): Promise<T> => {
   let headers;
   if (token) {
@@ -165,13 +208,53 @@ export const simpleUpdateData = <T>(url: string, data?: object, token?: string):
   return axios
     .post<T>(url, data, { headers })
     .then((response) => {
-      console.log("response", response); // 모달창으로 바꾸기
+      console.log("response", response);
       return response.data;
     })
     .catch((error) => {
       console.error(error);
       throw error;
     });
+};
+
+export const simpleUpdateTokenData = async <T>(
+  url: string,
+  data: object,
+  token: string,
+  dispatch: (
+    action: PayloadAction<{ accessToken: string | null; refreshToken: string | null }>
+  ) => void,
+  refreshToken: string
+): Promise<T> => {
+  const headers = {
+    withCredentials: true,
+    Authorization: `Bearer ${token}`,
+  };
+
+  try {
+    const response = await axios.post<T>(url, data, { headers });
+    return response.data;
+  } catch (error) {
+    if ((error as AxiosError).response?.status === 401 && token && refreshToken) {
+      const newToken = await getRefresh(token, refreshToken);
+      if (dispatch) {
+        dispatch(
+          setTokens({
+            accessToken: newToken.AccessToken,
+            refreshToken: newToken.refreshToken,
+          })
+        );
+      }
+      const headers = {
+        withCredentials: true,
+        Authorization: `Bearer ${newToken.AccessToken}`,
+      };
+      const newResponse = await axios.post<T>(url, data, { headers });
+      return newResponse.data;
+    }
+
+    throw error;
+  }
 };
 
 export const putData = <T>(url: string, data: object, token?: string): Promise<T> => {

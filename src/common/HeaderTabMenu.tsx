@@ -12,7 +12,7 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { RootState } from "../Store/store";
 import { USER_DETAIL_URL, USER_LOGOUT_URL } from "../url";
 import { useEffect, useState } from "react";
-import { getTokenData, simpleUpdateData } from "../axios";
+import { getTokenData, simpleUpdateTokenData } from "../axios";
 import { useNavigate } from "react-router-dom";
 
 interface UserData {
@@ -70,8 +70,8 @@ export default function HeaderTabMenu() {
 
   const setLogOut = () => {
     setData(DEFAULT_USER_DATA);
-    if (MY_TOKEN !== null) {
-      simpleUpdateData(USER_LOGOUT_URL, {}, MY_TOKEN)
+    if (MY_TOKEN !== null && REFRESH_TOKEN) {
+      simpleUpdateTokenData(USER_LOGOUT_URL, {}, MY_TOKEN, dispatch, REFRESH_TOKEN)
         .then((response) => {
           console.log(response, "로그아웃 완료");
           sessionStorage.removeItem("userId");
