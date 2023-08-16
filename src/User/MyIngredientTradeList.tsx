@@ -37,16 +37,6 @@ function MyIngredeintTradeList() {
         });
     }
 
-    // axios.defaults.headers.common['Authorization'] = `Bearer ${MY_TOKEN}`;
-    // axios.get(SHARE_MYLIST_URL)
-    // .then((response)=>{
-    //     console.log(response)
-    //     setItems(response.data as Item[]);
-    //     console.log('받아오기성공')
-    // })
-    // .catch((error)=>{
-    //     console.error(error)
-    // })
   }, []);
   const handlePostClick = (itemId: number) => {
     setSelectedItemId(itemId);
