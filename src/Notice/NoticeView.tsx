@@ -7,8 +7,9 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import theme from "../common/theme";
-import { deleteData, updateData, getTokenData, getData } from "../axios";
+import { deleteTokenData, updateData, getData } from "../axios";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 interface Post {
   content: string;
@@ -32,14 +33,17 @@ function NoticeView() {
   const { accessTokenValue, refreshTokenValue } = Token;
   const MY_TOKEN = accessTokenValue;
   const REFRESH_TOKEN = refreshTokenValue;
+
+  const dispatch = useDispatch();
+
   const { noticeId } = useParams();
   const [post, setPost] = useState<Post | null>(null);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
-  const dispatch = useDispatch();
-
   const [newImageUrls, setNewImageUrls] = useState<Blob[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const navigate = useNavigate();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -72,8 +76,8 @@ function NoticeView() {
 
   //글 삭제하기
   const onDelete = () => {
-    if (MY_TOKEN !== null) {
-      deleteData(`${NOTICES_URL}/${noticeId}`, MY_TOKEN)
+    if (MY_TOKEN !== null && REFRESH_TOKEN) {
+      deleteTokenData(`${NOTICES_URL}/${noticeId}`, MY_TOKEN, dispatch, REFRESH_TOKEN)
         .then(() => {
           console.log("삭제되었습니다");
         })
@@ -216,9 +220,8 @@ function NoticeView() {
       ) : (
         //원본
         <>
-          <Notice>
-            공지사항
-            {roles === "ADMIN" && (
+          {roles === "ADMIN" && (
+            <Notice>
               <div className="btns">
                 <button className="delete-btn btn" onClick={onDelete}>
                   삭제
@@ -227,8 +230,9 @@ function NoticeView() {
                   수정
                 </button>
               </div>
-            )}
-          </Notice>
+            </Notice>
+          )}
+
           <NoticeTitleDate>
             <NoticeTitle>{post?.title}</NoticeTitle>
             <NoticeDate>{post?.createdAt.slice(0, 10)}</NoticeDate>
@@ -237,6 +241,13 @@ function NoticeView() {
           {imageUrls.map((imageUrl, index) => (
             <img key={index} src={imageUrl} alt={`Notice ${index}`} />
           ))}
+          <ListButton
+            onClick={() => {
+              navigate("/notice");
+            }}
+          >
+            목록
+          </ListButton>
         </>
       )}
     </NoticeViewArea>
@@ -246,9 +257,8 @@ function NoticeView() {
 export default NoticeView;
 
 const NoticeViewArea = styled.div`
-  margin-top: 10rem;
   img {
-    width: 95%;
+    width: 90%;
     display: block;
     margin: 10rem auto;
   }
@@ -316,11 +326,13 @@ const Notice = styled.h1`
   padding: 15rem 20rem;
 `;
 const NoticeTitleDate = styled.div`
-  padding: 15rem 20rem;
-  background-color: rgb(221, 221, 221);
+  padding: 14px;
+  background-color: rgb(229 229 229);
 `;
 const NoticeTitle = styled.div`
   font-size: 20rem;
+  font-weight: 800;
+  line-height: 1.3;
   input {
     width: 100%;
   }
@@ -331,7 +343,7 @@ const NoticeDate = styled.div`
 `;
 
 const NoticeContent = styled.div`
-  font-size: 20rem;
+  font-size: 16rem;
   padding: 10rem 20rem;
   line-height: 1.5;
   textarea {
@@ -347,4 +359,20 @@ const NoticeContent = styled.div`
     border: none;
     color: gray;
   }
+`;
+
+const ListButton = styled.button`
+  display: flex;
+  width: 90%;
+  margin: 0 auto;
+  background-color: ${theme.colors.main};
+  color: #fff;
+  font-size: 18rem;
+  font-weight: 800;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0px;
+  margin-top: 60px;
+  cursor: pointer;
+  border-radius: 4px;
 `;
