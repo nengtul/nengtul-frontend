@@ -8,12 +8,14 @@ import { useSelector } from "react-redux";
 import theme from "../common/theme";
 import { SHAREBOARD_URL } from "../url.ts";
 import { RootState } from "../Store/store";
-import  {deleteData,updateData} from "../axios";
+import  {deleteTokenData,updateData} from "../axios";
+import { useDispatch } from "react-redux";
 function PostDetail({ item }:{item:Item}) {
     const Token=useSelector((state: RootState)=>state.accessTokenValue)
-    const {accessTokenValue}=Token;
-    const MY_TOKEN=accessTokenValue
-
+    const { accessTokenValue, refreshTokenValue } = Token;
+    const MY_TOKEN = accessTokenValue;
+    const REFRESH_TOKEN = refreshTokenValue;
+    const dispatch = useDispatch();
     const [newImage, setNewImage] = useState<string>('')
 
     //위치 수정할 받아오기
@@ -21,8 +23,8 @@ function PostDetail({ item }:{item:Item}) {
     const {moveLatitude,moveLongitude}=LatLng;
     //삭제
     const onDelete=()=>{
-        if(MY_TOKEN!==null){
-            deleteData(`${SHAREBOARD_URL}/${item.id}`,MY_TOKEN)
+        if(MY_TOKEN!==null && REFRESH_TOKEN){
+            deleteTokenData(`${SHAREBOARD_URL}/${item.id}`,MY_TOKEN,dispatch,REFRESH_TOKEN)
             .then(()=>{
                 console.log('삭제되었습니다')
             })
@@ -96,47 +98,6 @@ function PostDetail({ item }:{item:Item}) {
 
     //회원정보 수정제출버튼
     const onSave=()=>{
-        // try{
-        //     if (!editedData) {
-        //         return;
-        //     }
-        //     const url=`${SHAREBOARD_URL}/${item.id}`
-        //     const shareBoardDto={
-        //         title:editedData.title,
-        //         content:editedData.content,
-        //         place:editedData.place,
-        //         price:editedData.price,
-        //         lat:moveLatitude,
-        //         lon:moveLongitude,
-        //     }
-        //     const formData = new FormData();
-        //     console.log('image!!!',tradeImage)
-        //     if (tradeImage instanceof Blob) {
-        //         formData.append("image", tradeImage);
-        //     }
-        //     console.log('userUpdateDto:', shareBoardDto);
-        //     console.log('image!!!',tradeImage)
-        //     const blob=new Blob([JSON.stringify(shareBoardDto)],{
-        //         type:'application/json'
-        //     });
-        //     formData.append("shareBoardDto", blob)
-        //     const config = {
-        //         headers: {
-        //           'Content-Type': 'multipart/form-data',
-        //         },
-        //     };
-
-        //     axios.post(url,formData,config)
-        //         .then((response) => {
-        //             console.log('response', response);
-        //             console.log('수정완료!'); // 모달창으로 바꾸기
-        //         })
-        //         .catch((error) => {
-        //             console.error(error);
-        //         });
-        //     }catch(err){
-        //         console.log(err)
-        //     }
         try{
             if (!editedData) {
                 return;
@@ -165,7 +126,7 @@ function PostDetail({ item }:{item:Item}) {
             if(MY_TOKEN!==null){
                 updateData(`${SHAREBOARD_URL}/${item.id}`,formData,MY_TOKEN)
                     .then(()=>{
-                        console.log('수정완료!');
+                        console.log('수정완료!');  //모달창
                     })
                     .catch(error=>{
                         console.log(error)
