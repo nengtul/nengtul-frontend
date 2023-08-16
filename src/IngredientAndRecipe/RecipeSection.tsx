@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { getTokenData } from "../axios";
+import { getData, getTokenData } from "../axios";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
@@ -41,26 +41,19 @@ function RecipeSection({ ingredients }: IngredientsProps) {
 
   const fetch = useCallback(async () => {
     try {
-      if (MY_TOKEN && REFRESH_TOKEN) {
-        await getTokenData<RecipeSectionProps>(
-          `${url}?size=7&page=${page.current}&sort=viewCount,desc`,
-          MY_TOKEN,
-          dispatch,
-          REFRESH_TOKEN
-        )
-          .then((data) => {
-            console.log(data);
-            const contentData = data.content;
-            setPosts((prevPosts) => [...prevPosts, ...contentData]);
-            setHasNextPage(contentData.length === 7);
-            if (contentData.length) {
-              page.current += 1;
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+      await getData<RecipeSectionProps>(`${url}?size=7&page=${page.current}&sort=viewCount,desc`)
+        .then((data) => {
+          console.log(data);
+          const contentData = data.content;
+          setPosts((prevPosts) => [...prevPosts, ...contentData]);
+          setHasNextPage(contentData.length === 7);
+          if (contentData.length) {
+            page.current += 1;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (err) {
       console.error(err);
     }
