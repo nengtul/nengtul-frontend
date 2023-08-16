@@ -18,6 +18,7 @@ const Part=styled.div`
     display:flex;
     flex-direction: column;
     align-items: center;
+    margin-top:10px;
 `
 const IdPassword=styled.div`
     font-size:17rem;

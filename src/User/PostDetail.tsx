@@ -10,6 +10,8 @@ import { SHAREBOARD_URL } from "../url.ts";
 import { RootState } from "../Store/store";
 import  {deleteTokenData,updateData} from "../axios";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import ComfirmModal from "../Modal/ConfirmModal";
 function PostDetail({ item }:{item:Item}) {
     const Token=useSelector((state: RootState)=>state.accessTokenValue)
     const { accessTokenValue, refreshTokenValue } = Token;
@@ -21,19 +23,31 @@ function PostDetail({ item }:{item:Item}) {
     //위치 수정할 받아오기
     const LatLng=useSelector((state: RootState)=>state.latlngInfo)
     const {moveLatitude,moveLongitude}=LatLng;
+    const navigate = useNavigate();
+    const [okModalOpen, setokModalOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
     //삭제
-    const onDelete=()=>{
+    const handleDelete=()=>{
         if(MY_TOKEN!==null && REFRESH_TOKEN){
             deleteTokenData(`${SHAREBOARD_URL}/${item.id}`,MY_TOKEN,dispatch,REFRESH_TOKEN)
             .then(()=>{
                 console.log('삭제되었습니다')
+                // navigate("/ingredientMap")
+                window.location.reload()
+                setModalOpen(false);
             })
             .catch(error=>{
                 console.log(error)
             })
         }
+        
     }
-
+    const onDelete = () => {
+        setModalOpen(true);
+      };
+    const closeModal = () => {
+        setModalOpen(false);
+    };
     //수정값을 저장하는 부분
     interface UpdateData {
         title:string,
@@ -126,7 +140,8 @@ function PostDetail({ item }:{item:Item}) {
             if(MY_TOKEN!==null){
                 updateData(`${SHAREBOARD_URL}/${item.id}`,formData,MY_TOKEN)
                     .then(()=>{
-                        console.log('수정완료!');  //모달창
+                        console.log('수정완료!');
+                        window.location.reload()
                     })
                     .catch(error=>{
                         console.log(error)
@@ -218,6 +233,13 @@ function PostDetail({ item }:{item:Item}) {
             </div>
         ):(
             <>
+            {modalOpen && (
+                <ComfirmModal
+                closeModal={closeModal}
+                handleDelete={handleDelete}
+                message={"정말 삭제하시겠습니까?"}
+                />
+            )}
                 <div className='btns'>
                     <button className='delete-btn btn' onClick={onDelete}>삭제</button >
                     <button className='modify-btn btn' onClick={onModify}>수정</button >

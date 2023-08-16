@@ -4,7 +4,7 @@ import Back from "../assets/icon/back.svg";
 import HeaderTabMenu from "./HeaderTabMenu";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Alarm from "./Alarm";
+// import Alarm from "./Alarm";
 
 export default function Header() {
   const [showTabMenu, setShowTabMenu] = useState(false);
@@ -39,7 +39,7 @@ export default function Header() {
           )}
         </div>
         <RightMenu>
-          <Alarm />
+          {/* <Alarm /> */}
           <HamburgerIcon onClick={toggleTabMenu}>
             <span></span>
             <span></span>
