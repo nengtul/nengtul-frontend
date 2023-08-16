@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import theme from "../common/theme";
-import { deleteData, updateData, getTokenData } from "../axios";
+import { deleteData, updateData, getTokenData, getData } from "../axios";
 import { useDispatch } from "react-redux";
 
 interface Post {
@@ -54,18 +54,16 @@ function NoticeView() {
 
   //글 불러오기
   useEffect(() => {
-    if (MY_TOKEN && REFRESH_TOKEN) {
-      getTokenData<Post>(`${NOTICES_LIST_URL}/${noticeId}`, MY_TOKEN, dispatch, REFRESH_TOKEN)
-        .then((post: Post) => {
-          setPost(post);
-          const imageUrlString = post.noticeImg;
-          const urls = imageUrlString.split("\\");
-          setImageUrls(urls.slice(0, -1));
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    getData<Post>(`${NOTICES_LIST_URL}/${noticeId}`)
+      .then((post: Post) => {
+        setPost(post);
+        const imageUrlString = post.noticeImg;
+        const urls = imageUrlString.split("\\");
+        setImageUrls(urls.slice(0, -1));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   const onModify = () => {
