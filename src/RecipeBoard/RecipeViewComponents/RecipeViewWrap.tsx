@@ -124,7 +124,7 @@ export default function RecipeViewWrap() {
           console.error(err);
         });
     }
-  }, [recipe.cookingStep]);
+  }, []);
 
   useEffect(() => {
     if (recipe.id && recipe.title) {
