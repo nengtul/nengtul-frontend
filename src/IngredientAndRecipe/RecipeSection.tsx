@@ -3,11 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { getData, getTokenData } from "../axios";
+import { getData } from "../axios";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../Store/store";
-import { useDispatch } from "react-redux";
 import { RECIPE_INGREDIENT_URL } from "../url";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { IngredientsProps } from "./IngreAfterRecipePage";
@@ -30,12 +27,6 @@ function RecipeSection({ ingredients }: IngredientsProps) {
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
   const page = useRef<number>(0);
   const [ref, inView] = useInView();
-
-  const dispatch = useDispatch();
-  const Token = useSelector((state: RootState) => state.accessTokenValue);
-  const { accessTokenValue, refreshTokenValue } = Token;
-  const MY_TOKEN = accessTokenValue;
-  const REFRESH_TOKEN = refreshTokenValue;
 
   const url = `${RECIPE_INGREDIENT_URL}/${ingredients}`;
 
