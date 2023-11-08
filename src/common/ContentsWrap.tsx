@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 const ContensWrap = styled.div`
   width: 100%;
   padding: 60px 0px;
-  height: 844px;
+  height: calc(100vh - 60px);
   max-height: 844px;
   overflow-x: hidden;
   overflow-y: auto;

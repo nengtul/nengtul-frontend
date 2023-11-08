@@ -21,8 +21,9 @@ import { SAVED_RICIPE_RECIPE_URL, FAV_PUB_URL } from "../../url";
 import { AxiosError } from "axios";
 import { useDispatch } from "react-redux";
 import OkModal from "../../Modal/OkModal";
+import { DummyRecipeData } from "../../mainpage/DummyData";
 
-interface RecipeData {
+export interface RecipeData {
   category: string;
   cookingStep: string;
   cookingTime: string;
@@ -121,6 +122,12 @@ export default function RecipeViewWrap() {
           setFavorite(recipe.favorite);
         })
         .catch((err) => {
+          const responseData = DummyRecipeData as RecipeData;
+          setRecipe(responseData);
+          setStep(responseData.cookingStep.split("\\"));
+          setImgArr(responseData.imageUrl.split("\\"));
+          setLikes(recipe.likes);
+          setFavorite(recipe.favorite);
           console.error(err);
         });
     }
