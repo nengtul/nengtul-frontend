@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getData } from "../axios";
 import { RECIPE_URL } from "../url";
+import { dummyData } from "./DummyData";
 
 const sliderSettings = {
   slidesToShow: 1,
@@ -22,7 +23,7 @@ interface SlideProps {
 }
 
 export default function RecipeSlide() {
-  const [hotRecipe, setHotRecipe] = useState<SlideProps[]>([]);
+  const [hotRecipe, setHotRecipe] = useState<SlideProps[]>(dummyData);
   const url = RECIPE_URL;
 
   useEffect(() => {
