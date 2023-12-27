@@ -20,6 +20,7 @@ export default function Login() {
 }
 
 const Wrapper = styled.div`
-  min-height: 844px;
+  height: calc(100vh - 60px);
+  max-height: 844px;
   background-color: #38db83;
 `;

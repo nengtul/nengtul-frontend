@@ -64,7 +64,7 @@ function ChattingListPage() {
             ) : (
               <NoneRecipe>
                 <img src={Egg} alt="logo" />
-                <p>아직 진행중인 채팅이 없습니다!</p>
+                <p>아직 진행중인 채팅이 없습니다.</p>
                 <Link to={"/ingredientMap"}>
                   재료나눔 보러가기
                   <FontAwesomeIcon icon={faAngleRight} />
@@ -87,29 +87,29 @@ const ContentWrapper = styled.div`
 `;
 
 const ChatList = styled.div`
-  padding-top: 60px;
   width: 100%;
   flex-grow: 1;
 `;
 
 const NoneRecipe = styled.div`
-  height: 100%;
-  padding-top: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding-bottom: 80px;
+  position:absolute;
+  top:50%;left:50%;
+  width:100%;
+  transform:translate(-50%,-50%);
   p {
-    font-size: 18rem;
+    font-size: 20rem;
     font-weight: 800;
   }
   a {
     font-size: 16rem;
-    font-weight: 700;
+    font-weight: 800;
     color: #fff;
     background-color: ${theme.colors.main};
-    padding: 12px 20px;
+    padding: 16px 26px;
     margin-top: 20px;
     border-radius: 10px;
     svg {

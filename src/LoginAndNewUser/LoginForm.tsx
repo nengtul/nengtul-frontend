@@ -190,6 +190,7 @@ const SquareButton = styled.button`
   color: #38db83;
   text-align: center;
   cursor: pointer;
+  display:block;
   &:first-of-type {
     margin-top: 16rem;
   }

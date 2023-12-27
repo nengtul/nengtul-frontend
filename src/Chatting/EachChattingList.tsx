@@ -76,6 +76,7 @@ const Chat = styled.div`
   border-bottom: 1px solid #dddddd;
   border-top: 1px solid #dddddd;
   cursor: pointer;
+  padding-top:60px;
 `;
 
 const UserText = styled.div`
